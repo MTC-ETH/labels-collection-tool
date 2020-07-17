@@ -13,6 +13,7 @@ import {
   Jumbotron,
   Button
 } from 'reactstrap';
+import PlutchikSelector from "./components/labelling/PlutchikSelector";
 
 class App extends Component {
   constructor(props) {
@@ -63,6 +64,9 @@ class App extends Component {
                   </p>
                 </Col>
               </Row>
+            <Row>
+              <PlutchikSelector/>
+            </Row>
             </Container>
           </Jumbotron>
         </div>
