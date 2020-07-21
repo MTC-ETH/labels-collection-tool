@@ -4,6 +4,9 @@ import exampleArticleJson from "../assets/json/exampleArticle";
 import exampleCommentsJson from "../assets/json/exampleComments";
 import Article from "../components/labelling/Article";
 import Comments from "../components/labelling/CommentsContainer";
+import ArticleInstructions from "../components/labelling/ArticleInstructions";
+import CommentsInstructions from "../components/labelling/CommentsInstructions";
+import ArticleStanceQuestion from "../components/labelling/ArticleStanceQuestion";
 
 
 class Labelling extends React.Component {
@@ -25,7 +28,10 @@ class Labelling extends React.Component {
     render() {
       return (
         <>
+            <ArticleInstructions/>
             <Article articleJson={exampleArticleJson} />
+            <ArticleStanceQuestion question={exampleArticleJson.stanceQuestion}/>
+            <CommentsInstructions/>
             <Comments commentsJson={exampleCommentsJson}/>
         </>
       );
