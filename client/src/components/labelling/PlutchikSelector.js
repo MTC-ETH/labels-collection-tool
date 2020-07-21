@@ -2,9 +2,9 @@ import {Card, CardBody} from "reactstrap";
 import React from "react";
 import {Button, Col, Container, Row} from "reactstrap";
 
-class Comment extends React.Component {
+class PlutchikSelector extends React.Component {
 
-    // emotions = [
+    // options = [
     //     [{name: "serenity", color: "FFF0A1"}, {name: "joy", color: "FFDE7A"}, {name: "ecstasy", color: "FFCC08"},
     //     {name: "grief", color: "2884C7"}, {name: "sadness", color: "74A9DB"}, {name: "pensiveness", color: "A1C2E7"}],
     //     [{name: "acceptance", color: "CBE08C"}, {name: "trust", color: "ACD46A"}, {name: "admiration", color: "8BC84F"},
@@ -36,12 +36,12 @@ class Comment extends React.Component {
                 {this.emotions.map(row => {
                     return <Row>
                         {row.map(emotion => {
-                            return <Col className="pt-1 pr-1 pl-0"><Button className="p-0"
+                            return <Col className="pr-1 pl-0"><Button className="p-1"
                                                 style={{background: "#" + emotion.color,
                                                     width: "100%",
                                                 color: "black",
-                                                fontSize: "10px"}}>
-                                {emotion.name}
+                                                fontSize: "12px"}}>
+                                <b>{emotion.name}</b>
                             </Button></Col>;
                         })}
                     </Row>;
@@ -53,4 +53,4 @@ class Comment extends React.Component {
     }
 }
 
-export default Comment;
+export default PlutchikSelector;
