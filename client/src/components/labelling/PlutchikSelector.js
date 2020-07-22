@@ -1,4 +1,3 @@
-import {Card, CardBody} from "reactstrap";
 import React from "react";
 import {Button, Col, Container, Row} from "reactstrap";
 
@@ -15,12 +14,6 @@ class PlutchikSelector extends React.Component {
     //     {name: "amazement", color: "009BCF"}, {name: "surprise", color: "2CB0D9"}, {name: "distraction", color: "8ACAE8"}]
     // ];
 
-
-    constructor(props, context) {
-        super(props, context);
-        
-    }
-
     emotions = [
         [{name: "serenity", color: "FFF0A1"}, {name: "acceptance", color: "CBE08C"}, {name: "apprehension", color: "7BC798"}, {name: "interest", color: "FDC788"}],
             [{name: "joy", color: "FFDE7A"}, {name: "trust", color: "ACD46A"}, {name: "fear", color: "2FB774"}, {name: "anticipation", color: "FBAF64"}],
@@ -33,14 +26,15 @@ class PlutchikSelector extends React.Component {
     render() {
         return (
             <Container>
-                {this.emotions.map(row => {
-                    return <Row>
-                        {row.map(emotion => {
-                            return <Col className="pr-1 pl-0"><Button className="p-1"
+                {this.emotions.map((row, rowI) => {
+                    return <Row key={rowI}>
+                        {row.map((emotion, colI) => {
+                            return <Col key={colI} className="pr-1 pl-0"><Button className="p-1"
                                                 style={{background: "#" + emotion.color,
                                                     width: "100%",
                                                 color: "black",
-                                                fontSize: "12px"}}>
+                                                fontSize: "12px"}}
+                            onClick={(e) => this.props.onClick(e, emotion.name)}>
                                 <b>{emotion.name}</b>
                             </Button></Col>;
                         })}

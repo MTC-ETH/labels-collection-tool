@@ -1,7 +1,7 @@
 import React from "react";
 
 // reactstrap components
-import {Col, Container, Row} from "reactstrap";
+import {Col, Row} from "reactstrap";
 import PlutchikSelector from "./PlutchikSelector";
 
 class Paragraph extends React.Component {
@@ -13,7 +13,7 @@ class Paragraph extends React.Component {
                     {this.props.children}
                 </Col>
                 <Col xs={12} sm={5} md={5} lg={5} xl={5}>
-                    <PlutchikSelector/>
+                    <PlutchikSelector onClick={this.props.onClick}/>
                 </Col>
             </Row>
     );

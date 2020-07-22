@@ -2,7 +2,6 @@ import React from "react";
 
 // reactstrap components
 import {Col, Container, Row} from "reactstrap";
-import Paragraph from "./Paragraph";
 import Comment from "./Comment";
 
 class CommentsContainer extends React.Component {
@@ -31,7 +30,7 @@ class CommentsContainer extends React.Component {
                 </Col>
             </Row>
                 {commentsJson.map(com => {
-                    return (<Comment>
+                    return (<Comment key={com.id}>
                         {com.text}
                     </Comment>);
                 })}

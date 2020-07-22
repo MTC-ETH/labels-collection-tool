@@ -15,7 +15,7 @@ class CommentsInstructions extends React.Component {
                 <Row>
                     <Col>
                         <h4>Comment section</h4>
-                        <p>Please now read the following comments. For each comment, on the right:
+                            Please now read the following comments. For each comment, on the right:
                             <ul>
                                 <li>
                                     Click on the emotion that replies to the question:  <br/>
@@ -28,7 +28,7 @@ class CommentsInstructions extends React.Component {
                             Please bear in mind that the question refers to the stance of the comment towards the article and not towards the previously presented topic. <br/>
                                     </li>
                                 </ul>
-                        </p>
+
                     </Col>
                 </Row>
             </Container>

@@ -12,6 +12,7 @@ class Article extends React.Component {
       }
       const { articleJson } = this.props;
 
+
       return (
           <>
             <Container className="shape-container align-items-center">
@@ -32,8 +33,9 @@ class Article extends React.Component {
                         <h5>Emotion?</h5>
                     </Col>
                 </Row>
-                {articleJson.paragraphs.map(par => {
-                    return (<Paragraph>
+                {articleJson.paragraphs.map((par, index) => {
+                    return (<Paragraph key={articleJson.id + index.toString()}
+                                       onClick={(event, emotion) => {return this.props.onClick(event, emotion, index);}}>
                         {par}
                     </Paragraph>);
                 })}

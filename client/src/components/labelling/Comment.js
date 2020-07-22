@@ -1,7 +1,7 @@
 import React from "react";
 
 // reactstrap components
-import {Col, Container, Row} from "reactstrap";
+import {Col, Row} from "reactstrap";
 import PlutchikSelector from "./PlutchikSelector";
 import StanceSelector from "./StanceSelector";
 

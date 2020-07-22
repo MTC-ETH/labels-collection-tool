@@ -1,13 +1,7 @@
-import {Card, CardBody} from "reactstrap";
 import React from "react";
 import {Button, Col, Container, Row} from "reactstrap";
 
-class StanceSelector extends React.Component {
-
-    constructor(props, context) {
-        super(props, context);
-        
-    }
+class StanceSelectorOrizontal extends React.Component {
 
     options = [
         {name: "In favour", color: "2FB774"},
@@ -20,13 +14,13 @@ class StanceSelector extends React.Component {
         return (
             <Container>
                 <Row>
-                {this.options.map(option => {
+                {this.options.map((option, index) => {
                     let borders = "pr-1 pl-0";
                     if(option.name.toLowerCase() === "unrelated"){
                         borders += " ml-2"
                     }
                     return (
-                       <Col className={borders}>
+                       <Col key={index} className={borders}>
                            <Button className="p-1"
                                                 style={{background: "#" + option.color,
                                                     width: "100%",
@@ -44,4 +38,4 @@ class StanceSelector extends React.Component {
     }
 }
 
-export default StanceSelector;
+export default StanceSelectorOrizontal;

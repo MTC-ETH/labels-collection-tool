@@ -1,5 +1,4 @@
 import React from "react";
-import PlutchikSelector from "../components/labelling/PlutchikSelector";
 import exampleArticleJson from "../assets/json/exampleArticle";
 import exampleCommentsJson from "../assets/json/exampleComments";
 import Article from "../components/labelling/Article";
@@ -16,6 +15,8 @@ class Labelling extends React.Component {
             article: null,
           comments: null
         };
+
+        this.handleArticle = this.handleArticle.bind(this);
     }
 
     componentDidMount() {
@@ -25,11 +26,19 @@ class Labelling extends React.Component {
       });
     }
 
+    handleArticle(event, emotion, paragraphNumber) {
+        event.preventDefault();
+        console.log(emotion);
+        console.log(paragraphNumber);
+        // this.setState({
+        //     errorMessage: errorMessage});
+    }
+
     render() {
       return (
         <>
             <ArticleInstructions/>
-            <Article articleJson={exampleArticleJson} />
+            <Article articleJson={exampleArticleJson} onClick={this.handleArticle}/>
             <ArticleStanceQuestion question={exampleArticleJson.stanceQuestion}/>
             <CommentsInstructions/>
             <Comments commentsJson={exampleCommentsJson}/>
