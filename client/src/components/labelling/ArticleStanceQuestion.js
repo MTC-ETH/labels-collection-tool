@@ -20,7 +20,8 @@ class ArticleStanceQuestion extends React.Component {
                         <h5>{this.props.question}</h5>
                     </Col>
                 </Row>
-                <StanceSelectorOrizontal/>
+                <StanceSelectorOrizontal onClick={this.props.onClick}
+                                         selectedStance={this.props.stanceArticleQuestionLabel}/>
             </Container>
         </>
     );

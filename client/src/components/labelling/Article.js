@@ -35,6 +35,7 @@ class Article extends React.Component {
                 </Row>
                 {articleJson.paragraphs.map((par, index) => {
                     return (<Paragraph key={articleJson.id + index.toString()}
+                                       selectedEmotion={this.props.paragraphsEmotionLabel[index]}
                                        onClick={(event, emotion) => {return this.props.onClick(event, emotion, index);}}>
                         {par}
                     </Paragraph>);

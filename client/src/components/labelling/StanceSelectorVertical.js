@@ -2,29 +2,27 @@ import React from "react";
 import {Col, Container, Row} from "reactstrap";
 import StanceSelectorAbstract from "./StanceSelectorAbstract";
 
-class StanceSelectorOrizontal extends StanceSelectorAbstract {
-
+class StanceSelectorVertical extends StanceSelectorAbstract {
 
     render() {
         return (
             <Container>
-                <Row>
                 {this.options.map((option, index) => {
                     let borders = "pr-1 pl-0";
                     if(option.name.toLowerCase() === "unrelated"){
-                        borders += " ml-2"
+                        borders += " mt-2"
                     }
-
-                    return (
-                       <Col key={index} className={borders}>
-                           {this.getButtonObject(option,16)}
-                       </Col>);
+                    return <Row key={index}>
+                       <Col className={borders}>
+                           {this.getButtonObject(option,12)}
+                       </Col>
+                    </Row>;
                 })
                 }
-                    </Row>
+
             </Container>
         );
     }
 }
 
-export default StanceSelectorOrizontal;
+export default StanceSelectorVertical;

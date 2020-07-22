@@ -13,7 +13,7 @@ class Paragraph extends React.Component {
                     {this.props.children}
                 </Col>
                 <Col xs={12} sm={5} md={5} lg={5} xl={5}>
-                    <PlutchikSelector onClick={this.props.onClick}/>
+                    <PlutchikSelector selectedEmotion={this.props.selectedEmotion} onClick={this.props.onClick}/>
                 </Col>
             </Row>
     );

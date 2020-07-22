@@ -29,8 +29,12 @@ class CommentsContainer extends React.Component {
                     <h5>Emotion?</h5>
                 </Col>
             </Row>
-                {commentsJson.map(com => {
-                    return (<Comment key={com.id}>
+                {commentsJson.map((com, index) => {
+                    return (<Comment key={com.id}
+                                     selectedStance={this.props.commentsStanceLabel[index]}
+                                     selectedEmotion={this.props.commentsEmotionLabel[index]}
+                                     onClickStance={(event, stance) => {return this.props.onClickStance(event, stance, index)}}
+                                     onClickEmotion={(event, emotion) => {return this.props.onClickEmotion(event, emotion, index)}}>
                         {com.text}
                     </Comment>);
                 })}

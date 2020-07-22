@@ -13,35 +13,79 @@ class Labelling extends React.Component {
         super(props, context);
         this.state = {
             article: null,
-          comments: null
+          comments: null,
+            paragraphsEmotionLabel: [null],
+            stanceArticleQuestionLabel: null,
+            commentsStanceLabel: [null],
+            commentsEmotionLabel: [null]
         };
 
-        this.handleArticle = this.handleArticle.bind(this);
+        this.handleEmotionArticle = this.handleEmotionArticle.bind(this);
+        this.handleStanceArticle = this.handleStanceArticle.bind(this);
+        this.handleStanceComments = this.handleStanceComments.bind(this);
+        this.handleEmotionComments = this.handleEmotionComments.bind(this);
     }
 
     componentDidMount() {
+        const nullComments = exampleCommentsJson.map(() => null);
       this.setState({
         article: exampleArticleJson,
         comments: exampleCommentsJson,
+          paragraphsEmotionLabel: exampleArticleJson.paragraphs.map(() => null),
+          stanceArticleQuestionLabel: null,
+          commentsStanceLabel: nullComments,
+          commentsEmotionLabel: nullComments,
       });
     }
 
-    handleArticle(event, emotion, paragraphNumber) {
+    handleEmotionArticle(event, emotion, paragraphNumber) {
         event.preventDefault();
         console.log(emotion);
         console.log(paragraphNumber);
-        // this.setState({
-        //     errorMessage: errorMessage});
+        let paragraphsEmotionLabel = [...this.state.paragraphsEmotionLabel];
+        paragraphsEmotionLabel[paragraphNumber] = emotion;
+        this.setState({paragraphsEmotionLabel});
+    }
+
+    handleStanceArticle(event, stance) {
+        event.preventDefault();
+        console.log(stance);
+        this.setState({stanceArticleQuestionLabel: stance});
+    }
+
+    handleStanceComments(event, stance, commentNumber) {
+        event.preventDefault();
+        console.log(stance);
+        console.log(commentNumber);
+        let commentsStanceLabel = [...this.state.commentsStanceLabel];
+        commentsStanceLabel[commentNumber] = stance;
+        this.setState({commentsStanceLabel});
+    }
+
+    handleEmotionComments(event, emotion, commentNumber) {
+        event.preventDefault();
+        console.log(emotion);
+        console.log(commentNumber);
+        let commentsEmotionLabel = [...this.state.commentsEmotionLabel];
+        commentsEmotionLabel[commentNumber] = emotion;
+        this.setState({commentsEmotionLabel});
     }
 
     render() {
       return (
         <>
             <ArticleInstructions/>
-            <Article articleJson={exampleArticleJson} onClick={this.handleArticle}/>
-            <ArticleStanceQuestion question={exampleArticleJson.stanceQuestion}/>
+            <Article articleJson={exampleArticleJson} paragraphsEmotionLabel={this.state.paragraphsEmotionLabel}
+                     onClick={this.handleEmotionArticle}/>
+            <ArticleStanceQuestion question={exampleArticleJson.stanceQuestion}
+                                   onClick={this.handleStanceArticle}
+                                   stanceArticleQuestionLabel={this.state.stanceArticleQuestionLabel}/>
             <CommentsInstructions/>
-            <Comments commentsJson={exampleCommentsJson}/>
+            <Comments commentsJson={exampleCommentsJson}
+                      commentsStanceLabel={this.state.commentsStanceLabel}
+                      commentsEmotionLabel={this.state.commentsEmotionLabel}
+            onClickStance={this.handleStanceComments}
+            onClickEmotion={this.handleEmotionComments}/>
         </>
       );
     }

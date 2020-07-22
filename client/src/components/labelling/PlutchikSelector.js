@@ -1,7 +1,8 @@
 import React from "react";
 import {Button, Col, Container, Row} from "reactstrap";
+import SelectorAbstract from "./SelectorAbstract";
 
-class PlutchikSelector extends React.Component {
+class PlutchikSelector extends SelectorAbstract {
 
     // options = [
     //     [{name: "serenity", color: "FFF0A1"}, {name: "joy", color: "FFDE7A"}, {name: "ecstasy", color: "FFCC08"},
@@ -29,10 +30,20 @@ class PlutchikSelector extends React.Component {
                 {this.emotions.map((row, rowI) => {
                     return <Row key={rowI}>
                         {row.map((emotion, colI) => {
+                            let color, fontColor;
+                            if(this.props.selectedEmotion === null || this.props.selectedEmotion === emotion.name) {
+                                color = emotion.color;
+                                fontColor = "black";
+                            }
+                            else {
+                                color = this.neutralColor;
+                                fontColor = "#" + this.neutralFontColor;
+                            }
+
                             return <Col key={colI} className="pr-1 pl-0"><Button className="p-1"
-                                                style={{background: "#" + emotion.color,
+                                                style={{background: "#" + color,
                                                     width: "100%",
-                                                color: "black",
+                                                color: fontColor,
                                                 fontSize: "12px"}}
                             onClick={(e) => this.props.onClick(e, emotion.name)}>
                                 <b>{emotion.name}</b>
