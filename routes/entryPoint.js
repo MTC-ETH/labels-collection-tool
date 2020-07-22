@@ -1,11 +1,19 @@
 const router = require('express').Router();
 
+const articles = require(`../models/articles`);
 
 //entry point
 router.route('/').get((req, res) => {
     console.log("This is the req.body", req.body);
-
-    res.json("Response OK");
+    articles.findOne({}).exec((err, queryRes) => {
+        if(err) {
+            console.log(err);
+            res.error(err);
+        } else {
+            console.log(JSON.stringify(queryRes));
+            res.json(queryRes);
+        }
+    });
 });
 
 //----------------------------------------
