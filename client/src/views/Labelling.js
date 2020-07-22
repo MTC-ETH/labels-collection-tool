@@ -6,6 +6,7 @@ import Comments from "../components/labelling/CommentsContainer";
 import ArticleInstructions from "../components/labelling/ArticleInstructions";
 import CommentsInstructions from "../components/labelling/CommentsInstructions";
 import ArticleStanceQuestion from "../components/labelling/ArticleStanceQuestion";
+import SubmitInstructionsAndButton from "../components/labelling/SubmitInstructionsAndButton";
 
 
 class Labelling extends React.Component {
@@ -15,15 +16,19 @@ class Labelling extends React.Component {
             article: null,
           comments: null,
             paragraphsEmotionLabel: [null],
+            paragraphsError: [false],
             stanceArticleQuestionLabel: null,
+            stanceArticleQuestionError: false,
             commentsStanceLabel: [null],
-            commentsEmotionLabel: [null]
+            commentsEmotionLabel: [null],
+            commentsError: [false],
         };
 
         this.handleEmotionArticle = this.handleEmotionArticle.bind(this);
         this.handleStanceArticle = this.handleStanceArticle.bind(this);
         this.handleStanceComments = this.handleStanceComments.bind(this);
         this.handleEmotionComments = this.handleEmotionComments.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -32,9 +37,11 @@ class Labelling extends React.Component {
         article: exampleArticleJson,
         comments: exampleCommentsJson,
           paragraphsEmotionLabel: exampleArticleJson.paragraphs.map(() => null),
+          paragraphsError: exampleArticleJson.paragraphs.map(() => false),
           stanceArticleQuestionLabel: null,
           commentsStanceLabel: nullComments,
           commentsEmotionLabel: nullComments,
+          commentsError: exampleCommentsJson.map(() => false),
       });
     }
 
@@ -44,13 +51,15 @@ class Labelling extends React.Component {
         console.log(paragraphNumber);
         let paragraphsEmotionLabel = [...this.state.paragraphsEmotionLabel];
         paragraphsEmotionLabel[paragraphNumber] = emotion;
-        this.setState({paragraphsEmotionLabel});
+        let paragraphsError = [...this.state.paragraphsError];
+        paragraphsError[paragraphNumber] = false;
+        this.setState({paragraphsEmotionLabel, paragraphsError});
     }
 
     handleStanceArticle(event, stance) {
         event.preventDefault();
         console.log(stance);
-        this.setState({stanceArticleQuestionLabel: stance});
+        this.setState({stanceArticleQuestionLabel: stance, stanceArticleQuestionError: false});
     }
 
     handleStanceComments(event, stance, commentNumber) {
@@ -59,7 +68,9 @@ class Labelling extends React.Component {
         console.log(commentNumber);
         let commentsStanceLabel = [...this.state.commentsStanceLabel];
         commentsStanceLabel[commentNumber] = stance;
-        this.setState({commentsStanceLabel});
+        let commentsError = [...this.state.commentsError];
+        commentsError[commentNumber] = this.state.commentsEmotionLabel[commentNumber] === null;
+        this.setState({commentsStanceLabel, commentsError});
     }
 
     handleEmotionComments(event, emotion, commentNumber) {
@@ -68,24 +79,69 @@ class Labelling extends React.Component {
         console.log(commentNumber);
         let commentsEmotionLabel = [...this.state.commentsEmotionLabel];
         commentsEmotionLabel[commentNumber] = emotion;
-        this.setState({commentsEmotionLabel});
+        let commentsError = [...this.state.commentsError];
+        commentsError[commentNumber] = this.state.commentsStanceLabel[commentNumber] === null;
+        this.setState({commentsEmotionLabel, commentsError});
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        let error = false;
+
+        let paragraphsError = [...this.state.paragraphsError];
+        this.state.paragraphsEmotionLabel.forEach((label, index) => {
+            if(label == null) {
+                error = true;
+                paragraphsError[index] = true;
+            }
+        });
+
+        let stanceArticleQuestionError = this.state.stanceArticleQuestionError;
+        if(this.state.stanceArticleQuestionLabel === null) {
+            stanceArticleQuestionError = true;
+        }
+
+        let commentsError = [...this.state.commentsError];
+        this.state.commentsStanceLabel.forEach((label, index) => {
+            if(label == null) {
+                error = true;
+                commentsError[index] = true;
+            }
+        });
+        this.state.commentsEmotionLabel.forEach((label, index) => {
+            if(label == null) {
+                error = true;
+                commentsError[index] = true;
+            }
+        });
+
+        this.setState({commentsError, paragraphsError, stanceArticleQuestionError});
+        if(error) {
+            alert("ERROR");
+        }
     }
 
     render() {
       return (
         <>
             <ArticleInstructions/>
-            <Article articleJson={exampleArticleJson} paragraphsEmotionLabel={this.state.paragraphsEmotionLabel}
+            <Article articleJson={exampleArticleJson}
+                     paragraphsEmotionLabel={this.state.paragraphsEmotionLabel}
+                     paragraphsError={this.state.paragraphsError}
                      onClick={this.handleEmotionArticle}/>
             <ArticleStanceQuestion question={exampleArticleJson.stanceQuestion}
                                    onClick={this.handleStanceArticle}
-                                   stanceArticleQuestionLabel={this.state.stanceArticleQuestionLabel}/>
+                                   stanceArticleQuestionLabel={this.state.stanceArticleQuestionLabel}
+                                   error={this.state.stanceArticleQuestionError}/>
             <CommentsInstructions/>
             <Comments commentsJson={exampleCommentsJson}
                       commentsStanceLabel={this.state.commentsStanceLabel}
                       commentsEmotionLabel={this.state.commentsEmotionLabel}
+                      commentsError={this.state.commentsError}
             onClickStance={this.handleStanceComments}
-            onClickEmotion={this.handleEmotionComments}/>
+            onClickEmotion={this.handleEmotionComments}
+            />
+            <SubmitInstructionsAndButton onClick={this.handleSubmit}/>
         </>
       );
     }

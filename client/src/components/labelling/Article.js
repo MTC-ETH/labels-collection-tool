@@ -25,7 +25,7 @@ class Article extends React.Component {
                 <Row style={{
                     color: "blue",
                     // fontSize: "12px"
-                }} className={"text-center mt-3 mb-n3"}>
+                }} className={"text-center mt-3 mb-n2"}>
                     <Col xs={12} sm={7} md={7} lg={7} xl={7}>
                         <h5>Article paragraph</h5>
                     </Col>
@@ -36,6 +36,7 @@ class Article extends React.Component {
                 {articleJson.paragraphs.map((par, index) => {
                     return (<Paragraph key={articleJson.id + index.toString()}
                                        selectedEmotion={this.props.paragraphsEmotionLabel[index]}
+                                       error={this.props.paragraphsError[index]}
                                        onClick={(event, emotion) => {return this.props.onClick(event, emotion, index);}}>
                         {par}
                     </Paragraph>);

@@ -17,11 +17,15 @@ class ArticleStanceQuestion extends React.Component {
                     <Col>
                         <h5>Stance of article towards topic</h5>
                         <p>Please now select how the article replies to the following question:</p>
-                        <h5>{this.props.question}</h5>
                     </Col>
                 </Row>
-                <StanceSelectorOrizontal onClick={this.props.onClick}
+                <Row className={"pb-1"} style={{background: this.props.error ? "#FF9991" : null}}>
+                    <Col>
+                    <h5>{this.props.question}</h5>
+                    <StanceSelectorOrizontal onClick={this.props.onClick}
                                          selectedStance={this.props.stanceArticleQuestionLabel}/>
+                    </Col>
+                </Row>
             </Container>
         </>
     );

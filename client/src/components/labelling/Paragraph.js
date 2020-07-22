@@ -8,7 +8,10 @@ class Paragraph extends React.Component {
 
   render() {
       return (
-            <Row className={"mt-3 mb-4 align-items-center"} >
+            <Row className={"m1-3 mb-2 pt-1 pb-1 align-items-center"}
+                 style={{background: this.props.error ? "#FF9991" : null}}
+            >
+
                 <Col xs={12} sm={7} md={7} lg={7} xl={7}>
                     {this.props.children}
                 </Col>

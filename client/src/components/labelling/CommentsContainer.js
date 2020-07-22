@@ -18,7 +18,7 @@ class CommentsContainer extends React.Component {
                 <Row style={{
                 color: "blue",
                 // fontSize: "12px"
-            }} className={"text-center mt-3 mb-n3"}>
+            }} className={"text-center mt-3 mb-n2"}>
                 <Col xs={12} sm={5} md={5} lg={5} xl={5}>
                     <h5>Comment</h5>
                 </Col>
@@ -34,7 +34,8 @@ class CommentsContainer extends React.Component {
                                      selectedStance={this.props.commentsStanceLabel[index]}
                                      selectedEmotion={this.props.commentsEmotionLabel[index]}
                                      onClickStance={(event, stance) => {return this.props.onClickStance(event, stance, index)}}
-                                     onClickEmotion={(event, emotion) => {return this.props.onClickEmotion(event, emotion, index)}}>
+                                     onClickEmotion={(event, emotion) => {return this.props.onClickEmotion(event, emotion, index)}}
+                                     error={this.props.commentsError[index]}>
                         {com.text}
                     </Comment>);
                 })}
