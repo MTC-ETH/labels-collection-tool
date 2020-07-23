@@ -34,11 +34,11 @@ class Article extends React.Component {
                     </Col>
                 </Row>
                 {articleJson.paragraphs.map((par, index) => {
-                    return (<Paragraph key={articleJson.articleID + index.toString()}
-                                       selectedEmotion={this.props.paragraphsEmotionLabel[index]}
-                                       error={this.props.paragraphsError[index]}
-                                       onClick={(event, emotion) => {return this.props.onClick(event, emotion, index);}}>
-                        {par}
+                    return (<Paragraph key={articleJson.articleID + par.consecutiveID.toString()}
+                                       selectedEmotion={this.props.paragraphsEmotionLabel[par.consecutiveID]}
+                                       error={this.props.paragraphsError[par.consecutiveID]}
+                                       onClick={(event, emotion) => {return this.props.onClick(event, emotion, par);}}>
+                        {par.text}
                     </Paragraph>);
                 })}
             </Container>

@@ -17,7 +17,7 @@ const articlesSchema = new Schema({
         articleID: String,
         title: String,
         snippet: String,
-    paragraphs: [String],
+    paragraphs: [{consecutiveID: Number, text: String}],
     comments: [commentsSchema]
     },
     {

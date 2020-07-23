@@ -18,7 +18,15 @@ connection.once("open", () => {
                 articles.find({}).exec((err, res) => console.log(JSON.stringify(res)));
             } else {
                 console.log("doesn't exist, creating it");
-                const articlesJson = require(`./json/articles.json`);
+                let articlesJson = require(`./json/articles.json`);
+
+                //insert consecutive ids for paragraphs
+                articlesJson = articlesJson.map(article => {
+                    article.paragraphs = article.paragraphs.map((par, index) => {
+                        return {consecutiveID: index, text: par};
+                    });
+                    return article;
+                });
 
                 articles.insertMany(articlesJson, function(err, result) {
                     if (err) {

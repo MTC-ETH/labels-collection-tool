@@ -20,8 +20,8 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const tagCommentRouter = require('./routes/entryPoint');
-app.use('/', tagCommentRouter);
+const tagCommentRouter = require('./routes/labelling');
+app.use('/labelling/', tagCommentRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
