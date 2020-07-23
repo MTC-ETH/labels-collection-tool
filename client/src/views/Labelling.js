@@ -64,7 +64,7 @@ class Labelling extends React.Component {
     }
 
     callApi = async () => {
-        const response = await fetch(`/labelling/article`);
+        const response = await fetch(`/labelling/article?labellerID=5f199424dcf1cfe56a7436a7`);
         const body = await response.json();
         if (response.status !== 200) throw Error(body.message);
 
