@@ -21,7 +21,7 @@ app.use(cors());
 app.use(express.json());
 
 const tagCommentRouter = require('./routes/entryPoint');
-app.use('/article', tagCommentRouter);
+app.use('/', tagCommentRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);

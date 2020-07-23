@@ -1,6 +1,6 @@
 import React from "react";
-import exampleArticleJson from "../assets/json/exampleArticle";
-import exampleCommentsJson from "../assets/json/exampleComments";
+// import exampleArticleJson from "../assets/json/exampleArticle";
+// import exampleCommentsJson from "../assets/json/exampleComments";
 import Article from "../components/labelling/Article";
 import Comments from "../components/labelling/CommentsContainer";
 import ArticleInstructions from "../components/labelling/ArticleInstructions";
@@ -14,7 +14,7 @@ class Labelling extends React.Component {
         super(props, context);
         this.state = {
             article: null,
-          comments: null,
+            comments: null,
             paragraphsEmotionLabel: [null],
             paragraphsError: [false],
             stanceArticleQuestionLabel: null,
@@ -32,18 +32,29 @@ class Labelling extends React.Component {
     }
 
     componentDidMount() {
-        const nullComments = exampleCommentsJson.map(() => null);
-      this.setState({
-        article: exampleArticleJson,
-        comments: exampleCommentsJson,
-          paragraphsEmotionLabel: exampleArticleJson.paragraphs.map(() => null),
-          paragraphsError: exampleArticleJson.paragraphs.map(() => false),
-          stanceArticleQuestionLabel: null,
-          commentsStanceLabel: nullComments,
-          commentsEmotionLabel: nullComments,
-          commentsError: exampleCommentsJson.map(() => false),
-      });
+        this.callApi()
+            .then(res => {
+                this.setState({
+                    article: res,
+                    comments: res.comments,
+                    paragraphsEmotionLabel: res.paragraphs.map(() => null),
+                    paragraphsError: res.paragraphs.map(() => false),
+                    stanceArticleQuestionLabel: null,
+                    commentsStanceLabel: res.comments.map(() => null),
+                    commentsEmotionLabel: res.comments.map(() => null),
+                    commentsError: res.comments.map(() => false),
+                });
+            })
+            .catch(err => console.log(err));
     }
+
+    callApi = async () => {
+        const response = await fetch(`/article`);
+        const body = await response.json();
+        if (response.status !== 200) throw Error(body.message);
+
+        return body;
+    };
 
     handleEmotionArticle(event, emotion, paragraphNumber) {
         event.preventDefault();
@@ -122,28 +133,31 @@ class Labelling extends React.Component {
     }
 
     render() {
-      return (
-        <>
-            <ArticleInstructions/>
-            <Article articleJson={exampleArticleJson}
-                     paragraphsEmotionLabel={this.state.paragraphsEmotionLabel}
-                     paragraphsError={this.state.paragraphsError}
-                     onClick={this.handleEmotionArticle}/>
-            <ArticleStanceQuestion question={exampleArticleJson.stanceQuestion}
-                                   onClick={this.handleStanceArticle}
-                                   stanceArticleQuestionLabel={this.state.stanceArticleQuestionLabel}
-                                   error={this.state.stanceArticleQuestionError}/>
-            <CommentsInstructions/>
-            <Comments commentsJson={exampleCommentsJson}
-                      commentsStanceLabel={this.state.commentsStanceLabel}
-                      commentsEmotionLabel={this.state.commentsEmotionLabel}
-                      commentsError={this.state.commentsError}
-            onClickStance={this.handleStanceComments}
-            onClickEmotion={this.handleEmotionComments}
-            />
-            <SubmitInstructionsAndButton onClick={this.handleSubmit}/>
-        </>
-      );
+        if(this.state.article === null) {
+            return null;
+        }
+        return (
+            <>
+                <ArticleInstructions/>
+                <Article articleJson={this.state.article}
+                         paragraphsEmotionLabel={this.state.paragraphsEmotionLabel}
+                         paragraphsError={this.state.paragraphsError}
+                         onClick={this.handleEmotionArticle}/>
+                <ArticleStanceQuestion question={this.state.article.stanceQuestion}
+                                       onClick={this.handleStanceArticle}
+                                       stanceArticleQuestionLabel={this.state.stanceArticleQuestionLabel}
+                                       error={this.state.stanceArticleQuestionError}/>
+                <CommentsInstructions/>
+                <Comments commentsJson={this.state.comments}
+                          commentsStanceLabel={this.state.commentsStanceLabel}
+                          commentsEmotionLabel={this.state.commentsEmotionLabel}
+                          commentsError={this.state.commentsError}
+                          onClickStance={this.handleStanceComments}
+                          onClickEmotion={this.handleEmotionComments}
+                />
+                <SubmitInstructionsAndButton onClick={this.handleSubmit}/>
+            </>
+        );
     }
 }
 

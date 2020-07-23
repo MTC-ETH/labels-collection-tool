@@ -3,7 +3,7 @@ const router = require('express').Router();
 const articles = require(`../models/articles`);
 
 //entry point
-router.route('/').get((req, res) => {
+router.route('/article').get((req, res) => {
     console.log("This is the req.body", req.body);
     articles.findOne({}).exec((err, queryRes) => {
         if(err) {
