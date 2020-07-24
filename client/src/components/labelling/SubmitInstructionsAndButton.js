@@ -2,7 +2,6 @@ import React from "react";
 
 // reactstrap components
 import {Button, Col, Container, Row} from "reactstrap";
-import StanceSelectorOrizontal from "./StanceSelectorOrizontal";
 
 class SubmitInstructionsAndButton extends React.Component {
 

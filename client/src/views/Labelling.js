@@ -1,6 +1,5 @@
 import React from "react";
-// import exampleArticleJson from "../assets/json/exampleArticle";
-// import exampleCommentsJson from "../assets/json/exampleComments";
+import axios from 'axios';
 import Article from "../components/labelling/Article";
 import Comments from "../components/labelling/CommentsContainer";
 import ArticleInstructions from "../components/labelling/ArticleInstructions";
@@ -8,6 +7,7 @@ import CommentsInstructions from "../components/labelling/CommentsInstructions";
 import ArticleStanceQuestion from "../components/labelling/ArticleStanceQuestion";
 import SubmitInstructionsAndButton from "../components/labelling/SubmitInstructionsAndButton";
 
+const labellerID = "5f199424dcf1cfe56a7436a7";
 
 class Labelling extends React.Component {
     constructor(props, context) {
@@ -29,32 +29,47 @@ class Labelling extends React.Component {
         this.handleStanceComments = this.handleStanceComments.bind(this);
         this.handleEmotionComments = this.handleEmotionComments.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.postToBackendStatus = this.postToBackendStatus.bind(this);
     }
 
     componentDidMount() {
         this.callApi()
             .then(res => {
+                const {status, article} = res;
                 let paragraphsEmotionLabel = {};
                 let paragraphsError = {};
-                res.paragraphs.forEach((par) => {
-                    paragraphsEmotionLabel[par.consecutiveID] = null;
+                status.paragraphsEmotionLabel.forEach(entry => {
+                    paragraphsEmotionLabel[entry.paragraphConsecutiveID] = entry.label;
+                });
+                article.paragraphs.forEach((par) => {
+                    if(!(par.consecutiveID in paragraphsEmotionLabel)) {
+                        paragraphsEmotionLabel[par.consecutiveID] = null; }
                     paragraphsError[par.consecutiveID] = false;
                 });
 
                 let commentsStanceLabel = {};
                 let commentsEmotionLabel = {};
                 let commentsError = {};
-                res.comments.forEach((com) => {
-                    commentsStanceLabel[com.commentID] = null;
-                    commentsEmotionLabel[com.commentID] = null;
+
+                status.commentsStanceLabel.forEach(entry => {
+                    commentsStanceLabel[entry.commentID] = entry.label;
+                });
+                status.commentsEmotionLabel.forEach(entry => {
+                    commentsEmotionLabel[entry.commentID] = entry.label;
+                });
+                article.comments.forEach((com) => {
+                    if(!(com.commentID in commentsStanceLabel)) {
+                        commentsStanceLabel[com.commentID] = null; }
+                    if(!(com.commentID in commentsEmotionLabel)) {
+                        commentsEmotionLabel[com.commentID] = null; }
                     commentsError[com.commentID] = false;
                 });
                 this.setState({
-                    article: res,
-                    comments: res.comments,
+                    article: article,
+                    comments: article.comments,
                     paragraphsEmotionLabel: paragraphsEmotionLabel,
                     paragraphsError: paragraphsError,
-                    stanceArticleQuestionLabel: null,
+                    stanceArticleQuestionLabel: status.stanceArticleQuestionLabel || null,
                     commentsStanceLabel: commentsStanceLabel,
                     commentsEmotionLabel: commentsEmotionLabel,
                     commentsError: commentsError,
@@ -64,7 +79,7 @@ class Labelling extends React.Component {
     }
 
     callApi = async () => {
-        const response = await fetch(`/labelling/article?labellerID=5f199424dcf1cfe56a7436a7`);
+        const response = await fetch(`/labelling/article?labellerID=${labellerID}`);
         const body = await response.json();
         if (response.status !== 200) throw Error(body.message);
 
@@ -80,12 +95,14 @@ class Labelling extends React.Component {
         let paragraphsError = {...this.state.paragraphsError};
         paragraphsError[paragraph.consecutiveID] = false;
         this.setState({paragraphsEmotionLabel, paragraphsError});
+        this.postToBackendStatus('/labelling/tag/paragraph', paragraph.consecutiveID, emotion);
     }
 
     handleStanceArticle(event, stance) {
         event.preventDefault();
         console.log(stance);
         this.setState({stanceArticleQuestionLabel: stance, stanceArticleQuestionError: false});
+        this.postToBackendStatus('/labelling/tag/article', null, stance);
     }
 
     handleStanceComments(event, stance, comment) {
@@ -98,6 +115,22 @@ class Labelling extends React.Component {
         commentsError[comment.commentID] = commentsError[comment.commentID] &&
             this.state.commentsEmotionLabel[comment.commentID] === null;
         this.setState({commentsStanceLabel, commentsError});
+        this.postToBackendStatus('/labelling/tag/comment/stance', comment.commentID, stance);
+    }
+
+    postToBackendStatus(entryPoint, elemID, label) {
+        axios.post(entryPoint, {
+            labeller: labellerID,
+            article: this.state.article._id,
+            elemID: elemID,
+            label: label
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     handleEmotionComments(event, emotion, comment) {
@@ -110,6 +143,8 @@ class Labelling extends React.Component {
         commentsError[comment.commentID] = commentsError[comment.commentID] &&
             this.state.commentsStanceLabel[comment.commentID] === null;
         this.setState({commentsEmotionLabel, commentsError});
+
+        this.postToBackendStatus('/labelling/tag/comment/emotion', comment.commentID, emotion);
     }
 
     handleSubmit(event) {
