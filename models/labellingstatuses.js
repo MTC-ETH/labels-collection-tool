@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const labelledSchema = new Schema({
-        labeller: { type: Schema.Types.ObjectId, ref: 'labellers', required: true },
-        article: { type: Schema.Types.ObjectId, ref: 'articles', required: true },
+const labellingstatusesSchema = new Schema({
+        labeller: { type: Schema.Types.ObjectId, ref: 'labellers' },
+        article: { type: Schema.Types.ObjectId, ref: 'articles' },
         paragraphsEmotionLabel: [{paragraphConsecutiveID: Number, label: String}],
         stanceArticleQuestionLabel: String,
         commentsStanceLabel: [{commentID: String, label: String}],
@@ -13,5 +13,5 @@ const labelledSchema = new Schema({
         timestamps: true
     });
 
-const labelled = mongoose.model("labelled", labelledSchema);
-module.exports = labelled;
+const labellingstatuses = mongoose.model("labellingstatuses", labellingstatusesSchema);
+module.exports = labellingstatuses;

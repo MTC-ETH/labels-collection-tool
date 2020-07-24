@@ -3,7 +3,7 @@ const _ = require('lodash');
 const mongoose = require('mongoose');
 
 const articles = require(`../models/articles`);
-const labellingstatus = require(`../models/labellingStatus`);
+const labellingstatuses = require(`../models/labellingstatuses`);
 const labellers = require(`../models/labellers`);
 
 
@@ -42,8 +42,8 @@ router.route('/article').get((req, res) => {
                     throw new Error(err);
                 }
                 //associate labeller to this article and write this in the labellingstatus table
-
-                new labellingstatus({labeller: labellerID, article: queryRes._id}).save()
+                const newLabellingStatus =  new labellingstatuses({labeller: labellerID, article: queryRes._id});
+                newLabellingStatus.save()
                     .then(labstat => {
                         console.log('SUCCESS\nNew labelling status created for ' + labstat.labeller
                             + ' and article' + labstat.article);
