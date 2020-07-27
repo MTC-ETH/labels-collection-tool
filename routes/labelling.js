@@ -55,8 +55,18 @@ router.route('/article').get((req, res) => {
                         console.log("Not found any status, initiating a new one");
                         //we have to get the next article to be tagged
                         //todo: should be updated to find the correct next article
-                        return articles.findOne({}).exec()
-                            .then((newArticle) => {
+                        //the article to task should neither be in the labellingstatuses (it's being labelled
+                        //right now, nor in the labelledentries (it's already been labelled)
+                        const queriesPromises = [];
+                        queriesPromises.push(labellingstatuses.find({},{ "article": 1}).exec()
+                            .then(statuses => statuses.map(el => el.article)));
+                        queriesPromises.push(labelledentries.find({},{ "article": 1}).exec()
+                            .then(statuses => statuses.map(el => el.article)));
+
+                        return Promise.all(queriesPromises)
+                            .then(idArrays => idArrays.flat())
+                            .then(ids => articles.findOne({"_id": { "$nin": ids }}).exec())
+                            .then(newArticle => {
                                 //associate labeller to this article and write this in the labellingstatus table
                                 const newLabellingStatus =  new labellingstatuses(
                                     {labeller: labellerID,
@@ -72,6 +82,7 @@ router.route('/article').get((req, res) => {
                                             return {commentID: com.commentID, label: null}
                                         })
                                     });
+
                                 return newLabellingStatus.save()
                                     .then(labstat => {
                                         console.log('SUCCESS\nNew labelling status created for ' + labstat.labeller
@@ -82,15 +93,17 @@ router.route('/article').get((req, res) => {
                                         return {status: labstat, article: newArticle};
                                     })
                             });
-                    }
+                        }
                 }).then((responseObject) => {
                     console.log(responseObject);
                     res.json(responseObject)
                 });
 
-
         })
-        .catch(err => res.status(500).send(err));
+        .catch(err => {
+            console.log(err);
+            res.status(500).send(err)
+        });
 });
 
 function updatelabellingstatutes(req, res, arrayName, elemIDName) {

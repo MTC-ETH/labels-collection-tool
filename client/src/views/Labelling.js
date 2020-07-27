@@ -30,26 +30,32 @@ class Labelling extends React.Component {
         this.handleEmotionComments = this.handleEmotionComments.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.postToBackendStatus = this.postToBackendStatus.bind(this);
+        this.fetchDataAndUpdateState = this.fetchDataAndUpdateState.bind(this);
     }
 
     componentDidMount() {
+        this.fetchDataAndUpdateState();
+    }
+
+    fetchDataAndUpdateState() {
         this.callApi()
             .then(res => {
                 const {status, article} = res;
-                let paragraphsEmotionLabel = {};
-                let paragraphsError = {};
+                const paragraphsEmotionLabel = {};
+                const paragraphsError = {};
                 status.paragraphsEmotionLabel.forEach(entry => {
                     paragraphsEmotionLabel[entry.paragraphConsecutiveID] = entry.label;
                 });
                 article.paragraphs.forEach((par) => {
-                    if(!(par.consecutiveID in paragraphsEmotionLabel)) {
-                        paragraphsEmotionLabel[par.consecutiveID] = null; }
+                    if (!(par.consecutiveID in paragraphsEmotionLabel)) {
+                        paragraphsEmotionLabel[par.consecutiveID] = null;
+                    }
                     paragraphsError[par.consecutiveID] = false;
                 });
 
-                let commentsStanceLabel = {};
-                let commentsEmotionLabel = {};
-                let commentsError = {};
+                const commentsStanceLabel = {};
+                const commentsEmotionLabel = {};
+                const commentsError = {};
 
                 status.commentsStanceLabel.forEach(entry => {
                     commentsStanceLabel[entry.commentID] = entry.label;
@@ -58,10 +64,12 @@ class Labelling extends React.Component {
                     commentsEmotionLabel[entry.commentID] = entry.label;
                 });
                 article.comments.forEach((com) => {
-                    if(!(com.commentID in commentsStanceLabel)) {
-                        commentsStanceLabel[com.commentID] = null; }
-                    if(!(com.commentID in commentsEmotionLabel)) {
-                        commentsEmotionLabel[com.commentID] = null; }
+                    if (!(com.commentID in commentsStanceLabel)) {
+                        commentsStanceLabel[com.commentID] = null;
+                    }
+                    if (!(com.commentID in commentsEmotionLabel)) {
+                        commentsEmotionLabel[com.commentID] = null;
+                    }
                     commentsError[com.commentID] = false;
                 });
                 this.setState({
@@ -125,10 +133,10 @@ class Labelling extends React.Component {
             elemID: elemID,
             label: label
         })
-            .then(function (response) {
+            .then(response => {
                 console.log(response);
             })
-            .catch(function (error) {
+            .catch(error => {
                 console.log(error);
             });
     }
@@ -198,10 +206,13 @@ class Labelling extends React.Component {
             commentsStanceLabel: this.state.commentsStanceLabel,
             commentsEmotionLabel: this.state.commentsEmotionLabel,
         })
-            .then(function (response) {
+            .then(response => {
                 console.log(response);
+                console.log("fetching new article");
+                this.fetchDataAndUpdateState();
+                window.scrollTo(0, 0);
             })
-            .catch(function (error) {
+            .catch(error => {
                 alert("Server error, please try again");
                 console.log(error);
             });
