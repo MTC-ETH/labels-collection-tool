@@ -26,7 +26,10 @@ router.route('/labelled').get((req, res) => {
                     res.type('application/json');
                     res.json(queryRes);
                 })
-        .catch(err => res.status(500).send(err));
+        .catch(err => {
+            console.log(err);
+            res.status(500).send(err);
+        });
 });
 
 router.route('/status').get((req, res) => {
@@ -37,6 +40,9 @@ router.route('/status').get((req, res) => {
     queryPromises.push(labelledentries.aggregate([
         {$group: { _id: null, totalSize: { $sum: { $size: "$commentsEmotionLabel"}}}}])
         .exec().then(r => {
+            if(!r || r.length <= 0) {
+                return {nTaggedComments: 0};
+            }
             return {nTaggedComments: r[0].totalSize}}));
 
     //check that the labellerID exists
@@ -46,7 +52,10 @@ router.route('/status').get((req, res) => {
             console.log(status);
             res.json(status);
         })
-        .catch(err => res.status(500).send(err));
+        .catch(err => {
+            console.log(err);
+            res.status(500).send(err);
+        });
 });
 
 

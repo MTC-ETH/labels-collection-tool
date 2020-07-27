@@ -45,8 +45,7 @@ class AdminDashboard extends React.Component {
                     <h2>Infos</h2>
                 </Row>
                 <InfoRow counter={this.state.nRegisteredLabellers}>Number of registered labellers:</InfoRow>
-                <InfoRow counter={4}>Number of labelled articles:</InfoRow>
-
+                <InfoRow counter={this.state.nTaggedArticles}>Number of labelled articles:</InfoRow>
                 <InfoRow counter={this.state.nTaggedComments}>Number of labelled comments:</InfoRow>
                 <Row className={"pt-4"}>
                     <h2>Actions</h2>
