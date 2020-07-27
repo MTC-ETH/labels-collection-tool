@@ -13,6 +13,11 @@ const commentsSchema = new Schema({
 
 const articlesSchema = new Schema({
         articleID: String,
+        source: {
+            type: String,
+            enum : ['blick','nzz'],
+        },
+        url: String,
         title: String,
         snippet: String,
     paragraphs: [{consecutiveID: Number, text: String}],
