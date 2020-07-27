@@ -184,10 +184,27 @@ class Labelling extends React.Component {
             }
         );
 
-        this.setState({commentsError, paragraphsError, stanceArticleQuestionError});
         if(error) {
-            alert("ERROR");
+            this.setState({commentsError, paragraphsError, stanceArticleQuestionError});
+            alert("Please fill-in the missing entries (now in red) and try again");
+            return;
         }
+
+        axios.post("/labelling/submit", {
+            labeller: labellerID,
+            article: this.state.article._id,
+            paragraphsEmotionLabel: this.state.paragraphsEmotionLabel,
+            stanceArticleQuestionLabel: this.state.stanceArticleQuestionLabel,
+            commentsStanceLabel: this.state.commentsStanceLabel,
+            commentsEmotionLabel: this.state.commentsEmotionLabel,
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                alert("Server error, please try again");
+                console.log(error);
+            });
     }
 
     render() {

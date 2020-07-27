@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const articles = require(`../models/articles`);
 const labellingstatuses = require(`../models/labellingstatuses`);
 const labellers = require(`../models/labellers`);
+const labelledentries = require(`../models/labelledentries`);
 
 
 //get the next article to be tagged
@@ -56,31 +57,31 @@ router.route('/article').get((req, res) => {
                         //todo: should be updated to find the correct next article
                         return articles.findOne({}).exec()
                             .then((newArticle) => {
-                            //associate labeller to this article and write this in the labellingstatus table
-                            const newLabellingStatus =  new labellingstatuses(
-                                {labeller: labellerID,
-                                    article: newArticle._id,
-                                    paragraphsEmotionLabel: newArticle.paragraphs.map(par => {
-                                        return {paragraphConsecutiveID: par.consecutiveID, label: null}
-                                    }),
-                                    stanceArticleQuestionLabel: null,
-                                    commentsStanceLabel: newArticle.comments.map(com => {
-                                        return {commentID: com.commentID, label: null}
-                                    }),
-                                    commentsEmotionLabel: newArticle.comments.map(com => {
-                                        return {commentID: com.commentID, label: null}
-                                    })
-                                });
-                            return newLabellingStatus.save()
-                                .then(labstat => {
-                                    console.log('SUCCESS\nNew labelling status created for ' + labstat.labeller
-                                        + ' and article' + labstat.article);
-                                    console.log("Query will return the article: " + newArticle._id);
-                                    // console.log(newArticle);
+                                //associate labeller to this article and write this in the labellingstatus table
+                                const newLabellingStatus =  new labellingstatuses(
+                                    {labeller: labellerID,
+                                        article: newArticle._id,
+                                        paragraphsEmotionLabel: newArticle.paragraphs.map(par => {
+                                            return {paragraphConsecutiveID: par.consecutiveID, label: null}
+                                        }),
+                                        stanceArticleQuestionLabel: null,
+                                        commentsStanceLabel: newArticle.comments.map(com => {
+                                            return {commentID: com.commentID, label: null}
+                                        }),
+                                        commentsEmotionLabel: newArticle.comments.map(com => {
+                                            return {commentID: com.commentID, label: null}
+                                        })
+                                    });
+                                return newLabellingStatus.save()
+                                    .then(labstat => {
+                                        console.log('SUCCESS\nNew labelling status created for ' + labstat.labeller
+                                            + ' and article' + labstat.article);
+                                        console.log("Query will return the article: " + newArticle._id);
+                                        // console.log(newArticle);
 
-                                    return {status: labstat, article: newArticle};
-                                })
-                        });
+                                        return {status: labstat, article: newArticle};
+                                    })
+                            });
                     }
                 }).then((responseObject) => {
                     console.log(responseObject);
@@ -145,6 +146,57 @@ router.route('/tag/comment/stance').post((req, res) => {
 router.route('/tag/comment/emotion').post((req, res) => {
     console.log("request of tagging comment emotion");
     return updatelabellingstatutes(req, res, "commentsEmotionLabel", "commentID");
+});
+
+router.route('/submit').post((req, res) => {
+    console.log("request of submitting");
+    //reconciliation check between server status and client status
+
+    const data = req.body;
+
+    function reconciliate(newEntry, listName, idName) {
+        for (let i = 0; i < newEntry[listName].length; ++i) {
+            const curr = newEntry[listName][i];
+            if (curr.label !== data[listName][curr[idName]]) {
+                console.log("reconciliation needed for:");
+                console.log(curr);
+                console.log(curr[idName]);
+                newEntry[listName][i].label = data[listName][curr[idName]];
+            }
+        }
+    }
+
+    return labellingstatuses.findOne({
+        'labeller': mongoose.Types.ObjectId(req.body.labeller),
+        'article': mongoose.Types.ObjectId(req.body.article),
+    }).exec().then(queryRes => {
+        console.log(queryRes);
+        const newEntry = {...queryRes._doc};
+        //allows us to save into the other collection
+        newEntry._id = mongoose.Types.ObjectId();
+        // newEntry.isNew = true;
+        console.log(newEntry);
+        
+        reconciliate(newEntry, "paragraphsEmotionLabel", "paragraphConsecutiveID");
+
+        if(newEntry.stanceArticleQuestionLabel !== data.stanceArticleQuestionLabel) {
+            console.log("reconciliation needed for:");
+            console.log(newEntry.stanceArticleQuestionLabel);
+            console.log(data.stanceArticleQuestionLabel);
+            newEntry.stanceArticleQuestionLabel = data.stanceArticleQuestionLabel;
+        }
+
+        reconciliate(newEntry, "commentsStanceLabel", "commentID");
+        reconciliate(newEntry, "commentsEmotionLabel", "commentID");
+
+        const newLabelledEntry = new labelledentries(newEntry);
+        return newLabelledEntry.save().then(savedentry => {
+            return queryRes.remove().then(() => res.send('Successfully saved.'));
+        });
+    }).catch(err => {
+        console.log(err);
+        return res.status(500).send({error: err});
+    });
 });
 
 //----------------------------------------
