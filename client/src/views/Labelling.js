@@ -1,5 +1,6 @@
 import React from "react";
 import axios from 'axios';
+import queryString from 'query-string';
 import Article from "../components/labelling/Article";
 import Comments from "../components/labelling/CommentsContainer";
 import ArticleInstructions from "../components/labelling/ArticleInstructions";
@@ -7,12 +8,13 @@ import CommentsInstructions from "../components/labelling/CommentsInstructions";
 import ArticleStanceQuestion from "../components/labelling/ArticleStanceQuestion";
 import SubmitInstructionsAndButton from "../components/labelling/SubmitInstructionsAndButton";
 
-const labellerID = "5f199424dcf1cfe56a7436a7";
+// const labellerID = "5f199424dcf1cfe56a7436a7";
 
 class Labelling extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
+            labellerID: null,
             article: null,
             comments: null,
             paragraphsEmotionLabel: {},
@@ -34,13 +36,18 @@ class Labelling extends React.Component {
     }
 
     componentDidMount() {
+        console.log(this.props);
         this.fetchDataAndUpdateState();
     }
 
     fetchDataAndUpdateState() {
-        return this.callApi()
+        const params = queryString.parse(this.props.location.search);
+        console.log(params);
+        console.log(params.token);
+        this.setState({labellerID: params.token});
+        return axios.get(`/labelling/article?labellerID=${params.token}`)
             .then(res => {
-                const {status, article} = res;
+                const {status, article} = res.data;
                 const paragraphsEmotionLabel = {};
                 const paragraphsError = {};
                 status.paragraphsEmotionLabel.forEach(entry => {
@@ -86,13 +93,13 @@ class Labelling extends React.Component {
             .catch(err => console.log(err));
     }
 
-    callApi = async () => {
-        const response = await fetch(`/labelling/article?labellerID=${labellerID}`);
-        const body = await response.json();
-        if (response.status !== 200) throw Error(body.message);
-
-        return body;
-    };
+    // callApi = async () => {
+    //     const response = await fetch();
+    //     const body = await response.json();
+    //     if (response.status !== 200) throw Error(body.message);
+    //
+    //     return body;
+    // };
 
     handleEmotionArticle(event, emotion, paragraph) {
         event.preventDefault();
@@ -128,7 +135,7 @@ class Labelling extends React.Component {
 
     postToBackendStatus(entryPoint, elemID, label) {
         axios.post(entryPoint, {
-            labeller: labellerID,
+            labeller: this.state.labellerID,
             article: this.state.article._id,
             elemID: elemID,
             label: label
@@ -199,7 +206,7 @@ class Labelling extends React.Component {
         }
 
         axios.post("/labelling/submit", {
-            labeller: labellerID,
+            labeller: this.state.labellerID,
             article: this.state.article._id,
             paragraphsEmotionLabel: this.state.paragraphsEmotionLabel,
             stanceArticleQuestionLabel: this.state.stanceArticleQuestionLabel,

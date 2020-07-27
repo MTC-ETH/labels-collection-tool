@@ -15,7 +15,7 @@ router.route('/article').get((req, res) => {
     let labellerID = _.get(req, "query.labellerID", null);
     console.log("labellerID = " + labellerID);
     if(!labellerID) {
-        return res.status(500).send({error: "Please provide labellerID in query"});
+        return res.status(400).send({error: "Please provide labellerID in query"});
     }
 
     //convert to mongooseID and check it's valid id
@@ -23,7 +23,7 @@ router.route('/article').get((req, res) => {
     try {
         _labellerID = mongoose.Types.ObjectId(labellerID)
     } catch (err) {
-        return res.status(500).send({error: "labellerID is not a valid mongoose ID", stack: err.toString()});
+        return res.status(400).send({error: "labellerID is not a valid mongoose ID", stack: err.toString()});
     }
 
     //check that the labellerID exists
