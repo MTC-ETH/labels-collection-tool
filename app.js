@@ -23,7 +23,7 @@ app.use(cors());
 app.use(express.json());
 
 const labellingRouter = require('./routes/labelling');
-app.use('/labelling/', labellingRouter);
+app.use('/Labelling/', labellingRouter);
 
 const admindashboardRouter = require('./routes/admindashboard');
 app.use('/admindashboard/', admindashboardRouter);

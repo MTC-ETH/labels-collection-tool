@@ -31,7 +31,7 @@ class AuthenticateLabeller extends React.Component {
                 console.log(response.data);
                 if(response.data.valid) {
                     // const history = useHistory();
-                    this.props.history.push("/labelling?token=" + this.state.token);
+                    this.props.history.push("/Labelling?token=" + this.state.token);
                 } else {
                     alert(response.data.message);
                 }

@@ -1,12 +1,12 @@
 import React from "react";
 import axios from 'axios';
 import queryString from 'query-string';
-import Article from "../components/labelling/Article";
-import Comments from "../components/labelling/CommentsContainer";
-import ArticleInstructions from "../components/labelling/ArticleInstructions";
-import CommentsInstructions from "../components/labelling/CommentsInstructions";
-import ArticleStanceQuestion from "../components/labelling/ArticleStanceQuestion";
-import SubmitInstructionsAndButton from "../components/labelling/SubmitInstructionsAndButton";
+import Article from "../components/Labelling/Article";
+import Comments from "../components/Labelling/CommentsContainer";
+import ArticleInstructions from "../components/Labelling/ArticleInstructions";
+import CommentsInstructions from "../components/Labelling/CommentsInstructions";
+import ArticleStanceQuestion from "../components/Labelling/ArticleStanceQuestion";
+import SubmitInstructionsAndButton from "../components/Labelling/SubmitInstructionsAndButton";
 
 // const labellerID = "5f199424dcf1cfe56a7436a7";
 
@@ -110,14 +110,14 @@ class Labelling extends React.Component {
         let paragraphsError = {...this.state.paragraphsError};
         paragraphsError[paragraph.consecutiveID] = false;
         this.setState({paragraphsEmotionLabel, paragraphsError});
-        this.postToBackendStatus('/labelling/tag/paragraph', paragraph.consecutiveID, emotion);
+        this.postToBackendStatus('/Labelling/tag/paragraph', paragraph.consecutiveID, emotion);
     }
 
     handleStanceArticle(event, stance) {
         event.preventDefault();
         console.log(stance);
         this.setState({stanceArticleQuestionLabel: stance, stanceArticleQuestionError: false});
-        this.postToBackendStatus('/labelling/tag/article', null, stance);
+        this.postToBackendStatus('/Labelling/tag/article', null, stance);
     }
 
     handleStanceComments(event, stance, comment) {
@@ -130,7 +130,7 @@ class Labelling extends React.Component {
         commentsError[comment.commentID] = commentsError[comment.commentID] &&
             this.state.commentsEmotionLabel[comment.commentID] === null;
         this.setState({commentsStanceLabel, commentsError});
-        this.postToBackendStatus('/labelling/tag/comment/stance', comment.commentID, stance);
+        this.postToBackendStatus('/Labelling/tag/comment/stance', comment.commentID, stance);
     }
 
     postToBackendStatus(entryPoint, elemID, label) {
@@ -159,7 +159,7 @@ class Labelling extends React.Component {
             this.state.commentsStanceLabel[comment.commentID] === null;
         this.setState({commentsEmotionLabel, commentsError});
 
-        this.postToBackendStatus('/labelling/tag/comment/emotion', comment.commentID, emotion);
+        this.postToBackendStatus('/Labelling/tag/comment/emotion', comment.commentID, emotion);
     }
 
     handleSubmit(event) {
@@ -205,7 +205,7 @@ class Labelling extends React.Component {
             return;
         }
 
-        axios.post("/labelling/submit", {
+        axios.post("/Labelling/submit", {
             labeller: this.state.labellerID,
             article: this.state.article._id,
             paragraphsEmotionLabel: this.state.paragraphsEmotionLabel,

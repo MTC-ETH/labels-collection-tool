@@ -2,9 +2,9 @@ const router = require('express').Router();
 const _ = require('lodash');
 
 const labelledentries = require(`../models/labelledentries`);
+const labellers = require(`../models/labellers`);
 
 
-//get the next article to be tagged
 router.route('/labelled').get((req, res) => {
     console.log("This is the req.body", req.body);
 
@@ -26,6 +26,26 @@ router.route('/labelled').get((req, res) => {
                     res.type('application/json');
                     res.json(queryRes);
                 })
+        .catch(err => res.status(500).send(err));
+});
+
+router.route('/status').get((req, res) => {
+    const queryPromises = [];
+
+    queryPromises.push(labellers.countDocuments({}).exec().then(c => {return {nRegisteredLabellers: c}}));
+    queryPromises.push(labelledentries.countDocuments({}).exec().then(c => {return {nTaggedArticles: c}}));
+    queryPromises.push(labelledentries.aggregate([
+        {$group: { _id: null, totalSize: { $sum: { $size: "$commentsEmotionLabel"}}}}])
+        .exec().then(r => {
+            return {nTaggedComments: r[0].totalSize}}));
+
+    //check that the labellerID exists
+    return Promise.all(queryPromises)
+        .then(arrOfObjects => Object.assign({}, ...arrOfObjects)) //just flattens the objects
+        .then(status => {
+            console.log(status);
+            res.json(status);
+        })
         .catch(err => res.status(500).send(err));
 });
 
