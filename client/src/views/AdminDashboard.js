@@ -2,7 +2,7 @@ import React from "react";
 import axios from 'axios';
 import FileDownload from 'js-file-download';
 
-import {Badge, Button, Col, Container, Row} from "reactstrap";
+import {Button, Col, Container, Row} from "reactstrap";
 import InfoRow from "../components/AdminDashboard/InfoRow";
 
 class AdminDashboard extends React.Component {

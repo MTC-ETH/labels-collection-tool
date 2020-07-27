@@ -25,7 +25,7 @@ class SubmitInstructionsAndButton extends React.Component {
                             fontSize: "25px"
                         }}
                         onClick={this.props.onClick}>
-                    <b>➡️ Submit and go to next article ➡️</b>
+                    <b><span role="img" aria-label="arrow left">➡️</span> Submit and go to next article <span role="img" aria-label="arrow left">➡️</span>️</b>
                 </Button>
             </Container>
         </>

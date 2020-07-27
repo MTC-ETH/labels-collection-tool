@@ -1,7 +1,6 @@
 import React from "react";
 import axios from 'axios';
-// import { useHistory } from 'react-router-dom';
-import {Button, Container, Form, FormGroup, FormText, Input, Label} from "reactstrap";
+import {Button, Container, Form, FormGroup, Input, Label} from "reactstrap";
 
 class AuthenticateLabeller extends React.Component {
     constructor(props, context) {
