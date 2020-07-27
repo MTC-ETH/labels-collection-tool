@@ -24,13 +24,10 @@ class AuthenticateLabeller extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log(this.state.token);
 
         axios.get("/authenticatelabeller/valid?token=" + this.state.token)
             .then(response => {
-                console.log(response.data);
                 if(response.data.valid) {
-                    // const history = useHistory();
                     this.props.history.push("/Labelling?token=" + this.state.token);
                 } else {
                     alert(response.data.message);

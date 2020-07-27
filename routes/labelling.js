@@ -10,10 +10,8 @@ const labelledentries = require(`../models/labelledentries`);
 
 //get the next article to be tagged
 router.route('/article').get((req, res) => {
-    console.log("This is the req.body", req.body);
-
     let labellerID = _.get(req, "query.labellerID", null);
-    console.log("labellerID = " + labellerID);
+    console.log("labelling/article queried, with labellerID = " + labellerID);
     if(!labellerID) {
         return res.status(400).send({error: "Please provide labellerID in query"});
     }
@@ -30,11 +28,9 @@ router.route('/article').get((req, res) => {
     labellers.exists({_id: _labellerID})
         .then(exists => {
             if(!exists) {
-                console.log("labellerID not found");
                 throw new Error({error: "Please provide labellerID in query"});
             }
             //exists
-            console.log("labellerID found");
 
             //if there is already a Labelling status from this labeller we have to return that article
             return labellingstatuses.findOne({labeller: labellerID}).exec()
@@ -85,24 +81,20 @@ router.route('/article').get((req, res) => {
 
                                 return newLabellingStatus.save()
                                     .then(labstat => {
-                                        console.log('SUCCESS\nNew Labelling status created for ' + labstat.labeller
+                                        console.log('New Labelling status created for ' + labstat.labeller
                                             + ' and article' + labstat.article);
-                                        console.log("Query will return the article: " + newArticle._id);
-                                        // console.log(newArticle);
-
                                         return {status: labstat, article: newArticle};
                                     })
                             });
                         }
                 }).then((responseObject) => {
-                    console.log(responseObject);
                     res.json(responseObject)
                 });
 
         })
         .catch(err => {
             console.log(err);
-            res.status(500).send(err)
+            res.status(500).send(err);
         });
 });
 
@@ -116,8 +108,8 @@ function updatelabellingstatutes(req, res, arrayName, elemIDName) {
             $set: {
                 [arrayName + '.$.label']: req.body.label,
             }
-        }).then(updatedstatus => {
-        console.log(updatedstatus);
+        }).then(() => {
+        console.log("Succesfully updated.");
         return res.send('Successfully saved.');
     }).catch(err => {
         return res.status(500).send({error: err});
@@ -126,7 +118,8 @@ function updatelabellingstatutes(req, res, arrayName, elemIDName) {
 
 // POST an intermediate result of tagging a paragraph
 router.route('/tag/article').post((req, res) => {
-    console.log("request of tagging paragraph");
+    console.log("labelling/tag/article queried");
+
     return labellingstatuses.updateOne({
             'labeller': mongoose.Types.ObjectId(req.body.labeller),
             'article': mongoose.Types.ObjectId(req.body.article),
@@ -135,8 +128,9 @@ router.route('/tag/article').post((req, res) => {
             $set: {
                 stanceArticleQuestionLabel: req.body.label,
             }
-        }).then(updatedstatus => {
-        console.log(updatedstatus);
+        })
+        .then(() => {
+        console.log("Succesfully updated.");
         return res.send('Successfully saved.');
     }).catch(err => {
         return res.status(500).send({error: err});
@@ -145,26 +139,26 @@ router.route('/tag/article').post((req, res) => {
 
 // POST an intermediate result of tagging a paragraph
 router.route('/tag/paragraph').post((req, res) => {
-    console.log("request of tagging paragraph");
+    console.log("labelling/tag/paragraph queried");
     return updatelabellingstatutes(req, res, "paragraphsEmotionLabel", "paragraphConsecutiveID");
 });
 
 // POST an intermediate result of tagging a comment stance
 router.route('/tag/comment/stance').post((req, res) => {
-    console.log("request of tagging comment stance");
+    console.log("labelling/comment/stance queried");
     return updatelabellingstatutes(req, res, "commentsStanceLabel", "commentID");
 });
 
 // POST an intermediate result of tagging a comment emotion
 router.route('/tag/comment/emotion').post((req, res) => {
-    console.log("request of tagging comment emotion");
+    console.log("labelling/comment/emotion queried");
     return updatelabellingstatutes(req, res, "commentsEmotionLabel", "commentID");
 });
 
 router.route('/submit').post((req, res) => {
-    console.log("request of submitting");
-    //reconciliation check between server status and client status
+    console.log("labelling/submit queried");
 
+    //reconciliation check between server status and client status
     const data = req.body;
 
     function reconciliate(newEntry, listName, idName) {
@@ -203,8 +197,12 @@ router.route('/submit').post((req, res) => {
         reconciliate(newEntry, "commentsEmotionLabel", "commentID");
 
         const newLabelledEntry = new labelledentries(newEntry);
-        return newLabelledEntry.save().then(savedentry => {
-            return queryRes.remove().then(() => res.send('Successfully saved.'));
+        return newLabelledEntry.save().then(() => {
+            console.log("Successfully saved.");
+            return queryRes.remove().then(() => {
+                console.log("Successfully removed labellingstatuses record.");
+                res.send('Successfully saved.')
+            });
         });
     }).catch(err => {
         console.log(err);

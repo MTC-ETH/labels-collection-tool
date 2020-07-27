@@ -32,7 +32,6 @@ class AdminDashboard extends React.Component {
     handleDownloadLabelled() {
         axios.get("/admindashboard/labelled?token=" + "temporarytoken")
             .then((response) => {
-                console.log(response.data);
                 FileDownload(JSON.stringify(response.data, null, 4), 'labelled.json');
             });
     }

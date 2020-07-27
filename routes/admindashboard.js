@@ -1,28 +1,25 @@
 const router = require('express').Router();
-const _ = require('lodash');
 
 const labelledentries = require(`../models/labelledentries`);
 const labellers = require(`../models/labellers`);
 
 
 router.route('/labelled').get((req, res) => {
-    console.log("This is the req.body", req.body);
-
-    let token = _.get(req, "query.token", null);
-    console.log("token = " + token);
-    console.log(process.env.ADMIN_TOKEN);
+    console.log("admindashboard/labelled queried, with token = " + token);
     if(!token) {
+        console.log("No token in query");
         return res.status(400).send({error: "Please provide token in query"});
     }
     if(token !== process.env.ADMIN_TOKEN) {
-        return res.status(400).send({error: "Wrong token"});
+        console.log("Token is not admin token.");
+        return res.status(400).send({error: "Token is not admin token."});
     }
 
     //check that the labellerID exists
     return labelledentries.find({})
         .then(queryRes => {
-            console.log(queryRes);
-            res.set("Content-Disposition", "attachment; filename=labelled.json");
+                    console.log("Succesfully authenticated, returning records");
+                    res.set("Content-Disposition", "attachment; filename=labelled.json");
                     res.type('application/json');
                     res.json(queryRes);
                 })
@@ -33,6 +30,7 @@ router.route('/labelled').get((req, res) => {
 });
 
 router.route('/status').get((req, res) => {
+    console.log("admindashboard/status queried");
     const queryPromises = [];
 
     queryPromises.push(labellers.countDocuments({}).exec().then(c => {return {nRegisteredLabellers: c}}));
@@ -49,6 +47,7 @@ router.route('/status').get((req, res) => {
     return Promise.all(queryPromises)
         .then(arrOfObjects => Object.assign({}, ...arrOfObjects)) //just flattens the objects
         .then(status => {
+            console.log("Replying with current status");
             console.log(status);
             res.json(status);
         })

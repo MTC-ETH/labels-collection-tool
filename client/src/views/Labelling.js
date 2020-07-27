@@ -36,14 +36,11 @@ class Labelling extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props);
         this.fetchDataAndUpdateState();
     }
 
     fetchDataAndUpdateState() {
         const params = queryString.parse(this.props.location.search);
-        console.log(params);
-        console.log(params.token);
         this.setState({labellerID: params.token});
         return axios.get(`/labelling/article?labellerID=${params.token}`)
             .then(res => {
@@ -93,18 +90,8 @@ class Labelling extends React.Component {
             .catch(err => console.log(err));
     }
 
-    // callApi = async () => {
-    //     const response = await fetch();
-    //     const body = await response.json();
-    //     if (response.status !== 200) throw Error(body.message);
-    //
-    //     return body;
-    // };
-
     handleEmotionArticle(event, emotion, paragraph) {
         event.preventDefault();
-        console.log(emotion);
-        console.log(paragraph);
         let paragraphsEmotionLabel = {...this.state.paragraphsEmotionLabel};
         paragraphsEmotionLabel[paragraph.consecutiveID] = emotion;
         let paragraphsError = {...this.state.paragraphsError};
@@ -115,15 +102,12 @@ class Labelling extends React.Component {
 
     handleStanceArticle(event, stance) {
         event.preventDefault();
-        console.log(stance);
         this.setState({stanceArticleQuestionLabel: stance, stanceArticleQuestionError: false});
         this.postToBackendStatus('/Labelling/tag/article', null, stance);
     }
 
     handleStanceComments(event, stance, comment) {
         event.preventDefault();
-        console.log(stance);
-        console.log(comment);
         let commentsStanceLabel = {...this.state.commentsStanceLabel};
         commentsStanceLabel[comment.commentID] = stance;
         let commentsError = {...this.state.commentsError};
@@ -150,8 +134,6 @@ class Labelling extends React.Component {
 
     handleEmotionComments(event, emotion, comment) {
         event.preventDefault();
-        console.log(emotion);
-        console.log(comment.commentID);
         let commentsEmotionLabel = {...this.state.commentsEmotionLabel};
         commentsEmotionLabel[comment.commentID] = emotion;
         let commentsError = {...this.state.commentsError};
