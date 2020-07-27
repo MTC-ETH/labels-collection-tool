@@ -38,7 +38,7 @@ class Labelling extends React.Component {
     }
 
     fetchDataAndUpdateState() {
-        this.callApi()
+        return this.callApi()
             .then(res => {
                 const {status, article} = res;
                 const paragraphsEmotionLabel = {};
@@ -72,7 +72,7 @@ class Labelling extends React.Component {
                     }
                     commentsError[com.commentID] = false;
                 });
-                this.setState({
+                return this.setState({
                     article: article,
                     comments: article.comments,
                     paragraphsEmotionLabel: paragraphsEmotionLabel,
@@ -207,10 +207,8 @@ class Labelling extends React.Component {
             commentsEmotionLabel: this.state.commentsEmotionLabel,
         })
             .then(response => {
-                console.log(response);
-                console.log("fetching new article");
-                this.fetchDataAndUpdateState();
-                window.scrollTo(0, 0);
+                this.fetchDataAndUpdateState().then(() =>
+                window.scrollTo(0, 0));
             })
             .catch(error => {
                 alert("Server error, please try again");
