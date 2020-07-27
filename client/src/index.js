@@ -5,12 +5,14 @@ import './index.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Labelling from "./views/Labelling";
+import AdminDashboard from "./views/AdminDashboard";
 
 ReactDOM.render(
     <>
         <BrowserRouter>
             <Switch>
                 <Route path="/" exact render={props => <Labelling {...props} />} />
+                <Route path="/admindashboard" exact render={props => <AdminDashboard {...props} />} />
                 {/*<Route component={NoMatch}/>*/}
             </Switch>
         </BrowserRouter>
