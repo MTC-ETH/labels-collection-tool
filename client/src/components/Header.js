@@ -13,7 +13,7 @@ class Header extends React.Component {
               <Row>
                   <Col>
                       <Media>
-                          <Media left>
+                          <Media left href="/">
                               <Media object style={{
                                   maxHeight: '100%',
                                   maxWidth: '100%',

@@ -39,10 +39,10 @@ class AuthenticateLabeller extends React.Component {
         return (<>
             <Header/>
             <Container className="shape-container align-items-center pt-4">
-                <h2>Authentication</h2>
+                <h2>Labeller Authentication</h2>
                 <Form>
                     <FormGroup>
-                        <Label for="token">Personal token (can be found in email):</Label>
+                        <Label for="token">Please enter you personal token, sent to you in the registration email:</Label>
                         <Input onChange={this.handleInputChange} type="text" name="tokenInput" id="tokenInput" placeholder="Personal token" />
                     </FormGroup>
                     <Button onClick={this.handleSubmit}>Start labelling</Button>
