@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const nodemailer = require('nodemailer');
 const labellers = require(`../models/labellers`);
-
+const config = require("../config");
 
 function sendRegistrationEmailAndWriteInDB(name, surname, email, affiliation, smtpTrans, res) {
     const newLabeller = new labellers({
@@ -16,7 +16,7 @@ function sendRegistrationEmailAndWriteInDB(name, surname, email, affiliation, sm
     return newLabeller.save()
         .then(savedObject => savedObject._id)
         .then(idToken => {
-            const link = "http://localhost:3000/labelling?token=" + idToken;
+            const link = config.baseLink + "/labelling?token=" + idToken;
             // Specify what the email will look like
             const mailOpts = {
                 from: process.env.EMAIL, // This is ignored by Gmail
@@ -44,7 +44,7 @@ The emotion and stance MTC team`
 
 function sendAlreadyExistingEmail(name, surname, email, affiliation, idToken, smtpTrans, res) {
     console.log("Email already exists in DB, resending email.");
-    const link = "http://localhost:3000/labelling?token=" + idToken;
+    const link = config.baseLink + "/labelling?token=" + idToken;
     // Specify what the email will look like
     const mailOpts = {
         from: process.env.EMAIL, // This is ignored by Gmail
