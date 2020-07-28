@@ -8,6 +8,7 @@ import Labelling from "./views/Labelling";
 import AdminDashboard from "./views/AdminDashboard";
 import AuthenticateLabeller from "./views/AuthenticateLabeller";
 import Register from "./views/Register";
+import NoMatch from "./views/NoMatch";
 
 ReactDOM.render(
     <>
@@ -18,7 +19,7 @@ ReactDOM.render(
                 <Route path="/admindashboard" exact render={props => <AdminDashboard {...props} />} />
                 <Route path="/authenticatelabeller" exact render={props => <AuthenticateLabeller {...props} />} />
                 <Route path="/register" exact render={props => <Register {...props} />} />
-                {/*<Route component={NoMatch}/>*/}
+                <Route component={NoMatch}/>
             </Switch>
         </BrowserRouter>
     </>,

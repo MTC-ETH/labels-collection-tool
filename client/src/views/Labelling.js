@@ -113,13 +113,13 @@ class Labelling extends React.Component {
         let paragraphsError = {...this.state.paragraphsError};
         paragraphsError[paragraph.consecutiveID] = false;
         this.setState({paragraphsEmotionLabel, paragraphsError});
-        this.postToBackendStatus('/Labelling/tag/paragraph', paragraph.consecutiveID, emotion);
+        this.postToBackendStatus('/labelling/tag/paragraph', paragraph.consecutiveID, emotion);
     }
 
     handleStanceArticle(event, stance) {
         event.preventDefault();
         this.setState({stanceArticleQuestionLabel: stance, stanceArticleQuestionError: false});
-        this.postToBackendStatus('/Labelling/tag/article', null, stance);
+        this.postToBackendStatus('/labelling/tag/article', null, stance);
     }
 
     handleStanceComments(event, stance, comment) {
@@ -130,7 +130,7 @@ class Labelling extends React.Component {
         commentsError[comment.commentID] = commentsError[comment.commentID] &&
             this.state.commentsEmotionLabel[comment.commentID] === null;
         this.setState({commentsStanceLabel, commentsError});
-        this.postToBackendStatus('/Labelling/tag/comment/stance', comment.commentID, stance);
+        this.postToBackendStatus('/labelling/tag/comment/stance', comment.commentID, stance);
     }
 
     postToBackendStatus(entryPoint, elemID, label) {
@@ -157,7 +157,7 @@ class Labelling extends React.Component {
             this.state.commentsStanceLabel[comment.commentID] === null;
         this.setState({commentsEmotionLabel, commentsError});
 
-        this.postToBackendStatus('/Labelling/tag/comment/emotion', comment.commentID, emotion);
+        this.postToBackendStatus('/labelling/tag/comment/emotion', comment.commentID, emotion);
     }
 
     handleSubmit(event) {
@@ -203,7 +203,7 @@ class Labelling extends React.Component {
             return;
         }
 
-        axios.post("/Labelling/submit", {
+        axios.post("/labelling/submit", {
             labeller: this.state.labellerID,
             article: this.state.article._id,
             paragraphsEmotionLabel: this.state.paragraphsEmotionLabel,

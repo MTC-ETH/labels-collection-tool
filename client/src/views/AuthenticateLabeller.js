@@ -27,7 +27,7 @@ class AuthenticateLabeller extends React.Component {
         axios.get("/authenticatelabeller/valid?token=" + this.state.token)
             .then(response => {
                 if(response.data.valid) {
-                    this.props.history.push("/Labelling?token=" + this.state.token);
+                    this.props.history.push("/labelling?token=" + this.state.token);
                 } else {
                     alert(response.data.message);
                 }

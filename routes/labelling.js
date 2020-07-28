@@ -40,7 +40,7 @@ router.route('/article').get((req, res) => {
             }
             //exists
 
-            //if there is already a Labelling status from this labeller we have to return that article
+            //if there is already a labelling status from this labeller we have to return that article
             return labellingstatuses.findOne({labeller: labellerID}).exec()
                 .then(status => {
                     if(status) {
@@ -88,7 +88,7 @@ router.route('/article').get((req, res) => {
 
                                 return newLabellingStatus.save()
                                     .then(labstat => {
-                                        console.log('New Labelling status created for ' + labstat.labeller
+                                        console.log('New labelling status created for ' + labstat.labeller
                                             + ' and article' + labstat.article);
                                         res.json({status: labstat, article: newArticle});
                                     })
