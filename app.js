@@ -30,6 +30,9 @@ app.use('/admindashboard/', admindashboardRouter);
 const authenticatelabellerRouter = require('./routes/authenticatelabeller');
 app.use('/authenticatelabeller/', authenticatelabellerRouter);
 
+const registerRouter = require('./routes/register');
+app.use('/register/', registerRouter);
+
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });

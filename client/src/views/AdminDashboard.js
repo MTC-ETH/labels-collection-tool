@@ -26,7 +26,7 @@ class AdminDashboard extends React.Component {
             })
             .catch(err => {
                 console.log(err);
-            })
+            });
     }
 
     handleDownloadLabelled() {

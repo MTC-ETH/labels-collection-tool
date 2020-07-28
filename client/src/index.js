@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Labelling from "./views/Labelling";
 import AdminDashboard from "./views/AdminDashboard";
 import AuthenticateLabeller from "./views/AuthenticateLabeller";
+import Register from "./views/Register";
 
 ReactDOM.render(
     <>
@@ -16,6 +17,7 @@ ReactDOM.render(
                 <Route path="/labelling" exact render={props => <Labelling {...props} />} />
                 <Route path="/admindashboard" exact render={props => <AdminDashboard {...props} />} />
                 <Route path="/authenticatelabeller" exact render={props => <AuthenticateLabeller {...props} />} />
+                <Route path="/register" exact render={props => <Register {...props} />} />
                 {/*<Route component={NoMatch}/>*/}
             </Switch>
         </BrowserRouter>
