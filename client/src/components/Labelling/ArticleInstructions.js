@@ -8,7 +8,7 @@ class ArticleInstructions extends React.Component {
   render() {
       return (
           <>
-            <Container className="shape-container align-items-center pt-4" style={{
+            <Container className="shape-container align-items-center pt-2" style={{
                 color: "blue",
                 // fontSize: "12px"
             }}>

@@ -1,6 +1,7 @@
 import React from "react";
 import axios from 'axios';
 import {Button, Container, Form, FormGroup, Input, Label, UncontrolledAlert} from "reactstrap";
+import Header from "../components/Header";
 
 class AuthenticateLabeller extends React.Component {
     constructor(props, context) {
@@ -116,8 +117,9 @@ class AuthenticateLabeller extends React.Component {
     }
 
     render() {
-        return (
-            <Container className="shape-container align-items-center pt-4">
+        return (<>
+            <Header/>
+            <Container className="shape-container align-items-center">
                 <h2>Registration</h2>
 
                 {!(this.state.errorMessage) ? null :
@@ -192,6 +194,7 @@ class AuthenticateLabeller extends React.Component {
                     </>
                     )}
             </Container>
+            </>
         );
     }
 }

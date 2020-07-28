@@ -1,6 +1,7 @@
 import React from "react";
 import axios from 'axios';
 import {Button, Container, Form, FormGroup, Input, Label} from "reactstrap";
+import Header from "../components/Header";
 
 class AuthenticateLabeller extends React.Component {
     constructor(props, context) {
@@ -35,8 +36,10 @@ class AuthenticateLabeller extends React.Component {
     }
 
     render() {
-        return (
+        return (<>
+            <Header/>
             <Container className="shape-container align-items-center pt-4">
+                <h2>Authentication</h2>
                 <Form>
                     <FormGroup>
                         <Label for="token">Personal token (can be found in email):</Label>
@@ -45,6 +48,7 @@ class AuthenticateLabeller extends React.Component {
                     <Button onClick={this.handleSubmit}>Start labelling</Button>
                 </Form>
             </Container>
+            </>
         );
     }
 }

@@ -9,6 +9,7 @@ import ArticleStanceQuestion from "../components/Labelling/ArticleStanceQuestion
 import SubmitInstructionsAndButton from "../components/Labelling/SubmitInstructionsAndButton";
 import {Col, Container, UncontrolledAlert} from "reactstrap";
 import Row from "reactstrap/es/Row";
+import Header from "../components/Header";
 
 // const labellerID = "5f199424dcf1cfe56a7436a7";
 
@@ -244,6 +245,9 @@ class Labelling extends React.Component {
         }
         return (
             <>
+                <Header/>
+                <Container><Row><Col><h2>Labelling Procedure</h2></Col></Row></Container>
+
                 <ArticleInstructions/>
                 <Article articleJson={this.state.article}
                          paragraphsEmotionLabel={this.state.paragraphsEmotionLabel}

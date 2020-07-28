@@ -1,23 +1,19 @@
 import React from "react";
-import axios from 'axios';
-import queryString from 'query-string';
-import Article from "../components/Labelling/Article";
-import Comments from "../components/Labelling/CommentsContainer";
-import ArticleInstructions from "../components/Labelling/ArticleInstructions";
-import CommentsInstructions from "../components/Labelling/CommentsInstructions";
-import ArticleStanceQuestion from "../components/Labelling/ArticleStanceQuestion";
-import SubmitInstructionsAndButton from "../components/Labelling/SubmitInstructionsAndButton";
-import {Button, Col, Container, UncontrolledAlert} from "reactstrap";
+import {Button, Col, Container, Media, UncontrolledAlert} from "reactstrap";
 import Row from "reactstrap/es/Row";
 
-// const labellerID = "5f199424dcf1cfe56a7436a7";
+import headerImg from "../assets/imgs/ETHMTCHeader.png";
+import Header from "../components/Header";
 
 class NoMatch extends React.Component {
 
 
 
     render() {
-        return (<Container className={"pt-4"}>
+        return (<>
+            <Header/>
+            <Container>
+                <Row><Col><h2>Error 404</h2></Col></Row>
             <Row>
                 <Col>
                     <UncontrolledAlert color="danger" fade={true}>
@@ -41,7 +37,8 @@ class NoMatch extends React.Component {
                     </Button>
                 </Col>
             </Row>
-        </Container>);
+        </Container>
+            </>);
     }
 }
 

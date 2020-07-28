@@ -4,6 +4,7 @@ import FileDownload from 'js-file-download';
 
 import {Button, Col, Container, Row} from "reactstrap";
 import InfoRow from "../components/AdminDashboard/InfoRow";
+import Header from "../components/Header";
 
 class AdminDashboard extends React.Component {
     constructor(props, context) {
@@ -38,21 +39,28 @@ class AdminDashboard extends React.Component {
 
 
     render() {
-        return (
-            <Container className="shape-container align-items-center pt-4">
-                <Row>
-                    <h2>Infos</h2>
+        return ( <>
+            <Header/>
+            <Container><Row><Col><h2>Admin Dashboard</h2></Col></Row></Container>
+        <Container className="shape-container align-items-center">
+                <Row className={"pt-2"}>
+                    <Col>
+                    <h3>Infos</h3>
+                    </Col>
                 </Row>
                 <InfoRow counter={this.state.nRegisteredLabellers}>Number of registered labellers:</InfoRow>
                 <InfoRow counter={this.state.nTaggedArticles}>Number of labelled articles:</InfoRow>
                 <InfoRow counter={this.state.nTaggedComments}>Number of labelled comments:</InfoRow>
                 <Row className={"pt-4"}>
-                    <h2>Actions</h2>
+                    <Col>
+                    <h3>Actions</h3>
+                </Col>
                 </Row>
                 <Row>
                     <Col><Button onClick={this.handleDownloadLabelled}>Download Labelled Data</Button></Col>
                 </Row>
             </Container>
+            </>
         );
     }
 }
