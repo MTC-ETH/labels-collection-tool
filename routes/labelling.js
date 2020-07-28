@@ -49,7 +49,7 @@ router.route('/article').get((req, res) => {
                         return articles.findOne({_id: status.article}).exec()
                             .then(matchingArticle => {
                                 if(matchingArticle) {
-                                    res.json({status: status, article: matchingArticle});
+                                    return res.json({status: status, article: matchingArticle});
                                 }
                                 else {
                                     throw new Error("No matching article found for the status of this labeller");
@@ -70,6 +70,11 @@ router.route('/article').get((req, res) => {
                             .then(idArrays => idArrays.flat())
                             .then(ids => articles.findOne({"_id": { "$nin": ids }}).exec())
                             .then(newArticle => {
+                                if(newArticle === null) {
+                                    return res.status(400).send({message: "No article found. Either the database is " +
+                                            "empty or all the articles have been labelled",
+                                        error: null});
+                                }
                                 //associate labeller to this article and write this in the labellingstatus table
                                 const newLabellingStatus =  new labellingstatuses(
                                     {labeller: labellerID,
