@@ -6,6 +6,7 @@ const labellersSchema = new Schema({
         surname: String,
         email: String,
         affiliation: String,
+        confirmedEmail: {type: Boolean, default: false}
     },
     {
         timestamps: true

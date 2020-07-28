@@ -7,6 +7,8 @@ import ArticleInstructions from "../components/Labelling/ArticleInstructions";
 import CommentsInstructions from "../components/Labelling/CommentsInstructions";
 import ArticleStanceQuestion from "../components/Labelling/ArticleStanceQuestion";
 import SubmitInstructionsAndButton from "../components/Labelling/SubmitInstructionsAndButton";
+import {Col, Container, UncontrolledAlert} from "reactstrap";
+import Row from "reactstrap/es/Row";
 
 // const labellerID = "5f199424dcf1cfe56a7436a7";
 
@@ -24,6 +26,7 @@ class Labelling extends React.Component {
             commentsStanceLabel: {},
             commentsEmotionLabel: {},
             commentsError: {},
+            serverFetchError: null,
         };
 
         this.handleEmotionArticle = this.handleEmotionArticle.bind(this);
@@ -87,7 +90,20 @@ class Labelling extends React.Component {
                     commentsError: commentsError,
                 });
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+                if(err.response && err.response.data.message) {
+                    console.log(err.response.data); // => the response payload
+                    this.setState({
+                        serverFetchError: err.response.data.message,
+                    });
+                }
+                else {
+                    this.setState({
+                        serverFetchError: "Server error" + err.toString(),
+                    });
+                }
+            });
     }
 
     handleEmotionArticle(event, emotion, paragraph) {
@@ -206,6 +222,23 @@ class Labelling extends React.Component {
     }
 
     render() {
+        if(this.state.serverFetchError !== null) {
+            return (<Container>
+                <Row>
+                    <Col>
+                        <UncontrolledAlert color="danger" fade={true}>
+                                        <span className="alert-inner--icon">
+                                            <i className="ni ni-support-16" />
+                                        </span>
+                            <span className="alert-inner--text ml-1">
+                            <strong>Error!</strong> {this.state.serverFetchError}
+                                        </span>
+                        </UncontrolledAlert>
+                    </Col>
+                </Row>
+            </Container>);
+        }
+
         if(this.state.article === null) {
             return null;
         }

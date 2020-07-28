@@ -13,7 +13,7 @@ router.route('/article').get((req, res) => {
     let labellerID = _.get(req, "query.labellerID", null);
     console.log("labelling/article queried, with labellerID = " + labellerID);
     if(!labellerID) {
-        return res.status(400).send({error: "Please provide labellerID in query"});
+        return res.status(400).send({message: "Please provide labellerID in query"});
     }
 
     //convert to mongooseID and check it's valid id
@@ -21,14 +21,22 @@ router.route('/article').get((req, res) => {
     try {
         _labellerID = mongoose.Types.ObjectId(labellerID)
     } catch (err) {
-        return res.status(400).send({error: "labellerID is not a valid mongoose ID", stack: err.toString()});
+        return res.status(400).send({message: "labellerID is not a valid mongoose ID", error: err});
     }
 
     //check that the labellerID exists
-    labellers.exists({_id: _labellerID})
+    labellers.findOne({_id: _labellerID})
+        .then(queryRes => {
+            //if he clicked on the link he confimed the email
+            if(queryRes !== null) {
+                return queryRes.update({confirmedEmail: true}).then(() => true);
+            }
+            return false;
+        })
         .then(exists => {
             if(!exists) {
-                throw new Error({error: "Please provide labellerID in query"});
+                return res.status(400).send({message: "labellerID doesn't exist in database, please use a valid one",
+                    error: null});
             }
             //exists
 
@@ -41,16 +49,15 @@ router.route('/article').get((req, res) => {
                         return articles.findOne({_id: status.article}).exec()
                             .then(matchingArticle => {
                                 if(matchingArticle) {
-                                    return {status: status, article: matchingArticle};
+                                    res.json({status: status, article: matchingArticle});
                                 }
                                 else {
-                                    throw new Error("No matching article found for the status of this labeller")
+                                    throw new Error("No matching article found for the status of this labeller");
                                 }
                             });
                     } else {
                         console.log("Not found any status, initiating a new one");
                         //we have to get the next article to be tagged
-                        //todo: should be updated to find the correct next article
                         //the article to task should neither be in the labellingstatuses (it's being labelled
                         //right now, nor in the labelledentries (it's already been labelled)
                         const queriesPromises = [];
@@ -83,12 +90,10 @@ router.route('/article').get((req, res) => {
                                     .then(labstat => {
                                         console.log('New Labelling status created for ' + labstat.labeller
                                             + ' and article' + labstat.article);
-                                        return {status: labstat, article: newArticle};
+                                        res.json({status: labstat, article: newArticle});
                                     })
                             });
                         }
-                }).then((responseObject) => {
-                    res.json(responseObject)
                 });
 
         })
