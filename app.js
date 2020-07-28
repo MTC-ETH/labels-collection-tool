@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const mongoose = require('mongoose');
 
-const uri = 'mongodb://localhost/labelling_tool';
+const uri = process.env.MONGODB_URI;
 
 mongoose.connect(uri, {useNewUrlParser:true, useCreateIndex: true, useUnifiedTopology:true});
 const connection = mongoose.connection;
