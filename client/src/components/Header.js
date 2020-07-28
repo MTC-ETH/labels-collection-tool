@@ -1,7 +1,7 @@
 import React from "react";
 
 // reactstrap components
-import {Button, Col, Container, Media, Row} from "reactstrap";
+import {Col, Container, Media, Row} from "reactstrap";
 import headerImg from "../assets/imgs/ETHMTCHeader.png";
 
 class Header extends React.Component {

@@ -1,8 +1,7 @@
 import React from "react";
-import {Button, Col, Container, Media, UncontrolledAlert} from "reactstrap";
+import {Button, Col, Container, UncontrolledAlert} from "reactstrap";
 import Row from "reactstrap/es/Row";
 
-import headerImg from "../assets/imgs/ETHMTCHeader.png";
 import Header from "../components/Header";
 
 class NoMatch extends React.Component {
