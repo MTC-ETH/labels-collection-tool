@@ -7,6 +7,7 @@ const labellingstatuses = require(`../models/labellingstatuses`);
 const labellers = require(`../models/labellers`);
 const labelledentries = require(`../models/labelledentries`);
 
+const config = require('../config');
 
 //get the next article to be tagged
 router.route('/article').get((req, res) => {
@@ -46,9 +47,12 @@ router.route('/article').get((req, res) => {
                     if(status) {
                         console.log("Already find a status, replying with that one");
                         //there is a registered status
-                        return articles.findOne({_id: status.article}).exec()
+                        //lean returns an object rather than a mongoose document, needed because we want to modify it
+                        return articles.findOne({_id: status.article}).lean().exec()
                             .then(matchingArticle => {
                                 if(matchingArticle) {
+                                    matchingArticle.comments = matchingArticle.comments
+                                        .slice(0, status.limitNumberOfComments);
                                     return res.json({status: status, article: matchingArticle});
                                 }
                                 else {
@@ -68,7 +72,8 @@ router.route('/article').get((req, res) => {
 
                         return Promise.all(queriesPromises)
                             .then(idArrays => idArrays.flat())
-                            .then(ids => articles.findOne({"_id": { "$nin": ids }}).exec())
+                            //lean returns an object rather than a mongoose document, needed because we want to modify it
+                            .then(ids => articles.findOne({"_id": { "$nin": ids }}).lean().exec())
                             .then(newArticle => {
                                 if(newArticle === null) {
                                     return res.status(400).send({message: "No article found. Either the database is " +
@@ -76,6 +81,7 @@ router.route('/article').get((req, res) => {
                                         error: null});
                                 }
                                 //associate labeller to this article and write this in the labellingstatus table
+                                newArticle.comments = newArticle.comments.slice(0, config.commentsPerArticle);
                                 const newLabellingStatus =  new labellingstatuses(
                                     {labeller: labellerID,
                                         article: newArticle._id,
@@ -88,7 +94,8 @@ router.route('/article').get((req, res) => {
                                         }),
                                         commentsEmotionLabel: newArticle.comments.map(com => {
                                             return {commentID: com.commentID, label: null}
-                                        })
+                                        }),
+                                        limitNumberOfComments: config.commentsPerArticle
                                     });
 
                                 return newLabellingStatus.save()

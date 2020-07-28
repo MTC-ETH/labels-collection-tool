@@ -8,6 +8,7 @@ const labellingstatusesSchema = new Schema({
         stanceArticleQuestionLabel: String,
         commentsStanceLabel: [{commentID: String, label: String}],
         commentsEmotionLabel: [{commentID: String, label: String}],
+        limitNumberOfComments: Number,
     },
     {
         timestamps: true
