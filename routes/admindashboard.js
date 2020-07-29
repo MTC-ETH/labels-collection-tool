@@ -1,10 +1,12 @@
 const router = require('express').Router();
+const _ = require('lodash');
 
 const labelledentries = require(`../models/labelledentries`);
 const labellers = require(`../models/labellers`);
 
 
 router.route('/labelled').get((req, res) => {
+    const token = _.get(req, "query.token", null);
     console.log("admindashboard/labelled queried, with token = " + token);
     if(!token) {
         console.log("No token in query");
