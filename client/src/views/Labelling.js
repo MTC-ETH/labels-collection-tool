@@ -101,7 +101,7 @@ class Labelling extends React.Component {
                 }
                 else {
                     this.setState({
-                        serverFetchError: "Server error" + err.toString(),
+                        serverFetchError: "Server error:\n" + JSON.stringify(err)
                     });
                 }
             });
