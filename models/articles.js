@@ -20,6 +20,7 @@ const articlesSchema = new Schema({
         url: String,
         title: String,
         snippet: String,
+        stanceQuestion: String,
     paragraphs: [{consecutiveID: Number, text: String}],
     comments: [commentsSchema]
     },

@@ -33,6 +33,10 @@ connection.once("open", () => {
                         return {consecutiveID: index, text: par};
                     });
 
+                    if(!article.stanceQuestion) {
+                        article.stanceQuestion = "Is the article in favour or against the topic it's talking about?"
+                    }
+
                     //comments are shuffled at insertion time
                     shuffleArray(article.comments);
                     return article;
