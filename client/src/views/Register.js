@@ -2,6 +2,7 @@ import React from "react";
 import axios from 'axios';
 import {Button, Container, Form, FormGroup, Input, Label, UncontrolledAlert} from "reactstrap";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 class AuthenticateLabeller extends React.Component {
     constructor(props, context) {
@@ -194,6 +195,7 @@ class AuthenticateLabeller extends React.Component {
                     </>
                     )}
             </Container>
+                <Footer/>
             </>
         );
     }

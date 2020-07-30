@@ -8,7 +8,7 @@ class SubmitInstructionsAndButton extends React.Component {
   render() {
       return (
           <>
-            <Container className="shape-container align-items-center pt-4 mb-5" style={{
+            <Container className="shape-container align-items-center pt-4" style={{
                 color: "blue",
             }}>
                 <Row>

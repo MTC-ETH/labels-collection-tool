@@ -3,6 +3,7 @@ import {Button, Col, Container} from "reactstrap";
 import Row from "reactstrap/es/Row";
 
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 class Home extends React.Component {
 
@@ -60,6 +61,7 @@ class Home extends React.Component {
                     </Col>
                 </Row>
         </Container>
+            <Footer/>
             </>);
     }
 }

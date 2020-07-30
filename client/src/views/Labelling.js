@@ -11,6 +11,7 @@ import {Button, Col, Container, UncontrolledAlert} from "reactstrap";
 import Row from "reactstrap/es/Row";
 import Header from "../components/Header";
 import TechnicalInstructions from "../components/Instructions/TechnicalInstructions";
+import Footer from "../components/Footer";
 
 // const labellerID = "5f199424dcf1cfe56a7436a7";
 
@@ -298,6 +299,7 @@ class Labelling extends React.Component {
                           onClickEmotion={this.handleEmotionComments}
                 />
                 <SubmitInstructionsAndButton onClick={this.handleSubmit}/>
+                <Footer/>
             </>
         );
     }

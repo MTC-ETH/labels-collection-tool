@@ -7,6 +7,7 @@ import queryString from 'query-string';
 import ArticleSectionInstructions from "../components/Instructions/ArticleSectionInstructions";
 import CommentsSectionInstructions from "../components/Instructions/CommentsSectionInstructions";
 import TechnicalInstructions from "../components/Instructions/TechnicalInstructions";
+import Footer from "../components/Footer";
 
 
 class Instructions extends React.Component {
@@ -50,6 +51,7 @@ class Instructions extends React.Component {
                     </Col>
                 </Row>
             </Container>
+            <Footer/>
         </>);
     }
 }

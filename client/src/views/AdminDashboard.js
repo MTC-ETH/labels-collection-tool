@@ -5,6 +5,7 @@ import FileDownload from 'js-file-download';
 import {Button, Col, Container, Row} from "reactstrap";
 import InfoRow from "../components/AdminDashboard/InfoRow";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 class AdminDashboard extends React.Component {
     constructor(props, context) {
@@ -60,6 +61,7 @@ class AdminDashboard extends React.Component {
                     <Col><Button onClick={this.handleDownloadLabelled}>Download Labelled Data</Button></Col>
                 </Row>
             </Container>
+                <Footer/>
             </>
         );
     }
