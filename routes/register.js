@@ -16,7 +16,7 @@ function sendRegistrationEmailAndWriteInDB(name, surname, email, affiliation, sm
     return newLabeller.save()
         .then(savedObject => savedObject._id)
         .then(idToken => {
-            const link = config.baseLink + "/labelling?token=" + idToken;
+            const link = config.baseLink + "/instructions?token=" + idToken;
             // Specify what the email will look like
             const mailOpts = {
                 from: process.env.EMAIL, // This is ignored by Gmail
@@ -24,8 +24,8 @@ function sendRegistrationEmailAndWriteInDB(name, surname, email, affiliation, sm
                 subject: '[MTC] emotions and stance project registration',
                 text:
                     `Dear ${name},
-Thank you for registering to the MTC emotion and stance project. You can start working and labelling
-articles and comments by clicking on this link: ${link}. This will also confirm your account.
+Thank you for registering to the MTC emotion and stance project. You can read the instructions and then start working 
+by clicking on this link: ${link}. This will also confirm your account.
 
 Please note down your personal id for future use: ${idToken}
 
