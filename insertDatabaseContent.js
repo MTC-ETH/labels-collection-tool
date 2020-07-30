@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const uri = 'mongodb://localhost/labelling_tool';
-// const uri = 'mongodb://heroku_wll30t81:u7m90co6idj3qrj24mqcg2u2vi@ds153304.mlab.com:53304/heroku_wll30t81';
+// const uri = 'mongodb://localhost/labelling_tool';
+const uri = 'mongodb://heroku_wll30t81:u7m90co6idj3qrj24mqcg2u2vi@ds153304.mlab.com:53304/heroku_wll30t81';
 mongoose.connect(uri, {useNewUrlParser:true, useCreateIndex: true, useUnifiedTopology:true});
 const connection = mongoose.connection;
 
@@ -25,7 +25,7 @@ connection.once("open", () => {
                 articles.find({}).exec((err, res) => console.log(JSON.stringify(res)));
             } else {
                 console.log("doesn't exist, creating it");
-                let articlesJson = require(`./json/articles.json`);
+                let articlesJson = require(`./json/articles`);
 
                 //insert consecutive ids for paragraphs
                 articlesJson = articlesJson.map(article => {
