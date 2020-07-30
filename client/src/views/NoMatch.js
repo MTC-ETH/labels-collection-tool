@@ -31,7 +31,7 @@ class NoMatch extends React.Component {
                             size={"lg"}
                             style={{width: "100%"}}
                             color={"primary"}
-                            onClick={() =>  this.props.history.push("/")}>
+                            href={"/"}>
                         Go to Home
                     </Button>
                 </Col>

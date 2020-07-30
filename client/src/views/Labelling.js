@@ -7,7 +7,7 @@ import ArticleInstructions from "../components/Labelling/ArticleInstructions";
 import CommentsInstructions from "../components/Labelling/CommentsInstructions";
 import ArticleStanceQuestion from "../components/Labelling/ArticleStanceQuestion";
 import SubmitInstructionsAndButton from "../components/Labelling/SubmitInstructionsAndButton";
-import {Col, Container, UncontrolledAlert} from "reactstrap";
+import {Button, Col, Container, UncontrolledAlert} from "reactstrap";
 import Row from "reactstrap/es/Row";
 import Header from "../components/Header";
 
@@ -246,7 +246,16 @@ class Labelling extends React.Component {
         return (
             <>
                 <Header/>
-                <Container><Row><Col><h2>Labelling Procedure</h2></Col></Row></Container>
+                <Container>
+                    <Row>
+                        <Col xs={12} sm={9} md={9} lg={9} xl={9}>
+                            <h2>Labelling Procedure</h2>
+                        </Col>
+                        <Col xs={12} sm={3} md={3} lg={3} xl={3}>
+                            {/*<Button href={"/instructions"} color={"primary"} block>More instructions</Button>*/}
+                        </Col>
+                    </Row>
+                </Container>
 
                 <ArticleInstructions/>
                 <Article articleJson={this.state.article}

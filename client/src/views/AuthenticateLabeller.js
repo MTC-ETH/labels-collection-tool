@@ -42,7 +42,9 @@ class AuthenticateLabeller extends React.Component {
                 <h2>Labeller Authentication</h2>
                 <Form>
                     <FormGroup>
-                        <Label for="token">Please enter you personal token, sent to you in the registration email:</Label>
+                        <Label for="token">Please enter you personal token, sent to you in the registration email.
+                        If you lost your token, please <a href={"/register"}>register</a> with the same email and it will be recovered for you.
+                        </Label>
                         <Input onChange={this.handleInputChange} type="text" name="tokenInput" id="tokenInput" placeholder="Personal token" />
                     </FormGroup>
                     <Button onClick={this.handleSubmit} block>Start labelling</Button>

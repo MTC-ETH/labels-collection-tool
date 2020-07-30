@@ -44,7 +44,7 @@ class Home extends React.Component {
                         <Button className="p-1"
                                 size={"lg"}
                                 // color={"primary"}
-                                onClick={() =>  this.props.history.push("/register")} block>
+                                href={"/register"} block>
                             Register as labeller
                         </Button>
                     </Col>
@@ -54,7 +54,7 @@ class Home extends React.Component {
                         <Button className="p-1"
                                 // size={"lg"}
                                 // color={"primary"}
-                                onClick={() =>  this.props.history.push("/authenticatelabeller")} block>
+                                href={"/authenticatelabeller"} block>
                             Continue labelling (your token is required)
                         </Button>
                     </Col>
