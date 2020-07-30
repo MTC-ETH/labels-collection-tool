@@ -33,7 +33,8 @@ class StanceSelectorAbstract extends SelectorAbstract {
                        style={{background: "#" + color,
                            width: "100%",
                            color: fontColor,
-                           fontSize: fontSize.toString() + "px"
+                           fontSize: fontSize.toString() + "px",
+                           borderRadius: 0
                        }}
                        onClick={(e) => this.props.onClick(e, option.name)}>
             <b>{option.name}</b>

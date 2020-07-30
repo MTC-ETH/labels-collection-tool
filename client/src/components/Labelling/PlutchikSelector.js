@@ -1,6 +1,9 @@
 import React from "react";
-import {Button, Col, Container, Row} from "reactstrap";
+import {Button, Col, Container, Media, Row} from "reactstrap";
 import SelectorAbstract from "./SelectorAbstract";
+import arrowDown from "../../assets/imgs/IntensityArrowDown.png";
+import arrowUp from "../../assets/imgs/IntensityArrowUp.png";
+
 
 class PlutchikSelector extends SelectorAbstract {
 
@@ -27,6 +30,8 @@ class PlutchikSelector extends SelectorAbstract {
     render() {
         return (
             <Container>
+                <Row>
+                    <Col xs={11} sm={12} md={12} lg={11} xl={11} >
                 {this.emotions.map((row, rowI) => {
                     return <Row key={rowI}>
                         {row.map((emotion, colI) => {
@@ -40,19 +45,46 @@ class PlutchikSelector extends SelectorAbstract {
                                 fontColor = "#" + this.neutralFontColor;
                             }
 
-                            return <Col key={colI} className="pr-1 pl-0"><Button className="p-1"
+                            let className = "pr-2 pl-0";
+                            if(rowI === 3) {
+                                className += " pt-2"
+                            }
+                            return <Col key={colI} className={className}><Button className="p-1"
                                                 style={{background: "#" + color,
                                                     width: "100%",
                                                 color: fontColor,
-                                                fontSize: "12px"}}
-                            onClick={(e) => this.props.onClick(e, emotion.name)}>
-                                <b>{emotion.name}</b>
+                                                fontSize: (rowI === 1 || rowI === 4 ? "13px" : "12px"),
+                                                    borderRadius: 0}}
+                            onClick={(e) => this.props.onClick(e, emotion.name)}
+                            rounded={false}>
+                                {rowI === 1 || rowI === 4 ? <b>{emotion.name}</b> : emotion.name}
                             </Button></Col>;
                         })}
                     </Row>;
                 })
                 }
-
+                    </Col>
+                    <Col xs={1} sm={0} md={0} lg={1} xl={1} className="d-xs-block d-none d-lg-block d-xl-block">
+                        <Row>
+                            <Media object style={{
+                                maxHeight: 'auto',
+                                maxWidth: '34%',
+                                position: "absolute",
+                                top: 0
+                            }}
+                                   src={arrowDown} alt="intensity decreases" />
+                        </Row>
+                        <Row>
+                            <Media object style={{
+                                maxHeight: 'auto',
+                                maxWidth: '34%',
+                                position: "absolute",
+                                bottom: 0
+                            }}
+                                   src={arrowUp} alt="intensity increases" />
+                        </Row>
+                    </Col>
+                </Row>
             </Container>
         );
     }

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-// const uri = 'mongodb://localhost/labelling_tool';
-const uri = 'mongodb://heroku_wll30t81:u7m90co6idj3qrj24mqcg2u2vi@ds153304.mlab.com:53304/heroku_wll30t81';
+const uri = 'mongodb://localhost/labelling_tool';
+// const uri = 'mongodb://heroku_wll30t81:u7m90co6idj3qrj24mqcg2u2vi@ds153304.mlab.com:53304/heroku_wll30t81';
 mongoose.connect(uri, {useNewUrlParser:true, useCreateIndex: true, useUnifiedTopology:true});
 const connection = mongoose.connection;
 
