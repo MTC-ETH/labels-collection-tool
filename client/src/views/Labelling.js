@@ -270,10 +270,10 @@ class Labelling extends React.Component {
                 <Header/>
                 <Container>
                     <Row>
-                        <Col xs={12} sm={9} md={9} lg={9} xl={9}>
+                        <Col xs={12} sm={9} md={9} lg={10} xl={10}>
                             <h2>Labelling Procedure</h2>
                         </Col>
-                        <Col xs={12} sm={3} md={3} lg={3} xl={3}>
+                        <Col xs={12} sm={3} md={3} lg={2} xl={2} className={"text-center"}>
                             {/*<Button href={"/instructions"} color={"primary"} block>More instructions</Button>*/}
                             {this.state.labelledArticlesCount ? <># labelled articles: {this.state.labelledArticlesCount}</> : null}
                         </Col>
