@@ -38,14 +38,14 @@ class AuthenticateLabeller extends React.Component {
     render() {
         return (<>
             <Header/>
-            <Container className="shape-container align-items-center pt-4">
+            <Container className="shape-container align-items-center">
                 <h2>Labeller Authentication</h2>
                 <Form>
                     <FormGroup>
                         <Label for="token">Please enter you personal token, sent to you in the registration email:</Label>
                         <Input onChange={this.handleInputChange} type="text" name="tokenInput" id="tokenInput" placeholder="Personal token" />
                     </FormGroup>
-                    <Button onClick={this.handleSubmit}>Start labelling</Button>
+                    <Button onClick={this.handleSubmit} block>Start labelling</Button>
                 </Form>
             </Container>
             </>

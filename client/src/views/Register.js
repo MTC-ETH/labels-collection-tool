@@ -189,7 +189,7 @@ class AuthenticateLabeller extends React.Component {
                             I've read and I accept the terms of conditions of this study.
                         </Label>
                     </FormGroup>
-                    <Button onClick={this.handleSubmit}>Register</Button>
+                    <Button onClick={this.handleSubmit} className={"mt-3"} block>Register</Button>
                     </Form>
                     </>
                     )}
