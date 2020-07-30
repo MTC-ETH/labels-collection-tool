@@ -1,9 +1,13 @@
 const mongoose = require('mongoose');
 
+const config = require( "./config");
+
 const uri = 'mongodb://localhost/labelling_tool';
 // const uri = 'mongodb://heroku_wll30t81:u7m90co6idj3qrj24mqcg2u2vi@ds153304.mlab.com:53304/heroku_wll30t81';
 mongoose.connect(uri, {useNewUrlParser:true, useCreateIndex: true, useUnifiedTopology:true});
+
 const connection = mongoose.connection;
+
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -28,7 +32,9 @@ connection.once("open", () => {
                 let articlesJson = require(`./json/articles`);
 
                 //insert consecutive ids for paragraphs
-                articlesJson = articlesJson.map(article => {
+                articlesJson = articlesJson
+                    .filter(article => article.comments.length >= config.commentsPerArticle)
+                    .map(article => {
                     article.paragraphs = article.paragraphs.map((par, index) => {
                         return {consecutiveID: index, text: par};
                     });
@@ -46,7 +52,7 @@ connection.once("open", () => {
                     if (err) {
                         console.log(err);
                     } else {
-                        console.log("SUCCESS");
+                        console.log("SUCCESS, inserted " + articlesJson.length + " articles");
                     }
                 });
             }
