@@ -19,6 +19,7 @@ class Labelling extends React.Component {
         super(props, context);
         this.state = {
             labellerID: null,
+            labelledArticlesCount: null,
             article: null,
             comments: null,
             paragraphsEmotionLabel: {},
@@ -38,19 +39,30 @@ class Labelling extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.postToBackendStatus = this.postToBackendStatus.bind(this);
         this.fetchDataAndUpdateState = this.fetchDataAndUpdateState.bind(this);
+        this.fetchLabelledArticlesCount = this.fetchLabelledArticlesCount.bind(this);
     }
 
     componentDidMount() {
-        this.fetchDataAndUpdateState();
-    }
-
-    fetchDataAndUpdateState() {
         const params = queryString.parse(this.props.location.search);
         this.setState({labellerID: params.token});
         if(!params.token) {
             this.props.history.push("/authenticatelabeller");
         }
-        return axios.get(`/labelling/article?labellerID=${params.token}`)
+
+        this.fetchDataAndUpdateState(params.token);
+        this.fetchLabelledArticlesCount(params.token);
+    }
+
+    fetchLabelledArticlesCount(labellerID) {
+        return axios.get("/labelling/ntagged?labellerID=" + labellerID)
+            .then(res => {
+                this.setState({labelledArticlesCount: res.data.count})
+            })
+            .catch(err => console.log(err));
+    }
+
+    fetchDataAndUpdateState(labellerID) {
+        return axios.get(`/labelling/article?labellerID=${labellerID}`)
             .then(res => {
                 const {status, article} = res.data;
                 const paragraphsEmotionLabel = {};
@@ -217,7 +229,13 @@ class Labelling extends React.Component {
             commentsEmotionLabel: this.state.commentsEmotionLabel,
         })
             .then(response => {
-                this.fetchDataAndUpdateState().then(() =>
+                if(this.state.labelledArticlesCount) {
+                    this.setState({labelledArticlesCount: this.state.labelledArticlesCount + 1});
+                }
+                else {
+                    this.fetchLabelledArticlesCount(this.state.labellerID); //there was an error before, retry
+                }
+                this.fetchDataAndUpdateState(this.state.labellerID).then(() =>
                 window.scrollTo(0, 0));
             })
             .catch(error => {
@@ -257,6 +275,7 @@ class Labelling extends React.Component {
                         </Col>
                         <Col xs={12} sm={3} md={3} lg={3} xl={3}>
                             {/*<Button href={"/instructions"} color={"primary"} block>More instructions</Button>*/}
+                            {this.state.labelledArticlesCount ? <># labelled articles: {this.state.labelledArticlesCount}</> : null}
                         </Col>
                     </Row>
                 </Container>

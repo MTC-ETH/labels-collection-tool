@@ -9,12 +9,11 @@ const labelledentries = require(`../models/labelledentries`);
 
 const config = require('../config');
 
-//get the next article to be tagged
-router.route('/article').get((req, res) => {
+function getTokenFromRequest(req, res) {
     let labellerID = _.get(req, "query.labellerID", null);
-    console.log("labelling/article queried, with labellerID = " + labellerID);
     if(!labellerID) {
-        return res.status(400).send({message: "Please provide labellerID in query"});
+        res.status(400).send({message: "Please provide labellerID in query"});
+        return null;
     }
 
     //convert to mongooseID and check it's valid id
@@ -22,13 +21,23 @@ router.route('/article').get((req, res) => {
     try {
         _labellerID = mongoose.Types.ObjectId(labellerID)
     } catch (err) {
-        return res.status(400).send({message: "labellerID is not a valid mongoose ID", error: err});
+        res.status(400).send({message: "labellerID is not a valid mongoose ID", error: err});
+        return null;
     }
+    return _labellerID;
+}
+
+//get the next article to be tagged
+router.route('/article').get((req, res) => {
+    console.log("labelling/article queried");
+
+    const _labellerID = getTokenFromRequest(req, res);
+    console.log(", with labellerID = " + _labellerID);
 
     //check that the labellerID exists
     labellers.findOne({_id: _labellerID})
         .then(queryRes => {
-            //if he clicked on the link he confimed the email
+            //if he clicked on the link he confirmed the email
             if(queryRes !== null) {
                 return queryRes.update({confirmedEmail: true}).then(() => true);
             }
@@ -42,7 +51,7 @@ router.route('/article').get((req, res) => {
             //exists
 
             //if there is already a labelling status from this labeller we have to return that article
-            return labellingstatuses.findOne({labeller: labellerID}).exec()
+            return labellingstatuses.findOne({labeller: _labellerID}).exec()
                 .then(status => {
                     if(status) {
                         console.log("Already find a status, replying with that one");
@@ -83,7 +92,7 @@ router.route('/article').get((req, res) => {
                                 //associate labeller to this article and write this in the labellingstatus table
                                 newArticle.comments = newArticle.comments.slice(0, config.commentsPerArticle);
                                 const newLabellingStatus =  new labellingstatuses(
-                                    {labeller: labellerID,
+                                    {labeller: _labellerID,
                                         article: newArticle._id,
                                         paragraphsEmotionLabel: newArticle.paragraphs.map(par => {
                                             return {paragraphConsecutiveID: par.consecutiveID, label: null}
@@ -112,6 +121,22 @@ router.route('/article').get((req, res) => {
         .catch(err => {
             console.log(err);
             res.status(500).send(err);
+        });
+});
+
+//get the the number of articles tagged by a certain labeller
+router.route('/ntagged').get((req, res) => {
+    console.log("labelling/ntagged queried");
+    const id = getTokenFromRequest(req, res);
+
+    return labelledentries.countDocuments({labeller: id}).exec()
+        .then(count => {
+            console.log("Found count " + count);
+            return res.json({count: count})
+        })
+        .catch(err => {
+            console.log(err);
+            return res.status(500).send(err);
         });
 });
 
