@@ -10,6 +10,7 @@ import AuthenticateLabeller from "./views/AuthenticateLabeller";
 import Register from "./views/Register";
 import NoMatch from "./views/NoMatch";
 import Home from "./views/Home";
+import Instructions from "./views/Instructions";
 
 ReactDOM.render(
     <>
@@ -20,6 +21,7 @@ ReactDOM.render(
                 <Route path="/admindashboard" exact render={props => <AdminDashboard {...props} />} />
                 <Route path="/authenticatelabeller" exact render={props => <AuthenticateLabeller {...props} />} />
                 <Route path="/register" exact render={props => <Register {...props} />} />
+                <Route path="/instructions" exact render={props => <Instructions {...props} />} />
                 <Route component={NoMatch}/>
             </Switch>
         </BrowserRouter>

@@ -10,6 +10,7 @@ import SubmitInstructionsAndButton from "../components/Labelling/SubmitInstructi
 import {Button, Col, Container, UncontrolledAlert} from "reactstrap";
 import Row from "reactstrap/es/Row";
 import Header from "../components/Header";
+import TechnicalInstructions from "../components/Instructions/TechnicalInstructions";
 
 // const labellerID = "5f199424dcf1cfe56a7436a7";
 
@@ -46,6 +47,9 @@ class Labelling extends React.Component {
     fetchDataAndUpdateState() {
         const params = queryString.parse(this.props.location.search);
         this.setState({labellerID: params.token});
+        if(!params.token) {
+            this.props.history.push("/authenticatelabeller");
+        }
         return axios.get(`/labelling/article?labellerID=${params.token}`)
             .then(res => {
                 const {status, article} = res.data;
@@ -257,7 +261,7 @@ class Labelling extends React.Component {
                     </Row>
                 </Container>
 
-                <ArticleInstructions/>
+                <ArticleInstructions token={this.state.labellerID}/>
                 <Article articleJson={this.state.article}
                          paragraphsEmotionLabel={this.state.paragraphsEmotionLabel}
                          paragraphsError={this.state.paragraphsError}
