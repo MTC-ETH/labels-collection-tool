@@ -16,7 +16,7 @@ class ArticleSectionInstructions extends React.Component {
             <Row>
                 <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                     <p>Read the article carefully; for each paragraph, select an emotion on the right
-                        side that best replies to the question: "Which is the emotion conveyed in this paragraph?".
+                        side that best replies to the question: "<i>Which is the emotion conveyed in this paragraph?</i>".
                         It’s possible to select only
                         one emotion per paragraph. If in doubt, select the emotion which is conveyed in a stronger
                         manner by the text.</p>
@@ -26,10 +26,11 @@ class ArticleSectionInstructions extends React.Component {
                         a definition of emotions widely used in the scientific literature
                         and visible on the right. The emotions are divided into 3 levels of intensity,
                         creating 8 clusters of similar emotions with different intensity.
-                        For example serenity is a lighter emotion than joy, while ecstasy is the stronger
-                        version of joy. Moreover, each of the 8 clusters can be represented as the opposite
+                        For example, <i>serenity</i> is a lighter emotion than <i>joy</i>, while <i>ecstasy</i> is the
+                        stronger
+                        version of <i>joy</i>. Moreover, each of the 8 clusters can be represented as the opposite
                         of another cluster, meaning that the respective emotions are mutually exclusive.
-                        For example sadness is mutually exclusive with joy and for this reason they are
+                        For example <i>sadness</i> is mutually exclusive with <i>joy</i> and for this reason they are
                         represented as two opposite clusters.</p>
                 </Col>
                 <Col xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -47,8 +48,8 @@ class ArticleSectionInstructions extends React.Component {
                         page.
                         To reduce cognitive load is often easier to first choose the cluster of emotions and then
                         select the intensity of the emotion, either by keeping it, strengthening it
-                        or weakening it. For example one could select the "joy" cluster and then choose its stronger
-                        version "ecstasy".</p>
+                        or weakening it. For example one could select the <i>joy</i> cluster and then choose its stronger
+                        version <i>ecstasy</i>.</p>
                 </Col>
             </Row>
             <Row>

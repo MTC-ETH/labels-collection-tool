@@ -187,7 +187,7 @@ class AuthenticateLabeller extends React.Component {
                             <Input onChange={this.handleCheckedChange}
                                    className={this.state.acceptedConditionsError ? "is-invalid" : null}
                                    name="acceptedConditions" type="checkbox" />{' '}
-                            I've read and I accept the terms of conditions of this study.
+                            I've read and I accept the <a href={"/termsandconditions"} target={"_blank"}>terms of conditions</a> of this study.
                         </Label>
                     </FormGroup>
                     <Button onClick={this.handleSubmit} className={"mt-3"} block>Register</Button>
