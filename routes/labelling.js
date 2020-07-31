@@ -34,6 +34,10 @@ router.route('/article').get((req, res) => {
     const _labellerID = getTokenFromRequest(req, res);
     console.log(", with labellerID = " + _labellerID);
 
+    if(_labellerID === null) {
+        return; //we've already sent the reply communicating the problem
+    }
+
     //check that the labellerID exists
     labellers.findOne({_id: _labellerID})
         .then(queryRes => {
@@ -128,6 +132,10 @@ router.route('/article').get((req, res) => {
 router.route('/ntagged').get((req, res) => {
     console.log("labelling/ntagged queried");
     const id = getTokenFromRequest(req, res);
+
+    if(id === null) {
+        return; //we've already sent the reply communicating the problem
+    }
 
     return labelledentries.countDocuments({labeller: id}).exec()
         .then(count => {
