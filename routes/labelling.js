@@ -134,6 +134,7 @@ function createAndReplyWithNewStatus(res, _labellerID) {
                 {
                     labeller: _labellerID,
                     article: newArticle._id,
+                    articleID: newArticle.articleID,
                     paragraphsEmotionLabel: newArticle.paragraphs.map(par => {
                         return {paragraphConsecutiveID: par.consecutiveID, label: null}
                     }),
