@@ -27,6 +27,135 @@ function getTokenFromRequest(req, res) {
     return _labellerID;
 }
 
+function replyWithExistingStatus(status, res) {
+    console.log("Already find a status, replying with that one");
+    //there is a registered status
+    //lean returns an object rather than a mongoose document, needed because we want to modify it
+    return articles.findOne({_id: status.article}).lean().exec()
+        .then(matchingArticle => {
+            if (matchingArticle) {
+                matchingArticle.comments = matchingArticle.comments
+                    .slice(0, status.limitNumberOfComments);
+                return res.json({status: status, article: matchingArticle});
+            } else {
+                throw new Error("No matching article found for the status of this labeller");
+            }
+        });
+}
+
+function createAndReplyWithNewStatus(res, _labellerID) {
+    console.log("Not found any status, initiating a new one");
+    //we have to get the next article to be tagged
+    //the article should not have been labelled (labelledentries) or in the process of being labelled (labellingstatuses)
+    //more than config.interrater.labbelersPerArticle times. To check this we callect all articles who are labbelled
+    //more than config.interrater.labbelersPerArticle times.
+    const allArticlesNLabellersReachedPromises = [];
+
+    allArticlesNLabellersReachedPromises.push(labellingstatuses.aggregate([
+        {
+            $group: {
+                _id:  "$article",
+                count: { "$sum": 1 }
+            }
+        }]).then(queryRes => queryRes.filter(el => el.count >= config.interrater.labbelersPerArticle)));
+    allArticlesNLabellersReachedPromises.push(labelledentries.aggregate([
+        {
+            $group: {
+                _id:  "$article",
+                count: { "$sum": 1 }
+            }
+        }]).then(queryRes => queryRes.filter(el => el.count >= config.interrater.labbelersPerArticle)));
+
+    const allNonValuableArticleIdsPromises = [];
+    allNonValuableArticleIdsPromises.push(Promise.all(allArticlesNLabellersReachedPromises)
+        .then(idArrays => idArrays.flat())
+        .then(countArray => {
+            const aggregatedCounts = {};
+            countArray.forEach(el => {
+                if(el._id in aggregatedCounts){
+                    aggregatedCounts[el._id] += el.count;
+                } else {
+                    aggregatedCounts[el._id] = el.count;
+                }
+                }
+            );
+            console.log(countArray);
+            console.log(aggregatedCounts);
+            return Object.keys(aggregatedCounts)
+                .filter(articleID => aggregatedCounts[articleID] >= config.interrater.labbelersPerArticle);
+        })
+        .then(ids => {
+            console.log("Ids who have a count bigger than " + config.interrater.labbelersPerArticle);
+            console.log(ids);
+
+            //if we want to have multilabeller for all or we have not yet multilabelled enough
+            //we return the ids which have been already labelled more than config.interrater.labbelersPerArticle times
+            if(config.interrater.multiLabelledArticles === null || config.interrater.multiLabelledArticles < ids.length) {
+                return ids;
+            }
+            else { //otherwise (we have labelled enough articles with multilabellers(
+                //just return the ids which have been already labelled once
+                console.log("1 labeller per article reached");
+                return Promise.all([
+                    labellingstatuses.find({}, {"article": 1}).exec()
+                    .then(statuses => statuses.map(el => el.article)),
+                    labelledentries.find({}, {"article": 1}).exec()
+                        .then(statuses => statuses.map(el => el.article))])
+                    .then(idArrays =>  idArrays.flat());
+            }
+        }));
+
+    //also check that next article is not among the ones he / she already labelled
+    //to do this we collect all the ones he already labelled
+    allNonValuableArticleIdsPromises.push(labellingstatuses.find({"labeller": _labellerID}, {"article": 1}).exec()
+        .then(statuses => statuses.map(el => el.article)));
+    allNonValuableArticleIdsPromises.push(labelledentries.find({"labeller": _labellerID}, {"article": 1}).exec()
+        .then(statuses => statuses.map(el => el.article)));
+
+    return Promise.all(allNonValuableArticleIdsPromises)
+        .then(idArrays => {
+            console.log("All excluded ids:");
+            console.log(JSON.stringify(idArrays));
+            return idArrays.flat()
+        })
+        //lean returns an object rather than a mongoose document, needed because we want to modify it
+        .then(ids => articles.findOne({"_id": {"$nin": ids}}).lean().exec())
+        .then(newArticle => {
+            if (newArticle === null) {
+                return res.status(400).send({
+                    message: "No article found. Either the database is " +
+                        "empty or all the articles have been labelled",
+                    error: null
+                });
+            }
+            //associate labeller to this article and write this in the labellingstatus table
+            newArticle.comments = newArticle.comments.slice(0, config.commentsPerArticle);
+            const newLabellingStatus = new labellingstatuses(
+                {
+                    labeller: _labellerID,
+                    article: newArticle._id,
+                    paragraphsEmotionLabel: newArticle.paragraphs.map(par => {
+                        return {paragraphConsecutiveID: par.consecutiveID, label: null}
+                    }),
+                    stanceArticleQuestionLabel: null,
+                    commentsStanceLabel: newArticle.comments.map(com => {
+                        return {commentID: com.commentID, label: null}
+                    }),
+                    commentsEmotionLabel: newArticle.comments.map(com => {
+                        return {commentID: com.commentID, label: null}
+                    }),
+                    limitNumberOfComments: config.commentsPerArticle
+                });
+
+            return newLabellingStatus.save()
+                .then(labstat => {
+                    console.log('New labelling status created for ' + labstat.labeller
+                        + ' and article' + labstat.article);
+                    res.json({status: labstat, article: newArticle});
+                })
+        });
+}
+
 //get the next article to be tagged
 router.route('/article').get((req, res) => {
     console.log("labelling/article queried");
@@ -58,67 +187,10 @@ router.route('/article').get((req, res) => {
             return labellingstatuses.findOne({labeller: _labellerID}).exec()
                 .then(status => {
                     if(status) {
-                        console.log("Already find a status, replying with that one");
-                        //there is a registered status
-                        //lean returns an object rather than a mongoose document, needed because we want to modify it
-                        return articles.findOne({_id: status.article}).lean().exec()
-                            .then(matchingArticle => {
-                                if(matchingArticle) {
-                                    matchingArticle.comments = matchingArticle.comments
-                                        .slice(0, status.limitNumberOfComments);
-                                    return res.json({status: status, article: matchingArticle});
-                                }
-                                else {
-                                    throw new Error("No matching article found for the status of this labeller");
-                                }
-                            });
+                        return replyWithExistingStatus(status, res);
                     } else {
-                        console.log("Not found any status, initiating a new one");
-                        //we have to get the next article to be tagged
-                        //the article to task should neither be in the labellingstatuses (it's being labelled
-                        //right now, nor in the labelledentries (it's already been labelled)
-                        const queriesPromises = [];
-                        queriesPromises.push(labellingstatuses.find({},{ "article": 1}).exec()
-                            .then(statuses => statuses.map(el => el.article)));
-                        queriesPromises.push(labelledentries.find({},{ "article": 1}).exec()
-                            .then(statuses => statuses.map(el => el.article)));
-
-                        return Promise.all(queriesPromises)
-                            .then(idArrays => idArrays.flat())
-                            //lean returns an object rather than a mongoose document, needed because we want to modify it
-                            .then(ids => articles.findOne({"_id": { "$nin": ids }}).lean().exec())
-                            .then(newArticle => {
-                                if(newArticle === null) {
-                                    return res.status(400).send({message: "No article found. Either the database is " +
-                                            "empty or all the articles have been labelled",
-                                        error: null});
-                                }
-                                //associate labeller to this article and write this in the labellingstatus table
-                                newArticle.comments = newArticle.comments.slice(0, config.commentsPerArticle);
-                                const newLabellingStatus =  new labellingstatuses(
-                                    {labeller: _labellerID,
-                                        article: newArticle._id,
-                                        paragraphsEmotionLabel: newArticle.paragraphs.map(par => {
-                                            return {paragraphConsecutiveID: par.consecutiveID, label: null}
-                                        }),
-                                        stanceArticleQuestionLabel: null,
-                                        commentsStanceLabel: newArticle.comments.map(com => {
-                                            return {commentID: com.commentID, label: null}
-                                        }),
-                                        commentsEmotionLabel: newArticle.comments.map(com => {
-                                            return {commentID: com.commentID, label: null}
-                                        }),
-                                        limitNumberOfComments: config.commentsPerArticle
-                                    });
-
-                                return newLabellingStatus.save()
-                                    .then(labstat => {
-                                        console.log('New labelling status created for ' + labstat.labeller
-                                            + ' and article' + labstat.article);
-                                        res.json({status: labstat, article: newArticle});
-                                    })
-                            });
-                        }
+                        return createAndReplyWithNewStatus(res, _labellerID);
+                    }
                 });
 
         })
