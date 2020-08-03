@@ -58,6 +58,7 @@ class App extends Component {
                         size="large"
                         href="http://reactstrap.github.io"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >
                       View Reactstrap Docs
                     </Button>

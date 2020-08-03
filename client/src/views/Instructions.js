@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Col, Container, Media} from "reactstrap";
+import {Button, Col, Container} from "reactstrap";
 import Row from "reactstrap/es/Row";
 
 import Header from "../components/Header";

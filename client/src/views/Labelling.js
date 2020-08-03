@@ -7,10 +7,9 @@ import ArticleInstructions from "../components/Labelling/ArticleInstructions";
 import CommentsInstructions from "../components/Labelling/CommentsInstructions";
 import ArticleStanceQuestion from "../components/Labelling/ArticleStanceQuestion";
 import SubmitInstructionsAndButton from "../components/Labelling/SubmitInstructionsAndButton";
-import {Button, Col, Container, UncontrolledAlert} from "reactstrap";
+import {Col, Container, UncontrolledAlert} from "reactstrap";
 import Row from "reactstrap/es/Row";
 import Header from "../components/Header";
-import TechnicalInstructions from "../components/Instructions/TechnicalInstructions";
 import Footer from "../components/Footer";
 
 // const labellerID = "5f199424dcf1cfe56a7436a7";

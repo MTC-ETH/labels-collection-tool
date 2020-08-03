@@ -1,8 +1,7 @@
 import React from "react";
 
 // reactstrap components
-import {Col, Media, Row} from "reactstrap";
-import PlutchikWheelNoIntermediate from "../../assets/imgs/PlutchikWheelNoIntermediate.svg";
+import {Col, Row} from "reactstrap";
 
 class TechnicalInstructions extends React.Component {
     render() {

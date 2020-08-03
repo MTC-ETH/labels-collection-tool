@@ -22,7 +22,8 @@ class ArticleSectionInstructions extends React.Component {
                         manner by the text.</p>
                     <p>You can choose among one of the 24 emotions of the <a
                         href={"https://en.wikipedia.org/wiki/Robert_Plutchik#Plutchik's_wheel_of_emotions"}
-                        target={"_blank"}> Plutchik wheel of emotions</a>,
+                        target={"_blank"}
+                        rel="noopener noreferrer"> Plutchik wheel of emotions</a>,
                         a definition of emotions widely used in the scientific literature
                         and visible on the right. The emotions are divided into 3 levels of intensity,
                         creating 8 clusters of similar emotions with different intensity.

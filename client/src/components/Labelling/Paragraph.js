@@ -3,7 +3,6 @@ import React from "react";
 // reactstrap components
 import {Col, Row} from "reactstrap";
 import PlutchikSelector from "./PlutchikSelector";
-import PlutchikSelectorBad from "./PlutchikSelectorBad";
 
 class Paragraph extends React.Component {
 
