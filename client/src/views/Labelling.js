@@ -97,6 +97,7 @@ class Labelling extends React.Component {
                     }
                     commentsError[com.commentID] = false;
                 });
+                console.log(article.title);
                 return this.setState({
                     article: article,
                     comments: article.comments,

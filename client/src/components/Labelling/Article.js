@@ -12,7 +12,7 @@ class Article extends React.Component {
       }
       const { articleJson } = this.props;
 
-
+      console.log("In Article: " + articleJson.title);
       return (
           <>
             <Container className="shape-container align-items-center">
