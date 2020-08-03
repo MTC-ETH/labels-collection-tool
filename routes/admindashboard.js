@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const _ = require('lodash');
+const config = require( "../config");
 
 const labelledentries = require(`../models/labelledentries`);
 const labellers = require(`../models/labellers`);
@@ -31,6 +32,32 @@ router.route('/labelled').get((req, res) => {
         });
 });
 
+router.route('/labellers').get((req, res) => {
+    const token = _.get(req, "query.token", null);
+    console.log("admindashboard/labellers queried, with token = " + token);
+    if(!token) {
+        console.log("No token in query");
+        return res.status(400).send({error: "Please provide token in query"});
+    }
+    if(token !== process.env.ADMIN_TOKEN) {
+        console.log("Token is not admin token.");
+        return res.status(400).send({error: "Token is not admin token."});
+    }
+
+    //check that the labellerID exists
+    return labellers.find({})
+        .then(queryRes => {
+            console.log("Succesfully authenticated, returning records");
+            res.set("Content-Disposition", "attachment; filename=labellers.json");
+            res.type('application/json');
+            res.json(queryRes);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).send(err);
+        });
+});
+
 router.route('/status').get((req, res) => {
     console.log("admindashboard/status queried");
     const queryPromises = [];
@@ -44,14 +71,17 @@ router.route('/status').get((req, res) => {
                 return {nTaggedComments: 0};
             }
             return {nTaggedComments: r[0].totalSize}}));
+    queryPromises.push(labelledentries.distinct('article').exec()
+        .then(entries => {return {nTaggedUniqueArticles: entries.length}}));
 
     //check that the labellerID exists
     return Promise.all(queryPromises)
         .then(arrOfObjects => Object.assign({}, ...arrOfObjects)) //just flattens the objects
         .then(status => {
             console.log("Replying with current status");
-            console.log(status);
-            res.json(status);
+            const withConfig = Object.assign({}, config, status);
+            console.log(withConfig);
+            res.json(withConfig);
         })
         .catch(err => {
             console.log(err);

@@ -47,8 +47,8 @@ function createAndReplyWithNewStatus(res, _labellerID) {
     console.log("Not found any status, initiating a new one");
     //we have to get the next article to be tagged
     //the article should not have been labelled (labelledentries) or in the process of being labelled (labellingstatuses)
-    //more than config.interrater.labbelersPerArticle times. To check this we callect all articles who are labbelled
-    //more than config.interrater.labbelersPerArticle times.
+    //more than config.interrater.labbellersPerArticle times. To check this we callect all articles who are labbelled
+    //more than config.interrater.labbellersPerArticle times.
     const allArticlesNLabellersReachedPromises = [];
 
     allArticlesNLabellersReachedPromises.push(labellingstatuses.aggregate([
@@ -57,14 +57,14 @@ function createAndReplyWithNewStatus(res, _labellerID) {
                 _id:  "$article",
                 count: { "$sum": 1 }
             }
-        }]).then(queryRes => queryRes.filter(el => el.count >= config.interrater.labbelersPerArticle)));
+        }]).then(queryRes => queryRes.filter(el => el.count >= config.interrater.labbellersPerArticle)));
     allArticlesNLabellersReachedPromises.push(labelledentries.aggregate([
         {
             $group: {
                 _id:  "$article",
                 count: { "$sum": 1 }
             }
-        }]).then(queryRes => queryRes.filter(el => el.count >= config.interrater.labbelersPerArticle)));
+        }]).then(queryRes => queryRes.filter(el => el.count >= config.interrater.labbellersPerArticle)));
 
     const allNonValuableArticleIdsPromises = [];
     allNonValuableArticleIdsPromises.push(Promise.all(allArticlesNLabellersReachedPromises)
@@ -82,14 +82,14 @@ function createAndReplyWithNewStatus(res, _labellerID) {
             console.log(countArray);
             console.log(aggregatedCounts);
             return Object.keys(aggregatedCounts)
-                .filter(articleID => aggregatedCounts[articleID] >= config.interrater.labbelersPerArticle);
+                .filter(articleID => aggregatedCounts[articleID] >= config.interrater.labbellersPerArticle);
         })
         .then(ids => {
-            console.log("Ids who have a count bigger than " + config.interrater.labbelersPerArticle);
+            console.log("Ids who have a count bigger than " + config.interrater.labbellersPerArticle);
             console.log(ids);
 
             //if we want to have multilabeller for all or we have not yet multilabelled enough
-            //we return the ids which have been already labelled more than config.interrater.labbelersPerArticle times
+            //we return the ids which have been already labelled more than config.interrater.labbellersPerArticle times
             if(config.interrater.multiLabelledArticles === null || config.interrater.multiLabelledArticles < ids.length) {
                 return ids;
             }
