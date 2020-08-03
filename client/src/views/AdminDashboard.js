@@ -2,15 +2,19 @@ import React from "react";
 import axios from 'axios';
 import FileDownload from 'js-file-download';
 
-import {Button, Col, Container, Row} from "reactstrap";
+import {Button, Col, Container, Row, UncontrolledAlert} from "reactstrap";
 import InfoRow from "../components/AdminDashboard/InfoRow";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+
+import secrets from "../assets/json/secrets"
+import queryString from "query-string";
 
 class AdminDashboard extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
+            authenticated: false,
             nRegisteredLabellers: null,
             nTaggedArticles: null,
             nTaggedUniqueArticles: null,
@@ -22,6 +26,15 @@ class AdminDashboard extends React.Component {
     }
 
     componentDidMount() {
+        const params = queryString.parse(this.props.location.search);
+        this.setState({labellerID: params.token});
+        if(!params.token || params.token !== secrets.admintoken) {
+            this.setState({authenticated: false});
+        }
+        else {
+            this.setState({authenticated: true});
+        }
+
         axios.get("/admindashboard/status")
             .then(res => {
                 this.setState({
@@ -40,14 +53,14 @@ class AdminDashboard extends React.Component {
     }
 
     handleDownloadLabelled() {
-        axios.get("/admindashboard/labelled?token=" + "temporarytoken")
+        axios.get("/admindashboard/labelled?token=" + secrets.admintoken)
             .then((response) => {
                 FileDownload(JSON.stringify(response.data, null, 4), 'labelled.json');
             });
     }
 
     handleDownloadLabellers() {
-        axios.get("/admindashboard/labellers?token=" + "temporarytoken")
+        axios.get("/admindashboard/labellers?token=" + secrets.admintoken)
             .then((response) => {
                 FileDownload(JSON.stringify(response.data, null, 4), 'labellers.json');
             });
@@ -55,6 +68,22 @@ class AdminDashboard extends React.Component {
 
 
     render() {
+        if(!this.state.authenticated) {
+            return (<Container>
+                <Row>
+                    <Col>
+                        <UncontrolledAlert color="danger" fade={true}>
+                                        <span className="alert-inner--icon">
+                                            <i className="ni ni-support-16" />
+                                        </span>
+                            <span className="alert-inner--text ml-1">
+                            <strong>Error!</strong> Please provide valid authentication token in page query
+                                        </span>
+                        </UncontrolledAlert>
+                    </Col>
+                </Row>
+            </Container>);
+        }
         return ( <>
             <Header/>
             <Container><Row><Col><h2>Admin Dashboard</h2></Col></Row></Container>
