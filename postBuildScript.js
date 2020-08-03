@@ -1,4 +1,5 @@
 require('dotenv').config();
+const backup = require('./routes/backup');
 
 const FileSystem = require("fs");
 const targetDir = './client/src/assets/json';
@@ -17,3 +18,5 @@ FileSystem.writeFile(targetDir + '/secrets.json', JSON.stringify({admintoken: pr
         }
     }
 );
+
+backup.sendBackupMail();

@@ -34,6 +34,11 @@ app.use('/authenticatelabeller/', authenticatelabellerRouter);
 const registerRouter = require('./routes/register');
 app.use('/register/', registerRouter);
 
+const backupRouter = require('./routes/backup');
+app.use('/backup/', backupRouter);
+
+backupRouter.buildMailerJob();
+
 if (process.env.NODE_ENV === 'production') {
     //direct to local react build
     app.use(express.static( 'client/build' ));
