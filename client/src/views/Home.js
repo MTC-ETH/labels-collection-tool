@@ -20,7 +20,7 @@ class Home extends React.Component {
                             Welcome to the labelling tool related to the project emotion & stance detection
                             from the ETH <a target="_blank" rel="noopener noreferrer" href="https://mtc.ethz.ch">
                             Media Technology Center (MTC)</a>.
-                            This online tool has the propose of collection the manual labels for the datasets
+                            This online tool has the purpose of collection the manual labels for the datasets
                             related to the project.</p>
                         <h4>Project description</h4>
                         <p>The goal of the project is to create a machine learning pipeline to automatically detect
@@ -31,7 +31,7 @@ class Home extends React.Component {
                         polarization and opinion bias in the media.<br/>
                         While technologies to estimate emotion and stance for English have seen large
                             advances, they lack behind for German. We aim at closing this gap.</p>
-                        <h4>What you will do as a human labeller</h4>
+                        <h4>Your role as the human labeller and your tasks</h4>
                         <p>To train the machine learning model we need a dataset of news articles and user comments
                         paired with stance and emotion labels. You will play a crucial role in this the work. <br/>
                         For article you will be asked to label every paragraph with an emotion tag, reply to a
