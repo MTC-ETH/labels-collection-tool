@@ -16,7 +16,7 @@ function getTokenFromRequest(req, res) {
         return null;
     }
 
-    //convert to mongooseID and check it's valid id
+    //convert to mongooseID and check it is valid id
     let _labellerID;
     try {
         _labellerID = mongoose.Types.ObjectId(labellerID)

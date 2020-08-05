@@ -27,7 +27,7 @@ articlesJson = articlesJson
         });
 
         if(!article.stanceQuestion) {
-            article.stanceQuestion = "Is the article in favour or against the topic it's talking about?"
+            article.stanceQuestion = "Is the article in favour or against the topic it is talking about?"
         }
 
         //comments are shuffled at insertion time

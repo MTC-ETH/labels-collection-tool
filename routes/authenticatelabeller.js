@@ -14,7 +14,7 @@ router.route('/valid').get((req, res) => {
         console.log("No token provided.");
         return res.status(400).send({error: "Please provide token in query"});
     }
-    //convert to mongooseID and check it's valid id
+    //convert to mongooseID and check it is valid id
     let _labellerID;
     try {
         _labellerID = mongoose.Types.ObjectId(token);

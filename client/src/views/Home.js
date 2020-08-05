@@ -34,7 +34,7 @@ class Home extends React.Component {
                         <h4>Your role as the human labeller and your tasks</h4>
                         <p>To train the machine learning model we need a dataset of news articles and user comments
                         paired with stance and emotion labels. You will play a crucial role in this the work. <br/>
-                        For article you will be asked to label every paragraph with an emotion tag, reply to a
+                        For each article you will be asked to label every paragraph with an emotion tag, reply to a
                         question regarding the stance of an article towards a topic and for each comment select
                         an emotion and a stance. <br/>
                             For more details about the task and the remuneration please see the <a href={"/instructions"}>instructions page</a>.</p>

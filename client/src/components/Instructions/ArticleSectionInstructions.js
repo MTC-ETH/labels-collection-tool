@@ -47,7 +47,7 @@ class ArticleSectionInstructions extends React.Component {
                 <Col>
                     <p>For simplicity and space reasons, the Plutchik wheel is flattened into a table in the labelling
                         page.
-                        To reduce cognitive load is often easier to first choose the cluster of emotions and then
+                        To reduce cognitive load, it is often easier to first choose the cluster of emotions and then
                         select the intensity of the emotion, either by keeping it, strengthening it
                         or weakening it. For example one could select the <i>joy</i> cluster and then choose its stronger
                         version <i>ecstasy</i>.</p>
@@ -58,8 +58,7 @@ class ArticleSectionInstructions extends React.Component {
                     <h5>Stance</h5>
                     <p>After reading the whole article you are asked to select the stance of the article towards
                         a given topic. You are given a question and 4 possible answers <i>in favour, discussing,
-                            against</i>
-                        and <i>unrelated</i>. An example question can be: <i>Should abortion be legal?</i>.
+                            against</i> and <i>unrelated</i>. An example question can be: <i>Should abortion be legal?</i>.
                         The meaning of the four possible answers follows:
                         <ul>
                             <li>
