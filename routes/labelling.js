@@ -90,7 +90,7 @@ function createAndReplyWithNewStatus(res, _labellerID) {
 
             //if we want to have multilabeller for all or we have not yet multilabelled enough
             //we return the ids which have been already labelled more than config.interrater.labbellersPerArticle times
-            if(config.interrater.multiLabelledArticles === null || config.interrater.multiLabelledArticles < ids.length) {
+            if(config.interrater.multiLabelledArticles === null || ids.length <= config.interrater.multiLabelledArticles) {
                 return ids;
             }
             else { //otherwise (we have labelled enough articles with multilabellers(
