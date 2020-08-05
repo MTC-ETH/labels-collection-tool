@@ -95,6 +95,10 @@ class AuthenticateLabeller extends React.Component {
                 this.setState({
                     success: true
                 });
+                setTimeout(() => {
+                    console.log('Timeout finished');
+                    this.props.history.push('/authenticatelabeller');
+                }, 7000)
             })
             .catch(err => {
                 console.log(JSON.stringify(err));
@@ -138,7 +142,9 @@ class AuthenticateLabeller extends React.Component {
                                         <i className="ni ni-like-2" />
                                         </span>
                         <span className="alert-inner--text ml-1">
-                            <strong>Success!</strong> Please check your email ({this.state.email}), you'll find a link to begin the study.
+                            <strong>Success!</strong> Please check your email ({this.state.email}),
+                            you'll find a link to begin the study. You'll be redirected soon to the authentication
+                            page. If the redirection doesn't work please click <a href={"/authenticatelabeller"}>here</a>.
                                         </span>
                     </UncontrolledAlert>}
                 {this.state.success ? null : (<>
