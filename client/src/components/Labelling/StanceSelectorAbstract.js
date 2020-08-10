@@ -1,6 +1,6 @@
 import React from "react";
 import SelectorAbstract from "./SelectorAbstract";
-import {Button} from "reactstrap";
+import {Button, Container, Row, Col} from "reactstrap";
 
 class StanceSelectorAbstract extends SelectorAbstract {
 
@@ -12,10 +12,10 @@ class StanceSelectorAbstract extends SelectorAbstract {
     }
 
     options = [
-        {name: "In favour", color: "2FB774"},
-        {name: "Discussing", color: "FBAF64"},
-        {name: "Against", color: "F15A61"},
-        {name: "Unrelated", color: "E7E6E6"},
+        {name: "In favour", color: "2FB774", emoji: "👍"},
+        {name: "Discussing", color: "FBAF64", emoji: "☝️"},//👐🏽☝️👐
+        {name: "Against", color: "F15A61", emoji: "👎"},
+        {name: "Unrelated", color: "E7E6E6", emoji: "⁉️️"},
         ];
 
     getButtonObject(option, fontSize) {
@@ -29,15 +29,25 @@ class StanceSelectorAbstract extends SelectorAbstract {
             fontColor = "#" + this.neutralFontColor;
         }
 
-        return (<Button className="p-1"
-                       style={{background: "#" + color,
+        return (<Button className="p-0"
+                       style={{background: "#" + color + "DA",
                            width: "100%",
                            color: fontColor,
                            fontSize: fontSize.toString() + "px",
                            borderRadius: 0
                        }}
                        onClick={(e) => this.props.onClick(e, option.name)}>
-            <b>{option.name}</b>
+            <Container >
+                <Row className={"align-items-center"}>
+                    <Col xs={12} sm={2} md={2} lg={2} xl={2} className={"p-0"} style={{
+                        background: "#FFFFFFBB"}}>
+                        <span role="img" style={{fontSize: (fontSize*1.5)}} aria-label={option.emoji + " emoji"}>{option.emoji}</span>
+                    </Col>
+                    <Col xs={12} sm={10} md={10} lg={10} xl={10} className={"p-0 mt-1 mb-1"}><b>{option.name}</b></Col>
+                </Row>
+            </Container>
+
+
         </Button>);
     }
 }
