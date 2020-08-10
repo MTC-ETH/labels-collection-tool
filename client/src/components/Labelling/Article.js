@@ -5,6 +5,10 @@ import {Col, Container, Row} from "reactstrap";
 import Paragraph from "./Paragraph";
 
 class Article extends React.Component {
+    // Set default props
+    static defaultProps = {
+        contentBackgroundColor: "#f2f0e6",
+    };
 
   render() {
       if (!this.props.articleJson) {
@@ -16,7 +20,7 @@ class Article extends React.Component {
       return (
           <>
             <Container className="shape-container align-items-center">
-                <Row>
+                <Row style={{background: this.props.contentBackgroundColor}}>
                     <Col>
                         <h2> {articleJson.title}</h2>
                         <h5> {articleJson.snippet}</h5>
@@ -37,6 +41,7 @@ class Article extends React.Component {
                     return (<Paragraph key={articleJson.articleID + par.consecutiveID.toString()}
                                        selectedEmotion={this.props.paragraphsEmotionLabel[par.consecutiveID]}
                                        error={this.props.paragraphsError[par.consecutiveID]}
+                                       contentBackgroundColor={this.props.contentBackgroundColor}
                                        onClick={(event, emotion) => {return this.props.onClick(event, emotion, par);}}>
                         {par.text}
                     </Paragraph>);

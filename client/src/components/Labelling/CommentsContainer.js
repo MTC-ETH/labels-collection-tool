@@ -5,7 +5,9 @@ import {Col, Container, Row} from "reactstrap";
 import Comment from "./Comment";
 
 class CommentsContainer extends React.Component {
-
+    static defaultProps = {
+        contentBackgroundColor: "#f2f0e6",
+    };
   render() {
       if (!this.props.commentsJson) {
           return null;
@@ -35,7 +37,8 @@ class CommentsContainer extends React.Component {
                                      selectedEmotion={this.props.commentsEmotionLabel[com.commentID]}
                                      onClickStance={(event, stance) => {return this.props.onClickStance(event, stance, com)}}
                                      onClickEmotion={(event, emotion) => {return this.props.onClickEmotion(event, emotion, com)}}
-                                     error={this.props.commentsError[com.commentID]}>
+                                     error={this.props.commentsError[com.commentID]}
+                                     contentBackgroundColor={this.props.contentBackgroundColor}>
                         {com.text}
                     </Comment>);
                 })}

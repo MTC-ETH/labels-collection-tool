@@ -15,6 +15,11 @@ import Footer from "../components/Footer";
 // const labellerID = "5f199424dcf1cfe56a7436a7";
 
 class Labelling extends React.Component {
+
+    static defaultProps = {
+        contentBackgroundColor: "#f2f0e6",
+    };
+
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -285,7 +290,9 @@ class Labelling extends React.Component {
                 <Article articleJson={this.state.article}
                          paragraphsEmotionLabel={this.state.paragraphsEmotionLabel}
                          paragraphsError={this.state.paragraphsError}
-                         onClick={this.handleEmotionArticle}/>
+                         onClick={this.handleEmotionArticle}
+                        contentBackgroundColor={this.props.contentBackgroundColor}
+                />
                 <ArticleStanceQuestion question={this.state.article.stanceQuestion}
                                        onClick={this.handleStanceArticle}
                                        stanceArticleQuestionLabel={this.state.stanceArticleQuestionLabel}
@@ -297,6 +304,7 @@ class Labelling extends React.Component {
                           commentsError={this.state.commentsError}
                           onClickStance={this.handleStanceComments}
                           onClickEmotion={this.handleEmotionComments}
+                          contentBackgroundColor={this.props.contentBackgroundColor}
                 />
                 <SubmitInstructionsAndButton onClick={this.handleSubmit}/>
                 <Footer/>
