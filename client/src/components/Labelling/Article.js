@@ -34,7 +34,7 @@ class Article extends React.Component {
                         <h5>Article paragraph</h5>
                     </Col>
                     <Col xs={12} sm={5} md={5} lg={5} xl={5}>
-                        <h5>Emotion?</h5>
+                        <h5>Emotion and intensity?</h5>
                     </Col>
                 </Row>
                 {articleJson.paragraphs.map((par, index) => {

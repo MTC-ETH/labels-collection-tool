@@ -42,7 +42,7 @@ class PlutchikSelector8Main extends SelectorAbstract {
                                                                                              borderRadius: 0
                                                                                          }}
                                                                                          onClick={(e) => this.props.onClick(e, emotion.name)}
-                                                                                         rounded={false}>
+                                                                                         rounded={"false"}>
                                         {emotion.emoji ? <><span role="img" style={{fontSize: 32}}
                                                                  aria-label={emotion.name + " emoji"}>{emotion.emoji}</span><br/></>
                                             : null}

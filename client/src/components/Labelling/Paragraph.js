@@ -2,7 +2,7 @@ import React from "react";
 
 // reactstrap components
 import {Col, Row} from "reactstrap";
-import PlutchikSelector8WithIntensityCompact from "./PlutchikSelector8WithIntensityCompact";
+import PlutchikSelector8WithIntensitySlider from "./PlutchikSelector8WithIntensitySlider";
 
 class Paragraph extends React.Component {
     static defaultProps = {
@@ -11,10 +11,11 @@ class Paragraph extends React.Component {
 
   render() {
       return (
-            <Row className={"m1-3 mb-2 pt-1 pb-1 align-items-center"}
+            <Row className={"m1-3 mb-2 align-items-center"}
                  style={{background: this.props.error ? "#FF9991" : null,
                  overflow: "hidden"}}
             >
+
 
                 <Col style={{background: this.props.contentBackgroundColor,
                     height: "100%",
@@ -22,11 +23,13 @@ class Paragraph extends React.Component {
                     marginTop: -1000,
                     paddingBottom: 1000,
                 marginBottom:-1000}}
-                     xs={12} sm={7} md={7} lg={7} xl={7}>
-                    {this.props.children}
+                     xs={12} sm={7} md={7} lg={7} xl={7}
+                >
+                    <div className={"pt-2 pb-2"}>{this.props.children}</div>
                 </Col>
+
                 <Col xs={12} sm={5} md={5} lg={5} xl={5}>
-                    <PlutchikSelector8WithIntensityCompact selectedEmotion={this.props.selectedEmotion} onClick={this.props.onClick}/>
+                    <PlutchikSelector8WithIntensitySlider selectedEmotion={this.props.selectedEmotion} onClick={this.props.onClick}/>
                 </Col>
             </Row>
     );

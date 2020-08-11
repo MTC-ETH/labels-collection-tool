@@ -44,7 +44,6 @@ class PlutchikSelector8WithIntensity extends SelectorAbstract {
                             onClick={(e) => this.props.onClick(e, emotion.name)}
                             rounded={false}>
                                 <Container >
-                                    {/*<Row className={"d-flex align-items-center"}>*/}
                                     <Row>
                                         <Col className="p-0">
                                             <Row className={"p-0 mt-n1"}>
