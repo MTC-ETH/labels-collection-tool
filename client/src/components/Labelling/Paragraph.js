@@ -11,7 +11,7 @@ class Paragraph extends React.Component {
 
   render() {
       return (
-            <Row className={"m1-3 mb-2 align-items-center"}
+            <Row className={"m1-3 mt-4 mb-4 align-items-center"}
                  style={{background: this.props.error ? "#FF9991" : null,
                  overflow: "hidden"}}
             >

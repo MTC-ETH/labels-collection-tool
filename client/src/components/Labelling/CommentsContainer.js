@@ -28,7 +28,7 @@ class CommentsContainer extends React.Component {
                     <h5>Stance?</h5>
                 </Col>
                     <Col xs={12} sm={5} md={5} lg={5} xl={5}>
-                    <h5>Emotion adn intensity?</h5>
+                    <h5>Emotion and intensity?</h5>
                 </Col>
             </Row>
                 {commentsJson.map((com) => {
