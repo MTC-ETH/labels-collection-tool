@@ -15,8 +15,8 @@ class StanceSelectorAbstract extends SelectorAbstract {
         {name: "In favour", color: "2FB774", emoji: "👍"},
         {name: "Discussing", color: "FBAF64", emoji: "☝️"},//👐🏽☝️👐
         {name: "Against", color: "F15A61", emoji: "👎"},
-        {name: "Unrelated", color: "E7E6E6", emoji: "⁉️️"},
-        ];
+        {name: "Unrelated", color: "E7E6E6", emoji: String.fromCodePoint(0x2049)}, //⁉️️
+    ];
 
     getButtonObject(option, fontSize) {
         let color, fontColor;
