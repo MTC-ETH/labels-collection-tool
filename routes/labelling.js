@@ -136,14 +136,14 @@ function createAndReplyWithNewStatus(res, _labellerID) {
                     article: newArticle._id,
                     articleID: newArticle.articleID,
                     paragraphsEmotionLabel: newArticle.paragraphs.map(par => {
-                        return {paragraphConsecutiveID: par.consecutiveID, label: null}
+                        return {paragraphConsecutiveID: par.consecutiveID, label: null, intensity: null}
                     }),
                     stanceArticleQuestionLabel: null,
                     commentsStanceLabel: newArticle.comments.map(com => {
                         return {commentID: com.commentID, label: null}
                     }),
                     commentsEmotionLabel: newArticle.comments.map(com => {
-                        return {commentID: com.commentID, label: null}
+                        return {commentID: com.commentID, label: null, intensity: null}
                     }),
                     limitNumberOfComments: config.commentsPerArticle
                 });
@@ -221,7 +221,8 @@ router.route('/ntagged').get((req, res) => {
         });
 });
 
-function updatelabellingstatutes(req, res, arrayName, elemIDName) {
+function updatelabellingstatutes(req, res, arrayName, elemIDName, fieldName="label") {
+    console.log(fieldName);
     return labellingstatuses.updateOne({
             'labeller': mongoose.Types.ObjectId(req.body.labeller),
             'article': mongoose.Types.ObjectId(req.body.article),
@@ -229,7 +230,7 @@ function updatelabellingstatutes(req, res, arrayName, elemIDName) {
         },
         {
             $set: {
-                [arrayName + '.$.label']: req.body.label,
+                [arrayName + '.$.' + fieldName]: req.body.data,
             }
         }).then(() => {
         console.log("Succesfully updated.");
@@ -278,7 +279,7 @@ router.route('/tag/article').post((req, res) => {
         },
         {
             $set: {
-                stanceArticleQuestionLabel: req.body.label,
+                stanceArticleQuestionLabel: req.body.data,
             }
         })
         .then(() => {
@@ -290,9 +291,15 @@ router.route('/tag/article').post((req, res) => {
 });
 
 // POST an intermediate result of tagging a paragraph
-router.route('/tag/paragraph').post((req, res) => {
-    console.log("labelling/tag/paragraph queried");
+router.route('/tag/paragraph/label').post((req, res) => {
+    console.log("labelling/tag/paragraph/label queried");
     return updatelabellingstatutes(req, res, "paragraphsEmotionLabel", "paragraphConsecutiveID");
+});
+
+router.route('/tag/paragraph/intensity').post((req, res) => {
+    console.log("labelling/tag/paragraph/intensity queried");
+    return updatelabellingstatutes(req, res, "paragraphsEmotionLabel",
+        "paragraphConsecutiveID", "intensity");
 });
 
 // POST an intermediate result of tagging a comment stance
@@ -302,9 +309,16 @@ router.route('/tag/comment/stance').post((req, res) => {
 });
 
 // POST an intermediate result of tagging a comment emotion
-router.route('/tag/comment/emotion').post((req, res) => {
-    console.log("labelling/comment/emotion queried");
+router.route('/tag/comment/emotion/label').post((req, res) => {
+    console.log("labelling/tag/comment/emotion/label queried");
+    console.log(req.body);
     return updatelabellingstatutes(req, res, "commentsEmotionLabel", "commentID");
+});
+
+router.route('/tag/comment/emotion/intensity').post((req, res) => {
+    console.log("labelling/tag/comment/emotion/intensity queried");
+    return updatelabellingstatutes(req, res, "commentsEmotionLabel",
+        "commentID", "intensity");
 });
 
 router.route('/submit').post((req, res) => {
@@ -316,11 +330,24 @@ router.route('/submit').post((req, res) => {
     function reconciliate(newEntry, listName, idName) {
         for (let i = 0; i < newEntry[listName].length; ++i) {
             const curr = newEntry[listName][i];
-            if (curr.label !== data[listName][curr[idName]]) {
-                console.log("reconciliation needed for:");
+            // the stance contains the label directly and instead emotion is an object with label as a field
+            let label = data[listName][curr[idName]].label;
+            if(!label) {
+                label = data[listName][curr[idName]]
+            }
+            if (curr.label !== label) {
+                console.log("reconciliation of label needed for:");
                 console.log(curr);
                 console.log(curr[idName]);
-                newEntry[listName][i].label = data[listName][curr[idName]];
+                newEntry[listName][i].label = label;
+            }
+            // the stance doesn't have intensity and  emotion yes, as a field
+            const intensity = data[listName][curr[idName]].intensity;
+            if(intensity && curr.intensity !== intensity) {
+                console.log("reconciliation of intensity needed for:");
+                console.log(curr);
+                console.log(curr[idName]);
+                newEntry[listName][i].intensity = intensity;
             }
         }
     }

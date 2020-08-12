@@ -7,12 +7,18 @@ import arrowUp from "../../assets/imgs/IntensityArrowUp.png";
 
 class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {
 
+    constructor(props, context) {
+        super(props, context);
+        this.getIntensityRow = this.getIntensityRow.bind(this);
+    }
+
     emotions = [
         [{name: "joy", color: "FFDE7A", emoji: "😊"}, {name: "trust", color: "ACD46A", emoji: "🤝"}, {name: "fear", color: "2FB774", emoji: "😨"}, {name: "anticipation", color: "FBAF64", emoji: "👀"}],
         [{name: "sadness", color: "74A9DB", emoji: "😞"}, {name: "disgust", color: "A490C6", emoji: "🤢"}, {name: "anger", color: "F3736D", emoji: "😡"}, {name: "surprise", color: "2CB0D9", emoji: "😮"}],
     ];
 
     render() {
+        console.log(this.props.emotionStatus);
         return (
             <Container>
                 <Row className={"align-items-center"}>
@@ -21,7 +27,9 @@ class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {
                             return <Row key={rowI}>
                                 {row.map((emotion, colI) => {
                                     let color, fontColor;
-                                    if (this.props.selectedEmotion === null || this.props.selectedEmotion === emotion.name) {
+                                    if (this.props.emotionStatus === null
+                                        || this.props.emotionStatus.label === null
+                                        || this.props.emotionStatus.label === emotion.name) {
                                         color = emotion.color;
                                         fontColor = "black";
                                     } else {
@@ -70,15 +78,15 @@ class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {
                         }
                     </Col>
                     <Col xs={12} sm={2} md={2} lg={2} xl={2}>
-                        {this.getIntensirtyRow("⬆️", "high️", true, "#d1d1d1")}
+                        {this.getIntensityRow("⬆️", "high️", 2,true, "#a9a9a9")}
                         {/*🌕*/}
                         {/*🌔*/}
                         {/*❗️❗️❗*/}
-                        {this.getIntensirtyRow("⏺", "medium", false, "#e3e3e3")}
+                        {this.getIntensityRow("⏺", "medium", 1,false, "#c3c3c3")}
                         {/*🌗*/}
                         {/*🌗*/}
                         {/*❗️❗️*/}
-                        {this.getIntensirtyRow("⬇️", "low", false,"#f5f5f5")}
+                        {this.getIntensityRow("⬇️", "low", 0,false,"#e3e3e3")}
                         {/*🌒*/}
                         {/*🌑*/}
                         {/*❗️*/}
@@ -88,10 +96,19 @@ class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {
         );
     }
 
-    getIntensirtyRow(emoji, text, margitTop=false, color="#d1d1d1") {
+    getIntensityRow(emoji, text, intensity, margitTop=false, color="#d1d1d1") {
+        let fontColor = "black";
+        let newColor = color;
+        if (this.props.emotionStatus !== null
+            && this.props.emotionStatus.intensity !== null
+            && this.props.emotionStatus.intensity !== intensity) {
+            newColor = "#" + this.neutralColor;
+            fontColor = "#" + this.neutralFontColor;
+        }
+
         const styleDict = {
-            background: color,
-            color: "#000000",
+            background: newColor,
+            color: fontColor,
             height: "100%",
             width: "100%",
             borderRadius: 0,
@@ -105,6 +122,7 @@ class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {
                 <Button block className={"pr-0 pl-0"}
                         style={styleDict}
                         size={"sm"}
+                        onClick={(e) => this.props.onClickIntensity(e, intensity)}
                 >
                     <Container>
                         <Row>

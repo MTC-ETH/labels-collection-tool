@@ -30,7 +30,10 @@ class Paragraph extends React.Component {
                 </Col>
 
                 <Col xs={12} sm={5} md={5} lg={5} xl={5}>
-                    <PlutchikSelector selectedEmotion={this.props.selectedEmotion} onClick={this.props.onClick}/>
+                    <PlutchikSelector8WithIntensitySlider
+                        emotionStatus={this.props.emotionStatus}
+                                      onClick={this.props.onClick}
+                    onClickIntensity={this.props.onClickIntensity}/>
                 </Col>
             </Row>
     );

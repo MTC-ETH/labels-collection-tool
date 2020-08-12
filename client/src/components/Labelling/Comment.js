@@ -30,8 +30,9 @@ class Comment extends React.Component {
                                             onClick={this.props.onClickStance}/>
                 </Col>
                 <Col xs={12} sm={5} md={5} lg={5} xl={5}>
-                    <PlutchikSelector selectedEmotion={this.props.selectedEmotion}
-                                        onClick={this.props.onClickEmotion}/>
+                    <PlutchikSelector8WithIntensitySlider emotionStatus={this.props.emotionStatus}
+                                        onClick={this.props.onClickEmotion}
+                                        onClickIntensity={this.props.onClickEmotionIntensity}/>
                 </Col>
             </Row>
     );
