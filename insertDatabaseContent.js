@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const seedrandom = require('seedrandom');
 
 const config = require( "./config");
 
@@ -8,10 +9,10 @@ mongoose.connect(uri, {useNewUrlParser:true, useCreateIndex: true, useUnifiedTop
 
 const connection = mongoose.connection;
 
-
 function shuffleArray(array) {
+    const myrng = seedrandom('myrndseed');
     for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = Math.floor(myrng() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
