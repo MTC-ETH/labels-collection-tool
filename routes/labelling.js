@@ -236,7 +236,36 @@ function updatelabellingstatutes(req, res, arrayName, elemIDName) {
         return res.send('Successfully saved.');
     }).catch(err => {
         return res.status(500).send({error: err});
-    });
+    }).then(() => updateLabellingStatusesDate(req.body.labeller, req.body.article));
+}
+
+// save the date in which the labeller started labelling (clicked its first button)
+function updateLabellingStatusesDate(labeller, article) {
+    return labellingstatuses.updateOne({
+            'labeller': mongoose.Types.ObjectId(labeller),
+            'article': mongoose.Types.ObjectId(article),
+            firstLabelledEnteredDate: null
+        },
+        {
+            $set: {
+                firstLabelledEnteredDate: Date.now(),
+            }
+        })
+        .then((res) => {
+            if(!res.ok) {
+                return false;
+            }
+            if(res.nModified) {
+                console.log("Succesfully updated firstLabelledEnteredDate too.");
+            } else {
+                console.log("firstLabelledEnteredDate was already entered, no update needed");
+            }
+            console.log(res);
+            return true;
+        }).catch(err => {
+            console.log(err);
+            return false;
+        });
 }
 
 // POST an intermediate result of tagging a paragraph
@@ -257,7 +286,7 @@ router.route('/tag/article').post((req, res) => {
         return res.send('Successfully saved.');
     }).catch(err => {
         return res.status(500).send({error: err});
-    });
+    }).then(() => updateLabellingStatusesDate(req.body.labeller, req.body.article));;
 });
 
 // POST an intermediate result of tagging a paragraph
@@ -318,6 +347,9 @@ router.route('/submit').post((req, res) => {
 
         reconciliate(newEntry, "commentsStanceLabel", "commentID");
         reconciliate(newEntry, "commentsEmotionLabel", "commentID");
+
+        // save the date in which the labeller finished labelling
+        newEntry.finishedLabellingDate = Date.now();
 
         const newLabelledEntry = new labelledentries(newEntry);
         return newLabelledEntry.save().then(() => {

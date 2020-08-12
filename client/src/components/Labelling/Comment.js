@@ -4,6 +4,7 @@ import React from "react";
 import {Col, Row} from "reactstrap";
 import PlutchikSelector8WithIntensitySlider from "./PlutchikSelector8WithIntensitySlider";
 import StanceSelectorVertical from "./StanceSelectorVertical";
+import PlutchikSelector from "./PlutchikSelector";
 
 class Comment extends React.Component {
     static defaultProps = {
@@ -29,7 +30,7 @@ class Comment extends React.Component {
                                             onClick={this.props.onClickStance}/>
                 </Col>
                 <Col xs={12} sm={5} md={5} lg={5} xl={5}>
-                    <PlutchikSelector8WithIntensitySlider selectedEmotion={this.props.selectedEmotion}
+                    <PlutchikSelector selectedEmotion={this.props.selectedEmotion}
                                         onClick={this.props.onClickEmotion}/>
                 </Col>
             </Row>

@@ -3,6 +3,7 @@ import React from "react";
 // reactstrap components
 import {Col, Row} from "reactstrap";
 import PlutchikSelector8WithIntensitySlider from "./PlutchikSelector8WithIntensitySlider";
+import PlutchikSelector from "./PlutchikSelector";
 
 class Paragraph extends React.Component {
     static defaultProps = {
@@ -29,7 +30,7 @@ class Paragraph extends React.Component {
                 </Col>
 
                 <Col xs={12} sm={5} md={5} lg={5} xl={5}>
-                    <PlutchikSelector8WithIntensitySlider selectedEmotion={this.props.selectedEmotion} onClick={this.props.onClick}/>
+                    <PlutchikSelector selectedEmotion={this.props.selectedEmotion} onClick={this.props.onClick}/>
                 </Col>
             </Row>
     );

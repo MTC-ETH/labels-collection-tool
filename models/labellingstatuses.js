@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const labellingstatusesSchema = new Schema({
         labeller: { type: Schema.Types.ObjectId, ref: 'labellers' },
         article: { type: Schema.Types.ObjectId, ref: 'articles' },
+        firstLabelledEnteredDate: {type: Date, default: null},
     articleID: String,
         paragraphsEmotionLabel: [{paragraphConsecutiveID: Number, label: String}],
         stanceArticleQuestionLabel: String,
