@@ -4,13 +4,14 @@ import React from "react";
 import {Button, Col, Container, Row} from "reactstrap";
 
 class ArticleInstructions extends React.Component {
-
+    static defaultProps = {
+        instructionsTextColor: "#1e0ead"
+    };
   render() {
       return (
           <>
             <Container className="shape-container align-items-center pt-2" style={{
-                color: "blue",
-                // fontSize: "12px"
+                color: this.props.instructionsTextColor
             }}>
                 <Row>
                     <Col>
@@ -26,7 +27,9 @@ class ArticleInstructions extends React.Component {
                                 It’s possible to select only one emotion per paragraph. If in doubt, select the emotion which is conveyed in a stronger manner by the text.</p>
                         </Col>
                         <Col xs={12} sm={3} md={3} lg={2} xl={2}>
-                            <Button href={"/instructions?token=" + this.props.token} color={"primary"} block>
+                            <Button href={"/instructions?token=" + this.props.token}
+                                    style={{backgroundColor: this.props.instructionsTextColor + "AF"}}
+                                    block>
                                 More instructions</Button>
                         </Col>
                         </Row>

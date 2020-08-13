@@ -18,6 +18,7 @@ class Labelling extends React.Component {
 
     static defaultProps = {
         contentBackgroundColor: "#f2f0e6",
+        instructionsTextColor: "#1e0ead"
     };
 
     constructor(props, context) {
@@ -315,25 +316,35 @@ class Labelling extends React.Component {
                             <h2>Labelling Procedure</h2>
                         </Col>
                         <Col xs={12} sm={3} md={3} lg={2} xl={2} className={"text-center"}>
-                            {/*<Button href={"/instructions"} color={"primary"} block>More instructions</Button>*/}
-                            {this.state.labelledArticlesCount ? <># labelled articles: {this.state.labelledArticlesCount}</> : null}
+                            {this.state.labelledArticlesCount ?
+                                <div style={{color: this.props.instructionsTextColor}}>
+                                    # labelled articles: {this.state.labelledArticlesCount}
+                                </div>
+                                : null}
                         </Col>
                     </Row>
                 </Container>
 
-                <ArticleInstructions token={this.state.labellerID}/>
+                <ArticleInstructions token={this.state.labellerID}
+                                     instructionsTextColor={this.props.instructionsTextColor}
+                />
                 <Article articleJson={this.state.article}
                          paragraphsEmotionLabel={this.state.paragraphsEmotionLabel}
                          paragraphsError={this.state.paragraphsError}
                          onClick={this.handleEmotionArticle}
                          onClickIntensity={this.handleEmotionIntensityArticle}
-                        contentBackgroundColor={this.props.contentBackgroundColor}
+                         contentBackgroundColor={this.props.contentBackgroundColor}
+                         instructionsTextColor={this.props.instructionsTextColor}
                 />
                 <ArticleStanceQuestion question={this.state.article.stanceQuestion}
                                        onClick={this.handleStanceArticle}
                                        stanceArticleQuestionLabel={this.state.stanceArticleQuestionLabel}
-                                       error={this.state.stanceArticleQuestionError}/>
-                <CommentsInstructions/>
+                                       error={this.state.stanceArticleQuestionError}
+                                       instructionsTextColor={this.props.instructionsTextColor}
+                />
+                <CommentsInstructions
+                    instructionsTextColor={this.props.instructionsTextColor}
+                />
                 <Comments commentsJson={this.state.comments}
                           commentsStanceLabel={this.state.commentsStanceLabel}
                           commentsEmotionLabel={this.state.commentsEmotionLabel}
@@ -342,8 +353,11 @@ class Labelling extends React.Component {
                           onClickEmotion={this.handleEmotionComments}
                           onClickEmotionIntensity={this.handleEmotionIntensityComments}
                           contentBackgroundColor={this.props.contentBackgroundColor}
+                          instructionsTextColor={this.props.instructionsTextColor}
                 />
-                <SubmitInstructionsAndButton onClick={this.handleSubmit}/>
+                <SubmitInstructionsAndButton onClick={this.handleSubmit}
+                                             instructionsTextColor={this.props.instructionsTextColor}
+                />
                 <Footer/>
             </>
         );

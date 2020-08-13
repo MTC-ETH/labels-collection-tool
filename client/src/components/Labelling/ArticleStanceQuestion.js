@@ -5,13 +5,15 @@ import {Col, Container, Row} from "reactstrap";
 import StanceSelectorOrizontal from "./StanceSelectorOrizontal";
 
 class ArticleStanceQuestion extends React.Component {
+    static defaultProps = {
+        instructionsTextColor: "#1e0ead"
+    };
 
   render() {
       return (
           <>
             <Container className="shape-container align-items-center pt-4" style={{
-                color: "blue",
-                // fontSize: "12px"
+                color: this.props.instructionsTextColor
             }}>
                 <Row>
                     <Col>

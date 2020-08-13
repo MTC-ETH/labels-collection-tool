@@ -7,6 +7,7 @@ import Comment from "./Comment";
 class CommentsContainer extends React.Component {
     static defaultProps = {
         contentBackgroundColor: "#f2f0e6",
+        instructionsTextColor: "#1e0ead"
     };
   render() {
       if (!this.props.commentsJson) {
@@ -18,8 +19,7 @@ class CommentsContainer extends React.Component {
           <>
             <Container className="shape-container align-items-center">
                 <Row style={{
-                color: "blue",
-                // fontSize: "12px"
+                color: this.props.instructionsTextColor
             }} className={"text-center mt-3 mb-n2"}>
                 <Col xs={12} sm={5} md={5} lg={5} xl={5}>
                     <h5>Comment</h5>

@@ -8,6 +8,7 @@ class Article extends React.Component {
     // Set default props
     static defaultProps = {
         contentBackgroundColor: "#f2f0e6",
+        instructionsTextColor: "#1e0ead"
     };
 
   render() {
@@ -27,8 +28,7 @@ class Article extends React.Component {
                     </Col>
                 </Row>
                 <Row style={{
-                    color: "blue",
-                    // fontSize: "12px"
+                    color: this.props.instructionsTextColor,
                 }} className={"text-center mt-3 mb-n2"}>
                     <Col xs={12} sm={7} md={7} lg={7} xl={7}>
                         <h5>Article paragraph</h5>
