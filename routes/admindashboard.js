@@ -98,7 +98,10 @@ router.route('/status').get((req, res) => {
     queryPromises.push(labelledentries.find({}).exec()
         .then(entries => {
             console.log(entries);
-            let averageTime = entries.map((entry) => entry.finishedLabellingDate - entry.firstLabelledEnteredDate)
+            let averageTime = entries
+                .filter((entry) => entry.finishedLabellingDate !== null && entry.finishedLabellingDate !== undefined
+                                    && entry.firstLabelledEnteredDate !== null && entry.firstLabelledEnteredDate !== undefined)
+                .map((entry) => entry.finishedLabellingDate - entry.firstLabelledEnteredDate)
                 .reduce((a, b) => a + b, 0);
             console.log(averageTime);
             averageTime /= entries.length;
