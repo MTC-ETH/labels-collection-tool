@@ -97,14 +97,14 @@ router.route('/status').get((req, res) => {
 
     queryPromises.push(labelledentries.find({}).exec()
         .then(entries => {
-            console.log(entries);
-            let averageTime = entries
+            const nonNullEntries = entries
                 .filter((entry) => entry.finishedLabellingDate !== null && entry.finishedLabellingDate !== undefined
-                                    && entry.firstLabelledEnteredDate !== null && entry.firstLabelledEnteredDate !== undefined)
+                    && entry.firstLabelledEnteredDate !== null && entry.firstLabelledEnteredDate !== undefined);
+            let averageTime = nonNullEntries
                 .map((entry) => entry.finishedLabellingDate - entry.firstLabelledEnteredDate)
                 .reduce((a, b) => a + b, 0);
             console.log(averageTime);
-            averageTime /= entries.length;
+            averageTime /= nonNullEntries.length;
             console.log(averageTime);
             console.log(millisecToString(averageTime));
             return {averageTaggingTime: millisecToString(averageTime)};
