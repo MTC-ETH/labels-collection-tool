@@ -26,42 +26,44 @@ function buildMailerJob() {
 function sendBackupMail() {
     console.log("sendBackupMail called");
 
-    return getAllData()
-        .then(result => {
-            const stringifiedRes = JSON.stringify(result);
+    return new Promise(function(resolve, reject) {
+        getAllData()
+            .then(result => {
+                const stringifiedRes = JSON.stringify(result);
 
-            const smtpTrans = nodemailer.createTransport({
-                host: 'smtp.gmail.com',
-                port: 465,
-                secure: true,
-                auth: {
-                    user: process.env.EMAIL,
-                    pass: process.env.EMAIL_PASS
-                }
+                const smtpTrans = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 465,
+                    secure: true,
+                    auth: {
+                        user: process.env.EMAIL,
+                        pass: process.env.EMAIL_PASS
+                    }
+                });
+
+                const mailOpts = {
+                    from: process.env.EMAIL, // This is ignored by Gmail
+                    to: process.env.EMAIL_BACKUP,
+                    subject: '[MTC] emotions and stance backup',
+                    text: stringifiedRes
+                };
+
+                //we send the email
+                smtpTrans.sendMail(mailOpts, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                        reject(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                        resolve(true);
+                    }
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error)
             });
-
-            const mailOpts = {
-                from: process.env.EMAIL, // This is ignored by Gmail
-                to: process.env.EMAIL_BACKUP,
-                subject: '[MTC] emotions and stance backup',
-                text: stringifiedRes
-            };
-
-            //we send the email
-            smtpTrans.sendMail(mailOpts, function (error, info) {
-                if (error) {
-                    console.log(error);
-                    reject(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
-                    resolve(true);
-                }
-            });
-        })
-        .catch(error => {
-            console.log(error);
-            reject(error)
-        });
+    })
 }
 
 //get the next article to be tagged
