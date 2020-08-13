@@ -139,6 +139,7 @@ function createAndReplyWithNewStatus(res, _labellerID) {
                         return {paragraphConsecutiveID: par.consecutiveID, label: null, intensity: null}
                     }),
                     stanceArticleQuestionLabel: null,
+                    emotionArticleLabel: {label: null, intensity: null},
                     commentsStanceLabel: newArticle.comments.map(com => {
                         return {commentID: com.commentID, label: null}
                     }),
@@ -269,25 +270,40 @@ function updateLabellingStatusesDate(labeller, article) {
         });
 }
 
-// POST an intermediate result of tagging a paragraph
+// POST an intermediate result of tagging a stance question on article
 router.route('/tag/article').post((req, res) => {
     console.log("labelling/tag/article queried");
+    return updateSingleFieldInLabellingStatuses(req, res, "stanceArticleQuestionLabel");
+});
 
+function updateSingleFieldInLabellingStatuses(req, res, fieldName) {
     return labellingstatuses.updateOne({
             'labeller': mongoose.Types.ObjectId(req.body.labeller),
             'article': mongoose.Types.ObjectId(req.body.article),
         },
         {
             $set: {
-                stanceArticleQuestionLabel: req.body.data,
+                [fieldName]: req.body.data,
             }
         })
         .then(() => {
-        console.log("Succesfully updated.");
-        return res.send('Successfully saved.');
-    }).catch(err => {
-        return res.status(500).send({error: err});
-    }).then(() => updateLabellingStatusesDate(req.body.labeller, req.body.article));;
+            console.log("Succesfully updated.");
+            return res.send('Successfully saved.');
+        }).catch(err => {
+            return res.status(500).send({error: err});
+        }).then(() => updateLabellingStatusesDate(req.body.labeller, req.body.article));
+}
+
+// POST an intermediate result of tagging emotion label article level
+router.route('/tag/article/emotion/label').post((req, res) => {
+    console.log("labelling/tag/article/emotion/label queried");
+    return updateSingleFieldInLabellingStatuses(req, res, "emotionArticleLabel.label");
+});
+
+// POST an intermediate result of tagging emotion intensity article level
+router.route('/tag/article/emotion/intensity').post((req, res) => {
+    console.log("labelling/tag/article/emotion/intensity queried");
+    return updateSingleFieldInLabellingStatuses(req, res, "emotionArticleLabel.intensity");
 });
 
 // POST an intermediate result of tagging a paragraph
@@ -370,6 +386,15 @@ router.route('/submit').post((req, res) => {
             console.log(newEntry.stanceArticleQuestionLabel);
             console.log(data.stanceArticleQuestionLabel);
             newEntry.stanceArticleQuestionLabel = data.stanceArticleQuestionLabel;
+        }
+
+        if(newEntry.emotionArticleLabel === null || newEntry.emotionArticleLabel === undefined ||
+            newEntry.emotionArticleLabel.label !== data.emotionArticleLabel.label
+        || newEntry.emotionArticleLabel.intensity !== data.emotionArticleLabel.intensity) {
+            console.log("reconciliation needed for:");
+            console.log(newEntry.emotionArticleLabel);
+            console.log(data.emotionArticleLabel);
+            newEntry.emotionArticleLabel = data.emotionArticleLabel;
         }
 
         reconciliate(newEntry, "commentsStanceLabel", "commentID");

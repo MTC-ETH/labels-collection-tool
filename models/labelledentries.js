@@ -9,6 +9,7 @@ const labelledentriesSchema = new Schema({
         articleID: String,
         paragraphsEmotionLabel: [{paragraphConsecutiveID: Number, label: String, intensity: Number}], //0,1,2
         stanceArticleQuestionLabel: String,
+        emotionArticleLabel: {type: {label: String, intensity: Number}, default: null},
         commentsStanceLabel: [{commentID: String, label: String}],
         commentsEmotionLabel: [{commentID: String, label: String, intensity: Number}], //0,1,2
     },
