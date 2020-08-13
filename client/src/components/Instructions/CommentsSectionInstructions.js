@@ -11,7 +11,7 @@ class CommentsSectionInstructions extends React.Component {
                     <h4>Comments section</h4>
                     <p>Similarly to the article, you are shown comments that were written under the given article and
                     you are asked to label them for emotions and for stance.<br/>
-                        In particular, for each comment:
+                        In particular, for each comment:</p>
                         <ul>
                             <li>
                                 Click on the emotion that replies to the question:  <br/>
@@ -26,7 +26,6 @@ class CommentsSectionInstructions extends React.Component {
                                 of the comment towards the article and not towards the previously presented topic.</b> <br/>
                             </li>
                         </ul>
-                    </p>
                 </Col>
             </Row>
         </>;

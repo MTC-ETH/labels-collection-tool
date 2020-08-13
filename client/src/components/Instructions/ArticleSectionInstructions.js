@@ -59,7 +59,7 @@ class ArticleSectionInstructions extends React.Component {
                     <p>After reading the whole article you are asked to select the stance of the article towards
                         a given topic. You are given a question and 4 possible answers <i>in favour, discussing,
                             against</i> and <i>unrelated</i>. An example question can be: <i>Should abortion be legal?</i>.
-                        The meaning of the four possible answers follows:
+                        The meaning of the four possible answers follows:</p>
                         <ul>
                             <li>
                                 <i>in favour</i> means the article agrees with the question and
@@ -78,7 +78,6 @@ class ArticleSectionInstructions extends React.Component {
                                 question.
                             </li>
                         </ul>
-                    </p>
                 </Col>
             </Row>
         </>;
