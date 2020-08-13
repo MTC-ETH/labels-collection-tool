@@ -4,54 +4,75 @@ const config = require( "../config");
 
 const labelledentries = require(`../models/labelledentries`);
 const labellers = require(`../models/labellers`);
+const articles = require(`../models/articles`);
+const {getAllData, millisecToString} = require("./utils");
 
 
-router.route('/labelled').get((req, res) => {
+
+function checkAdminToken(req, res) {
     const token = _.get(req, "query.token", null);
-    console.log("admindashboard/labelled queried, with token = " + token);
     if(!token) {
         console.log("No token in query");
-        return res.status(400).send({error: "Please provide token in query"});
+        res.status(400).send({error: "Please provide token in query"});
+        return false;
     }
     if(token !== process.env.ADMIN_TOKEN) {
-        console.log("Token is not admin token.");
-        return res.status(400).send({error: "Token is not admin token."});
+        console.log("Token is not admin token. " + token);
+        res.status(400).send({error: "Token is not admin token."});
+        return false;
     }
+    return true;
+}
 
-    //check that the labellerID exists
-    return labelledentries.find({})
+function replyWithDowloadableTable(res, mongooseModel) {
+    console.log(mongooseModel.collection.collectionName);
+    return mongooseModel.find({})
         .then(queryRes => {
-                    console.log("Succesfully authenticated, returning records");
-                    res.set("Content-Disposition", "attachment; filename=labelled.json");
-                    res.type('application/json');
-                    res.json(queryRes);
-                })
+            console.log("Succesfully authenticated, returning records");
+            res.set("Content-Disposition", "attachment; filename=" + mongooseModel.collection.collectionName + ".json");
+            res.type('application/json');
+            res.json(queryRes);
+        })
         .catch(err => {
             console.log(err);
             res.status(500).send(err);
         });
+}
+
+router.route('/labelledentries').get((req, res) => {
+    console.log("admindashboard/labelledentries queried");
+    if(!checkAdminToken(req, res)) {
+        return false;
+    }
+    return replyWithDowloadableTable(res, labelledentries);
 });
 
 router.route('/labellers').get((req, res) => {
-    const token = _.get(req, "query.token", null);
-    console.log("admindashboard/labellers queried, with token = " + token);
-    if(!token) {
-        console.log("No token in query");
-        return res.status(400).send({error: "Please provide token in query"});
+    console.log("admindashboard/labellers queried");
+    if(!checkAdminToken(req, res)) {
+        return false;
     }
-    if(token !== process.env.ADMIN_TOKEN) {
-        console.log("Token is not admin token.");
-        return res.status(400).send({error: "Token is not admin token."});
-    }
+    return replyWithDowloadableTable(res, labellers);
+});
 
-    //check that the labellerID exists
-    return labellers.find({})
-        .then(queryRes => {
-            console.log("Succesfully authenticated, returning records");
-            res.set("Content-Disposition", "attachment; filename=labellers.json");
-            res.type('application/json');
-            res.json(queryRes);
-        })
+router.route('/articles').get((req, res) => {
+    if(!checkAdminToken(req, res)) {
+        return false;
+    }
+    return replyWithDowloadableTable(res, articles);
+});
+
+router.route('/all').get((req, res) => {
+    console.log("admindashboard/labelledentries queried");
+    if(!checkAdminToken(req, res)) {
+        return false;
+    }
+    return getAllData().then(queryRes => {
+        console.log("Succesfully authenticated, returning records");
+        res.set("Content-Disposition", "attachment; filename=all.json");
+        res.type('application/json');
+        res.json(queryRes);
+    })
         .catch(err => {
             console.log(err);
             res.status(500).send(err);
@@ -73,6 +94,19 @@ router.route('/status').get((req, res) => {
             return {nTaggedComments: r[0].totalSize}}));
     queryPromises.push(labelledentries.distinct('article').exec()
         .then(entries => {return {nTaggedUniqueArticles: entries.length}}));
+
+    queryPromises.push(labelledentries.find({}).exec()
+        .then(entries => {
+            console.log(entries);
+            let averageTime = entries.map((entry) => entry.finishedLabellingDate - entry.firstLabelledEnteredDate)
+                .reduce((a, b) => a + b, 0);
+            console.log(averageTime);
+            averageTime /= entries.length;
+            console.log(averageTime);
+            console.log(millisecToString(averageTime));
+            return {averageTaggingTime: millisecToString(averageTime)};
+        }));
+
 
     //check that the labellerID exists
     return Promise.all(queryPromises)

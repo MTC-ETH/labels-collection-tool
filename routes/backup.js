@@ -1,7 +1,10 @@
 const router = require('express').Router();
-const nodemailer = require('nodemailer');
 
+const nodemailer = require('nodemailer');
 const articles = require(`../models/articles`);
+
+const {getAllData} = require("./utils");
+
 const labelledentries = require(`../models/labelledentries`);
 const labellers = require(`../models/labellers`);
 const labellingstatuses = require(`../models/labellingstatuses`);
@@ -23,51 +26,42 @@ function buildMailerJob() {
 function sendBackupMail() {
     console.log("sendBackupMail called");
 
-    const queryPromises = [];
-    queryPromises.push(articles.find({}, { articleID: 1}).then(results => {return {articles: results}}));
-    queryPromises.push(labelledentries.find({}).then(results => {return {labelledentries: results}}));
-    queryPromises.push(labellers.find({}).then(results => {return {labellers: results}}));
-    queryPromises.push(labellingstatuses.find({}).then(results => {return {labellingstatuses: results}}));
+    return getAllData()
+        .then(result => {
+            const stringifiedRes = JSON.stringify(result);
 
-    return new Promise( function ( resolve , reject ) {
-        Promise.all(queryPromises)
-            .then(arrOfObjects => Object.assign({}, ...arrOfObjects)) //just flattens the objects
-            .then(result => {
-                const stringifiedRes = JSON.stringify(result);
-
-                const smtpTrans = nodemailer.createTransport({
-                    host: 'smtp.gmail.com',
-                    port: 465,
-                    secure: true,
-                    auth: {
-                        user: process.env.EMAIL,
-                        pass: process.env.EMAIL_PASS
-                    }
-                });
-
-                const mailOpts = {
-                    from: process.env.EMAIL, // This is ignored by Gmail
-                    to: process.env.EMAIL_BACKUP,
-                    subject: '[MTC] emotions and stance backup',
-                    text: stringifiedRes
-                };
-
-                //we send the email
-                smtpTrans.sendMail(mailOpts, function (error, info) {
-                    if (error) {
-                        console.log(error);
-                        reject(error);
-                    } else {
-                        console.log('Email sent: ' + info.response);
-                        resolve(true);
-                    }
-                });
-            })
-            .catch(error => {
-                console.log(error);
-                reject(error)
+            const smtpTrans = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: process.env.EMAIL,
+                    pass: process.env.EMAIL_PASS
+                }
             });
-    });
+
+            const mailOpts = {
+                from: process.env.EMAIL, // This is ignored by Gmail
+                to: process.env.EMAIL_BACKUP,
+                subject: '[MTC] emotions and stance backup',
+                text: stringifiedRes
+            };
+
+            //we send the email
+            smtpTrans.sendMail(mailOpts, function (error, info) {
+                if (error) {
+                    console.log(error);
+                    reject(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                    resolve(true);
+                }
+            });
+        })
+        .catch(error => {
+            console.log(error);
+            reject(error)
+        });
 }
 
 //get the next article to be tagged

@@ -197,7 +197,7 @@ class Labelling extends React.Component {
         let commentsError = {...this.state.commentsError};
         commentsError[comment.commentID] = commentsError[comment.commentID] &&
             (this.state.commentsStanceLabel[comment.commentID] === null ||
-                this.state.commentsEmotionLabel[comment.commentID] ||
+                this.state.commentsEmotionLabel[comment.commentID] === null ||
                 this.state.commentsEmotionLabel[comment.commentID].intensity === null);
         this.setState({commentsEmotionLabel, commentsError});
 

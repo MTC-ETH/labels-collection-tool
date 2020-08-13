@@ -21,7 +21,8 @@ class AdminDashboard extends React.Component {
             nTaggedComments: null,
             commentsPerArticle: null,
             labbellersPerArticle: null,
-            multiLabelledArticles: null
+            multiLabelledArticles: null,
+            averageTaggingTime: null
         }
     }
 
@@ -45,6 +46,7 @@ class AdminDashboard extends React.Component {
                     commentsPerArticle: res.data.commentsPerArticle,
                     labbellersPerArticle: res.data.interrater.labbellersPerArticle,
                     multiLabelledArticles: res.data.interrater.multiLabelledArticles,
+                    averageTaggingTime: res.data.averageTaggingTime,
                 })
             })
             .catch(err => {
@@ -52,17 +54,10 @@ class AdminDashboard extends React.Component {
             });
     }
 
-    handleDownloadLabelled() {
-        axios.get("/admindashboard/labelled?token=" + secrets.admintoken)
+    handleDownload(collectionName) {
+        axios.get("/admindashboard/" + collectionName + "?token=" + secrets.admintoken)
             .then((response) => {
-                FileDownload(JSON.stringify(response.data, null, 4), 'labelled.json');
-            });
-    }
-
-    handleDownloadLabellers() {
-        axios.get("/admindashboard/labellers?token=" + secrets.admintoken)
-            .then((response) => {
-                FileDownload(JSON.stringify(response.data, null, 4), 'labellers.json');
+                FileDownload(JSON.stringify(response.data, null, 4), collectionName + '.json');
             });
     }
 
@@ -97,6 +92,7 @@ class AdminDashboard extends React.Component {
                 <InfoRow counter={this.state.nTaggedArticles}>Number of labelled articles:</InfoRow>
                 <InfoRow counter={this.state.nTaggedUniqueArticles}>Number of uniquely labelled articles:</InfoRow>
                 <InfoRow counter={this.state.nTaggedComments}>Number of labelled comments:</InfoRow>
+                <InfoRow counter={this.state.averageTaggingTime}>Average tagging time per article:</InfoRow>
 
             <Row className={"pt-2"}>
                 <Col>
@@ -113,10 +109,12 @@ class AdminDashboard extends React.Component {
                 </Col>
                 </Row>
                 <Row>
-                    <Col><Button onClick={this.handleDownloadLabelled}>Download Labelled Data</Button></Col>
+                    <Col><Button block onClick={() => this.handleDownload("labelledentries")}>Download Labelled Data</Button></Col>
+                    <Col><Button block onClick={() => this.handleDownload("labellers")}>Download Labellers Data</Button></Col>
+                    <Col><Button onClick={() => this.handleDownload("articles")}>Download Articles Data</Button></Col>
+                    <Col><Button color="warning" onClick={() => this.handleDownload("all")}>Download All Data</Button></Col>
                 </Row>
                 <Row className={"mt-2"}>
-                    <Col><Button onClick={this.handleDownloadLabellers}>Download Labellers Data</Button></Col>
                 </Row>
             </Container>
                 <Footer/>
