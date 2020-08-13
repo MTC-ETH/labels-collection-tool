@@ -1,8 +1,6 @@
 import React from "react";
-import {Button, Col, Container, Media, Row} from "reactstrap";
+import {Button, Col, Container, Row} from "reactstrap";
 import SelectorAbstract from "./SelectorAbstract";
-import arrowDown from "../../assets/imgs/IntensityArrowDown.png";
-import arrowUp from "../../assets/imgs/IntensityArrowUp.png";
 
 
 class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {

@@ -4,7 +4,6 @@ import React from "react";
 import {Col, Row} from "reactstrap";
 import PlutchikSelector8WithIntensitySlider from "./PlutchikSelector8WithIntensitySlider";
 import StanceSelectorVertical from "./StanceSelectorVertical";
-import PlutchikSelector from "./PlutchikSelector";
 
 class Comment extends React.Component {
     static defaultProps = {

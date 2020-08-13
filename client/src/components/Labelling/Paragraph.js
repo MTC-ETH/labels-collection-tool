@@ -3,7 +3,6 @@ import React from "react";
 // reactstrap components
 import {Col, Row} from "reactstrap";
 import PlutchikSelector8WithIntensitySlider from "./PlutchikSelector8WithIntensitySlider";
-import PlutchikSelector from "./PlutchikSelector";
 
 class Paragraph extends React.Component {
     static defaultProps = {

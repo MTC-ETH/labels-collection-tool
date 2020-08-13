@@ -2,7 +2,6 @@ import React from "react";
 
 // reactstrap components
 import {Col, Container, Row} from "reactstrap";
-import StanceSelectorOrizontal from "./StanceSelectorOrizontal";
 import PlutchikSelector8WithIntensitySlider from "./PlutchikSelector8WithIntensitySlider";
 
 class ArticleEmotionQuestion extends React.Component {
