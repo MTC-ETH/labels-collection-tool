@@ -17,8 +17,8 @@ class ArticleSectionInstructions extends React.Component {
                 <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                     <p>Read the article carefully; for each paragraph, select an emotion on the right
                         side that best replies to the question: "<i>Which is the emotion conveyed in this paragraph?</i>".
-                        It’s possible to select only
-                        one emotion per paragraph. If in doubt, select the emotion which is conveyed in a stronger
+                        You can only select one emotion per paragraphs. If in doubt, select the emotion which is
+                        conveyed in a stronger
                         manner by the text.</p>
                     <p>You can choose among one of the 24 emotions of the <a
                         href={"https://en.wikipedia.org/wiki/Robert_Plutchik#Plutchik's_wheel_of_emotions"}

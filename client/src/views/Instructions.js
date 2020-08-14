@@ -30,7 +30,7 @@ class Instructions extends React.Component {
                 <Row>
                     <Col>
                         <p>For each page you are given an article divided in paragraphs and some comments
-                            made by users under the respective article. <br/>
+                            made by readers under the respective article. <br/>
                             At any time of the process if you're feeling tired or strained feel free to stop and
                             continue
                             later, all your inputs are saved and nothing will be lost, also when stopping in the middle

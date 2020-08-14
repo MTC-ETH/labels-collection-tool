@@ -15,7 +15,7 @@ class TechnicalInstructions extends React.Component {
                     the work at any time and pick it up from where you left later on, the replies you've given for
                     the current article are saved and reloaded.</p>
                     <h5>Remuneration</h5>
-                    <p>Based on our internal studies, we measured that an article and its comments take in average
+                    <p>Based on our internal studies, we measured that an article and its comments take on average
                     XX minutes to measure. At a wage of XX CHF per hour, this means XX CHF per each labelled article
                     and its comments. An article is considered completed when all the answers are properly given
                     and the submit button is pressed. No money will be handed out for articles and comments that are

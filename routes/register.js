@@ -30,7 +30,7 @@ by clicking on this link: ${link}. This will also confirm your account.
 Please note down your personal id for future use: ${idToken}
 
 For any problem or enquiry feel free to reply to this email and we will get back to you.
-Thanks for helping us advancing ML research!
+Thanks for helping us advancing research!
 All the best,
 The emotion and stance MTC team`
             };
