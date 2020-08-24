@@ -1,6 +1,10 @@
 import React from "react";
-import {Button, Col, Container, Row} from "reactstrap";
+import {Button, Col, Container, Media, Row} from "reactstrap";
 import SelectorAbstract from "./SelectorAbstract";
+
+import highVolSrc from "../../assets/imgs/speakerIconHigh.svg";
+import mediumVolSrc from "../../assets/imgs/speakerIconMedium.svg";
+import lowVolSrc from "../../assets/imgs/speakerIconLow.svg";
 
 
 class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {
@@ -76,25 +80,16 @@ class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {
                         }
                     </Col>
                     <Col xs={12} sm={2} md={2} lg={2} xl={2}>
-                        {this.getIntensityRow("⬆️", "high️", 2,true, "#a9a9a9")}
-                        {/*🌕*/}
-                        {/*🌔*/}
-                        {/*❗️❗️❗*/}
-                        {this.getIntensityRow("⏺", "medium", 1,false, "#c3c3c3")}
-                        {/*🌗*/}
-                        {/*🌗*/}
-                        {/*❗️❗️*/}
-                        {this.getIntensityRow("⬇️", "low", 0,false,"#e3e3e3")}
-                        {/*🌒*/}
-                        {/*🌑*/}
-                        {/*❗️*/}
+                        {this.getIntensityRow(highVolSrc, "strong", 2,true, "#a9a9a9")}
+                        {this.getIntensityRow(mediumVolSrc, "medium", 1,false, "#c3c3c3")}
+                        {this.getIntensityRow(lowVolSrc, "weak", 0,false,"#e3e3e3")}
                     </Col>
                 </Row>
             </Container>
         );
     }
 
-    getIntensityRow(emoji, text, intensity, margitTop=false, color="#d1d1d1") {
+    getIntensityRow(imgSrc, text, intensity, margitTop=false, color="#d1d1d1") {
         let fontColor = "black";
         let newColor = color;
         if (this.props.emotionStatus !== undefined && this.props.emotionStatus !== null
@@ -125,11 +120,13 @@ class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {
                     <Container>
                         <Row>
                             <Col className={"p-0"}>
-                                <span role="img"
-                                      style={{fontSize: 14}}
-                                      aria-label={text + " emoji"}>
-                                    {emoji}
-                                </span>
+                                <Media left>
+                                    <Media object style={{
+                                        maxWidth: '29%',
+                                        opacity: "80%"
+                                    }}
+                                           src={imgSrc} alt={text} />
+                                </Media>
                             </Col>
                         </Row>
                         <Row className={"mt-n1"}>
