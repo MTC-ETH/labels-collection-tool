@@ -3,10 +3,13 @@ import React from "react";
 // reactstrap components
 import {Col, Row} from "reactstrap";
 import PlutchikSelector8WithIntensitySlider from "./PlutchikSelector8WithIntensitySlider";
+import PlutchikSelector8WithIntensitySliderFactualAndUnsure2
+    from "./PlutchikSelector8WithIntensitySliderFactualAndUnsure2";
 
 class Paragraph extends React.Component {
     static defaultProps = {
         contentBackgroundColor: "#f2f0e6",
+        instructionsTextColor: "#1e0ead"
     };
 
   render() {
@@ -29,10 +32,11 @@ class Paragraph extends React.Component {
                 </Col>
 
                 <Col xs={12} sm={5} md={5} lg={5} xl={5}>
-                    <PlutchikSelector8WithIntensitySlider
+                    <PlutchikSelector8WithIntensitySliderFactualAndUnsure2
                         emotionStatus={this.props.emotionStatus}
                                       onClick={this.props.onClick}
-                    onClickIntensity={this.props.onClickIntensity}/>
+                    onClickIntensity={this.props.onClickIntensity}
+                        instructionsTextColor={this.props.instructionsTextColor}/>
                 </Col>
             </Row>
     );
