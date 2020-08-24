@@ -12,15 +12,16 @@ import NoMatch from "./views/NoMatch";
 import Home from "./views/Home";
 import Instructions from "./views/Instructions";
 import TermsAndConditions from "./views/TermsAndConditions";
+import {checkMobile} from "./views/NotAvailableOnMobile";
 
 ReactDOM.render(
     <>
         <BrowserRouter>
             <Switch>
                 <Route path="/" exact render={props => <Home {...props} />} />
-                <Route path="/labelling" exact render={props => <Labelling {...props} />} />
+                <Route path="/labelling" exact render={props => checkMobile(<Labelling {...props}/>)} />
                 <Route path="/admindashboard" exact render={props => <AdminDashboard {...props} />} />
-                <Route path="/authenticatelabeller" exact render={props => <AuthenticateLabeller {...props} />} />
+                <Route path="/authenticatelabeller" exact render={props => checkMobile(<AuthenticateLabeller {...props} />)} />
                 <Route path="/register" exact render={props => <Register {...props} />} />
                 <Route path="/instructions" exact render={props => <Instructions {...props} />} />
                 <Route path="/termsandconditions" exact render={props => <TermsAndConditions {...props} />} />

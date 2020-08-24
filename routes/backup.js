@@ -1,13 +1,7 @@
 const router = require('express').Router();
 
 const nodemailer = require('nodemailer');
-const articles = require(`../models/articles`);
-
 const {getAllData} = require("./utils");
-
-const labelledentries = require(`../models/labelledentries`);
-const labellers = require(`../models/labellers`);
-const labellingstatuses = require(`../models/labellingstatuses`);
 
 const schedule = require('node-schedule');
 
