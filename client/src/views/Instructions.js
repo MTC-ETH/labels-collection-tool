@@ -44,7 +44,6 @@ class Instructions extends React.Component {
                     <Col>
                         <Button className="p-1"
                                 size={"lg"}
-                            // color={"primary"}
                                 href={this.state.token ? "/labelling?token=" + this.state.token : "/labelling"} block>
                             Start or continue labelling
                         </Button>

@@ -25,7 +25,7 @@ class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {
                             return <Row key={rowI}>
                                 {row.map((emotion, colI) => {
                                     let color, fontColor;
-                                    if (this.props.emotionStatus === null
+                                    if (this.props.emotionStatus === null || this.props.emotionStatus === undefined
                                         || this.props.emotionStatus.label === null
                                         || this.props.emotionStatus.label === emotion.name) {
                                         color = emotion.color;
@@ -49,7 +49,7 @@ class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {
                                                     fontSize: 14,
                                                     borderRadius: 0
                                                 }}
-                                                onClick={(e) => this.props.onClick(e, emotion.name)}
+                                                onClick={(e) => this.props.onClick ? this.props.onClick(e, emotion.name) : () => null}
                                                 rounded={"false"}>
                                             <Container>
                                                 <Row>
@@ -97,7 +97,7 @@ class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {
     getIntensityRow(emoji, text, intensity, margitTop=false, color="#d1d1d1") {
         let fontColor = "black";
         let newColor = color;
-        if (this.props.emotionStatus !== null
+        if (this.props.emotionStatus !== undefined && this.props.emotionStatus !== null
             && this.props.emotionStatus.intensity !== null
             && this.props.emotionStatus.intensity !== intensity) {
             newColor = "#" + this.neutralColor;
@@ -120,7 +120,7 @@ class PlutchikSelector8WithIntensitySlider extends SelectorAbstract {
                 <Button block className={"pr-0 pl-0"}
                         style={styleDict}
                         size={"sm"}
-                        onClick={(e) => this.props.onClickIntensity(e, intensity)}
+                        onClick={(e) => this.props.onClickIntensity ? this.props.onClickIntensity(e, intensity) : () => null}
                 >
                     <Container>
                         <Row>
