@@ -403,6 +403,10 @@ router.route('/submit').post((req, res) => {
         // save the date in which the labeller finished labelling
         newEntry.finishedLabellingDate = Date.now();
 
+        //save the device specifications
+        newEntry.deviceSpecs = data.deviceSpecs;
+        console.log(newEntry.deviceSpecs);
+
         const newLabelledEntry = new labelledentries(newEntry);
         return newLabelledEntry.save().then(() => {
             console.log("Successfully saved.");

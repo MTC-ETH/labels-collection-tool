@@ -12,8 +12,21 @@ import Row from "reactstrap/es/Row";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ArticleEmotionQuestion from "../components/Labelling/ArticleEmotionQuestion";
+import {browserName, browserVersion, deviceType, osName, osVersion} from "react-device-detect";
 
 // const labellerID = "5f199424dcf1cfe56a7436a7";
+function getDeviceSpecs() {
+    const specifics = {
+        osName: osName,
+        osVersion: osVersion,
+        browserName: browserName,
+        browserVersion: browserVersion,
+        deviceType: deviceType
+    };
+    console.log(specifics);
+
+    return specifics;
+}
 
 class Labelling extends React.Component {
 
@@ -309,6 +322,7 @@ class Labelling extends React.Component {
             emotionArticleLabel: this.state.emotionArticleLabel,
             commentsStanceLabel: this.state.commentsStanceLabel,
             commentsEmotionLabel: this.state.commentsEmotionLabel,
+            deviceSpecs: getDeviceSpecs(),
         })
             .then(response => {
                 if(this.state.labelledArticlesCount) {
