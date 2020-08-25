@@ -284,7 +284,7 @@ class Labelling extends React.Component {
                 />
                 <ArticleStanceQuestion question={this.state.article.stanceQuestion}
                                        onClick={this.handleStanceArticle}
-                                       stanceArticleQuestionLabel={this.state.stanceArticleQuestionLabel}
+                                       stanceStatus={this.state.stanceArticleQuestionLabel}
                                        error={this.state.stanceArticleQuestionError}
                                        instructionsTextColor={this.props.instructionsTextColor}
                 />

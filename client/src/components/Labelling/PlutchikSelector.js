@@ -5,12 +5,14 @@ import SelectorAbstract from "./SelectorAbstract";
 import highVolSrc from "../../assets/imgs/speakerIconHigh.svg";
 import mediumVolSrc from "../../assets/imgs/speakerIconMedium.svg";
 import lowVolSrc from "../../assets/imgs/speakerIconLow.svg";
+import ImNotSureCheckboxRow from "./ImNotSureCheckboxRow";
 
 
 class PlutchikSelector extends SelectorAbstract {
 
     static defaultProps = {
-        instructionsTextColor: "#1e0ead"
+        instructionsTextColor: "#1e0ead",
+        imNotSureFontSize: 16
     };
 
     constructor(props, context) {
@@ -94,20 +96,9 @@ class PlutchikSelector extends SelectorAbstract {
                         {this.getPurelyFactualButton()}
                     </Col>
                 </Row>
-                <Row className={"align-items-center mt-1"}>
-                            <Col className={"p-0"}>
-                        <FormGroup check>
-                            <Label check>
-                                <Input type="checkbox"
-                                       id={"test-id"}
-                                       checked={this.props.emotionStatus.notSure}
-                                       onChange={(e) =>
-                                           this.props.onClick(e, "notSure", !this.props.emotionStatus.notSure)}/>{' '}
-                                <div style={{fontSize: 16}}>I'm not sure of my answer</div>
-                            </Label>
-                        </FormGroup>
-                            </Col>
-                </Row>
+                <ImNotSureCheckboxRow fontSize={this.props.imNotSureFontSize}
+                                      checked={this.props.emotionStatus.notSure}
+                                      onClick={this.props.onClick}/>
             </Container>
         );
     }

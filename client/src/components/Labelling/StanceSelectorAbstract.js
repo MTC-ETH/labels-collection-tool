@@ -20,7 +20,8 @@ class StanceSelectorAbstract extends SelectorAbstract {
 
     getButtonObject(option, fontSize) {
         let color, fontColor;
-        if(this.props.selectedStance === null || this.props.selectedStance === option.name) {
+        if(this.props.stanceStatus === null || this.props.stanceStatus.label === null ||
+            this.props.stanceStatus.label === option.name) {
             color = option.color;
             fontColor = "black";
         }

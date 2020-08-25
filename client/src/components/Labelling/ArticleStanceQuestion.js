@@ -12,20 +12,25 @@ class ArticleStanceQuestion extends React.Component {
   render() {
       return (
           <>
-            <Container className="shape-container align-items-center pt-4" style={{
-                color: this.props.instructionsTextColor
-            }}>
-                <Row>
+            <Container className="shape-container align-items-center pt-4" >
+                <Row style={{
+                    color: this.props.instructionsTextColor
+                }}>
                     <Col>
                         <h5>Stance of article towards topic</h5>
                         <p>Please now select how the article replies to the following question:</p>
                     </Col>
                 </Row>
-                <Row className={"pb-1"} style={{background: this.props.error ? "#FF9991" : null}}>
+                <Row className={"pb-1"} style={{background: this.props.error ? "#FF9991" : null,
+                    color: this.props.instructionsTextColor}}>
                     <Col>
                     <h5>{this.props.question}</h5>
-                    <StanceSelectorOrizontal onClick={this.props.onClick}
-                                         selectedStance={this.props.stanceArticleQuestionLabel.label}/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                <StanceSelectorOrizontal onClick={this.props.onClick}
+                                         stanceStatus={this.props.stanceStatus}/>
                     </Col>
                 </Row>
             </Container>

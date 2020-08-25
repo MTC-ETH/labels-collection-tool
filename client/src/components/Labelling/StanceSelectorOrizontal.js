@@ -1,6 +1,7 @@
 import React from "react";
 import {Col, Container, Row} from "reactstrap";
 import StanceSelectorAbstract from "./StanceSelectorAbstract";
+import ImNotSureCheckboxRow from "./ImNotSureCheckboxRow";
 
 class StanceSelectorOrizontal extends StanceSelectorAbstract {
 
@@ -22,6 +23,7 @@ class StanceSelectorOrizontal extends StanceSelectorAbstract {
                 })
                 }
                     </Row>
+                <ImNotSureCheckboxRow fontSize={18} checked={this.props.stanceStatus.notSure} onClick={this.props.onClick}/>
             </Container>
         );
     }
