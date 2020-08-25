@@ -127,17 +127,7 @@ function createAndReplyWithNewStatus(res, _labellerID) {
                 });
             }
             //associate labeller to this article and write this in the labellingstatus table
-            const newLabellingStatus = new labellingstatuses(
-                {
-                    labeller: _labellerID,
-                    article: newArticle._id,
-                    articleID: newArticle.articleID,
-                    paragraphsEmotionLabel: newArticle.paragraphs.map(par => {
-                        return {paragraphConsecutiveID: par.consecutiveID, label: null, intensity: null}
-                    }),
-                    stanceArticleQuestionLabel: null,
-                    emotionArticleLabel: {label: null, intensity: null},
-                });
+            const newLabellingStatus = labellingstatuses.getDefaultEmptySchema(_labellerID, newArticle);
 
             return newLabellingStatus.save()
                 .then(labstat => {
@@ -212,100 +202,106 @@ router.route('/ntagged').get((req, res) => {
         });
 });
 
-function updatelabellingstatutes(req, res, arrayName, elemIDName, fieldName="label") {
-    console.log(fieldName);
-    return labellingstatuses.updateOne({
+function updateParagraphEmotion(req, res) {
+    return labellingstatuses.findOne({
             'labeller': mongoose.Types.ObjectId(req.body.labeller),
             'article': mongoose.Types.ObjectId(req.body.article),
-            [arrayName + '.' + elemIDName]: req.body.elemID,
-        },
+        }).exec().then(status =>
         {
-            $set: {
-                [arrayName + '.$.' + fieldName]: req.body.data,
+            //push current status in history
+            const stringID = String(req.body.elemID);
+            if(status.paragraphsEmotionLabel.get(stringID).enteredAt !== null) {
+                const newHistory = status.paragraphsEmotionLabelHistory.get(stringID);
+                newHistory.push(status.paragraphsEmotionLabel.get(stringID));
+                console.log(newHistory);
+                status.paragraphsEmotionLabelHistory.set(stringID, newHistory);
+                status.markModified('paragraphsEmotionLabelHistory');
             }
+
+            //copy in new tag
+            const newEntry = req.body.data;
+            console.log(req.body.data);
+            newEntry.enteredAt = Date.now();
+            status.paragraphsEmotionLabel.set(stringID, newEntry);
+            console.log(status);
+
+            return status.save();
         }).then(() => {
         console.log("Succesfully updated.");
         return res.send('Successfully saved.');
     }).catch(err => {
+        console.log(err);
         return res.status(500).send({error: err});
-    }).then(() => updateLabellingStatusesDate(req.body.labeller, req.body.article));
+    }).then(() => labellingstatuses.updateLabellingStatusesDate(req.body.labeller, req.body.article));
 }
 
-// save the date in which the labeller started labelling (clicked its first button)
-function updateLabellingStatusesDate(labeller, article) {
-    return labellingstatuses.updateOne({
-            'labeller': mongoose.Types.ObjectId(labeller),
-            'article': mongoose.Types.ObjectId(article),
-            firstLabelledEnteredDate: null
-        },
-        {
-            $set: {
-                firstLabelledEnteredDate: Date.now(),
-            }
-        })
-        .then((res) => {
-            if(!res.ok) {
-                return false;
-            }
-            if(res.nModified) {
-                console.log("Succesfully updated firstLabelledEnteredDate too.");
-            } else {
-                console.log("firstLabelledEnteredDate was already entered, no update needed");
-            }
-            console.log(res);
-            return true;
+function updateStanceArticleQuestionLabel(req, res) {
+    return labellingstatuses.findOne({
+        'labeller': mongoose.Types.ObjectId(req.body.labeller),
+        'article': mongoose.Types.ObjectId(req.body.article),
+    }).exec().then(status => {
+        //push current status in history
+        if(status.stanceArticleQuestionLabel.enteredAt !== null) { //if it's null means it was the first labelled entered
+            status.stanceArticleQuestionLabelHistory.push(status.stanceArticleQuestionLabel);
+        }
+
+        //copy in new tag
+        status.stanceArticleQuestionLabel = req.body.data;
+        status.stanceArticleQuestionLabel.enteredAt = Date.now();
+
+        return status.save();
+    })
+        .then(() => {
+            console.log("Succesfully updated.");
+            return res.send('Successfully saved.');
         }).catch(err => {
             console.log(err);
-            return false;
-        });
+            return res.status(500).send({error: err});
+        }).then(() => labellingstatuses.updateLabellingStatusesDate(req.body.labeller, req.body.article));
 }
 
 // POST an intermediate result of tagging a stance question on article
-router.route('/tag/article').post((req, res) => {
-    console.log("labelling/tag/article queried");
-    return updateSingleFieldInLabellingStatuses(req, res, "stanceArticleQuestionLabel");
+router.route('/tag/article/stance').post((req, res) => {
+    console.log("labelling/tag/article/stance queried");
+    return updateStanceArticleQuestionLabel(req, res);
 });
 
-function updateSingleFieldInLabellingStatuses(req, res, fieldName) {
-    return labellingstatuses.updateOne({
+function updateEmotionArticleLabel(req, res) {
+    return labellingstatuses.findOne({
             'labeller': mongoose.Types.ObjectId(req.body.labeller),
             'article': mongoose.Types.ObjectId(req.body.article),
-        },
-        {
-            $set: {
-                [fieldName]: req.body.data,
+        }).exec()
+        .then(status => {
+            //push current status in history
+            if(status.emotionArticleLabel.enteredAt !== null) { //if it's null means it was the first labelled entered
+                status.emotionArticleLabelHistory.push(status.emotionArticleLabel);
             }
+
+            //copy in new tag
+            status.emotionArticleLabel = req.body.data;
+            status.emotionArticleLabel.enteredAt = Date.now();
+
+            return status.save();
         })
         .then(() => {
             console.log("Succesfully updated.");
             return res.send('Successfully saved.');
         }).catch(err => {
+            console.log(err);
             return res.status(500).send({error: err});
-        }).then(() => updateLabellingStatusesDate(req.body.labeller, req.body.article));
+        }).then(() => labellingstatuses.updateLabellingStatusesDate(req.body.labeller, req.body.article));
 }
 
 // POST an intermediate result of tagging emotion label article level
-router.route('/tag/article/emotion/label').post((req, res) => {
-    console.log("labelling/tag/article/emotion/label queried");
-    return updateSingleFieldInLabellingStatuses(req, res, "emotionArticleLabel.label");
-});
-
-// POST an intermediate result of tagging emotion intensity article level
-router.route('/tag/article/emotion/intensity').post((req, res) => {
-    console.log("labelling/tag/article/emotion/intensity queried");
-    return updateSingleFieldInLabellingStatuses(req, res, "emotionArticleLabel.intensity");
+router.route('/tag/article/emotion').post((req, res) => {
+    console.log("labelling/tag/article/emotion queried");
+    return updateEmotionArticleLabel(req, res);
 });
 
 // POST an intermediate result of tagging a paragraph
-router.route('/tag/paragraph/label').post((req, res) => {
-    console.log("labelling/tag/paragraph/label queried");
-    return updatelabellingstatutes(req, res, "paragraphsEmotionLabel", "paragraphConsecutiveID");
-});
-
-router.route('/tag/paragraph/intensity').post((req, res) => {
-    console.log("labelling/tag/paragraph/intensity queried");
-    return updatelabellingstatutes(req, res, "paragraphsEmotionLabel",
-        "paragraphConsecutiveID", "intensity");
+router.route('/tag/paragraph/emotion').post((req, res) => {
+    console.log("labelling/tag/paragraph/emotion queried");
+    return updateParagraphEmotion(req, res);
 });
 
 router.route('/submit').post((req, res) => {
@@ -314,59 +310,33 @@ router.route('/submit').post((req, res) => {
     //reconciliation check between server status and client status
     const data = req.body;
 
-    function reconciliate(newEntry, listName, idName) {
-        for (let i = 0; i < newEntry[listName].length; ++i) {
-            const curr = newEntry[listName][i];
-            // the stance contains the label directly and instead emotion is an object with label as a field
-            let label = data[listName][curr[idName]].label;
-            if(!label) {
-                label = data[listName][curr[idName]]
-            }
-            if (curr.label !== label) {
-                console.log("reconciliation of label needed for:");
-                console.log(curr);
-                console.log(curr[idName]);
-                newEntry[listName][i].label = label;
-            }
-            // the stance doesn't have intensity and  emotion yes, as a field
-            const intensity = data[listName][curr[idName]].intensity;
-            if(intensity && curr.intensity !== intensity) {
-                console.log("reconciliation of intensity needed for:");
-                console.log(curr);
-                console.log(curr[idName]);
-                newEntry[listName][i].intensity = intensity;
-            }
-        }
-    }
+    // function reconciliateParagraphs(newEntry) {
+    //     for (let i = 0; i < newEntry.paragraphsEmotionLabel.length; ++i) {
+    //         const curr = newEntry.paragraphsEmotionLabel[i];
+    //
+    //         newEntry.paragraphsEmotionLabel[i].tag = _.assignIn(curr.tag,
+    //             data.paragraphsEmotionLabel[curr.paragraphConsecutiveID].tag);
+    //     }
+    // }
 
     return labellingstatuses.findOne({
         'labeller': mongoose.Types.ObjectId(req.body.labeller),
         'article': mongoose.Types.ObjectId(req.body.article),
     }).exec().then(queryRes => {
         console.log(queryRes);
-        const newEntry = {...queryRes._doc};
+        let newEntry = {...queryRes._doc};
         //allows us to save into the other collection
         newEntry._id = mongoose.Types.ObjectId();
-        // newEntry.isNew = true;
         console.log(newEntry);
-        
-        reconciliate(newEntry, "paragraphsEmotionLabel", "paragraphConsecutiveID");
+        console.log(data);
 
-        if(newEntry.stanceArticleQuestionLabel !== data.stanceArticleQuestionLabel) {
-            console.log("reconciliation needed for:");
-            console.log(newEntry.stanceArticleQuestionLabel);
-            console.log(data.stanceArticleQuestionLabel);
-            newEntry.stanceArticleQuestionLabel = data.stanceArticleQuestionLabel;
-        }
-
-        if(newEntry.emotionArticleLabel === null || newEntry.emotionArticleLabel === undefined ||
-            newEntry.emotionArticleLabel.label !== data.emotionArticleLabel.label
-        || newEntry.emotionArticleLabel.intensity !== data.emotionArticleLabel.intensity) {
-            console.log("reconciliation needed for:");
-            console.log(newEntry.emotionArticleLabel);
-            console.log(data.emotionArticleLabel);
-            newEntry.emotionArticleLabel = data.emotionArticleLabel;
-        }
+        //make sure what the client posts is what we save by updating the values of the labelling status
+        newEntry = _.assignIn(newEntry, data);
+        // reconciliateParagraphs(newEntry);
+        // newEntry.stanceArticleQuestionLabel = _.assignIn(newEntry.stanceArticleQuestionLabel,
+        //     data.stanceArticleQuestionLabel);
+        // newEntry.emotionArticleLabel = _.assignIn(newEntry.emotionArticleLabel, data.emotionArticleLabel);
+        //
 
         // save the date in which the labeller finished labelling
         newEntry.finishedLabellingDate = Date.now();

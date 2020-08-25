@@ -16,6 +16,7 @@ class PlutchikSelector extends SelectorAbstract {
     constructor(props, context) {
         super(props, context);
         this.getIntensityRow = this.getIntensityRow.bind(this);
+        this.getPurelyFactualButton = this.getPurelyFactualButton.bind(this);
     }
 
     emotions = [
@@ -57,7 +58,7 @@ class PlutchikSelector extends SelectorAbstract {
                                                     fontSize: 14,
                                                     borderRadius: 0
                                                 }}
-                                                onClick={(e) => this.props.onClick ? this.props.onClick(e, emotion.name) : () => null}
+                                                onClick={(e) => this.props.onClick ? this.props.onClick(e, "label", emotion.name) : () => null}
                                                 rounded={"false"}>
                                             <Container>
                                                 <Row>
@@ -90,36 +91,7 @@ class PlutchikSelector extends SelectorAbstract {
                     </Col>
                     <Col xs={2} sm={2} md={2} lg={2} xl={2} className={"p-0 pl-1"}>
                         <div style={{textAlign: "center", color: this.props.instructionsTextColor}}><b>or</b></div>
-                        <Button block className={"p-0"}
-                                style={{
-                                    background: "#b09d6d",
-                                    // backgroundOpacity: 0.5,
-                                    width: "100%",
-                                    color: "black",
-                                    fontSize: 14,
-                                    borderRadius: 0,
-                                    visibility: "visible",
-                                }}
-                                onClick={null}
-                                rounded={"false"}>
-                            <Container>
-                                <Row>
-                                    <Col>
-                                                    <span role="img"
-                                                          style={{fontSize: 32}}
-                                                          aria-label={"purely factual emoji"}>
-                                                    🔩
-                                                </span>
-                                    </Col>
-                                </Row>
-                            </Container>
-
-                            <Row className={"mt-n1 mb-1"}>
-                                <Col>
-                                    <b>purely factual</b>
-                                </Col>
-                            </Row>
-                        </Button>
+                        {this.getPurelyFactualButton()}
                     </Col>
                 </Row>
                 <Row className={"align-items-center mt-1"}>
@@ -134,6 +106,47 @@ class PlutchikSelector extends SelectorAbstract {
                 </Row>
             </Container>
         );
+    }
+
+    getPurelyFactualButton() {
+        let backgroundColor = "#b09d6d";
+        let fontColor = "black";
+        if(this.props.emotionStatus !== undefined && this.props.emotionStatus !== null
+            && this.props.emotionStatus.label !== null
+            && this.props.emotionStatus.label !== "purely factual") {
+            backgroundColor = "#" + this.neutralColor;
+            fontColor = "#" + this.neutralFontColor;
+        }
+        const style = {
+            background: backgroundColor,
+                // backgroundOpacity: 0.5,
+                width: "100%",
+                color: fontColor,
+                fontSize: 14,
+                borderRadius: 0,
+        };
+        return <Button block className={"p-0"}
+                style={style}
+                onClick={(e) => this.props.onClick ? this.props.onClick(e, "label", "purely factual") : () => null}
+                rounded={"false"}>
+            <Container>
+                <Row>
+                    <Col>
+                                                    <span role="img"
+                                                          style={{fontSize: 32}}
+                                                          aria-label={"purely factual emoji"}>
+                                                    🔩
+                                                </span>
+                    </Col>
+                </Row>
+            </Container>
+
+            <Row className={"mt-n1 mb-1"}>
+                <Col>
+                    <b>purely factual</b>
+                </Col>
+            </Row>
+        </Button>
     }
 
     getIntensityRow(imgSrc, text, intensity, margitTop=false, color="#d1d1d1") {
@@ -162,7 +175,8 @@ class PlutchikSelector extends SelectorAbstract {
                 <Button block className={""}
                         style={styleDict}
                         size={"sm"}
-                        onClick={(e) => this.props.onClickIntensity ? this.props.onClickIntensity(e, intensity) : () => null}
+                        onClick={(e) => this.props.onClick ? this.props.onClick(e, "intensity", intensity) : () => null}
+                        disabled={this.props.emotionStatus.intensity === -1}
                 >
                     <Container>
                         <Row>

@@ -41,9 +41,9 @@ class Labelling extends React.Component {
             article: null,
             paragraphsEmotionLabel: {},
             paragraphsError: {},
-            stanceArticleQuestionLabel: null,
+            stanceArticleQuestionLabel: {label: null, notSure: false},
             stanceArticleQuestionError: false,
-            emotionArticleLabel: {label: null, intensity: null},
+            emotionArticleLabel: {label: null, intensity: null, notSure: false},
             emotionArticleError: false,
             serverFetchError: null,
         };
@@ -54,9 +54,7 @@ class Labelling extends React.Component {
         this.postToBackendStatus = this.postToBackendStatus.bind(this);
         this.fetchDataAndUpdateState = this.fetchDataAndUpdateState.bind(this);
         this.fetchLabelledArticlesCount = this.fetchLabelledArticlesCount.bind(this);
-        this.handleEmotionIntensityArticle = this.handleEmotionIntensityArticle.bind(this);
         this.handleEmotionParagraph = this.handleEmotionParagraph.bind(this);
-        this.handleEmotionIntensityParagraph = this.handleEmotionIntensityParagraph.bind(this);
     }
 
     componentDidMount() {
@@ -83,31 +81,19 @@ class Labelling extends React.Component {
             .then(res => {
                 const {status, article} = res.data;
                 console.log(status);
-                const paragraphsEmotionLabel = {};
                 const paragraphsError = {};
-                status.paragraphsEmotionLabel.forEach(entry => {
-                    paragraphsEmotionLabel[entry.paragraphConsecutiveID] = {label: entry.label, intensity: entry.intensity};
-                });
                 article.paragraphs.forEach((par) => {
-                    if (!(par.consecutiveID in paragraphsEmotionLabel)) {
-                        paragraphsEmotionLabel[par.consecutiveID] = {label: null, intensity: null};
-                    }
                     paragraphsError[par.consecutiveID] = false;
                 });
 
-
-                const emotionArticleLabel = this.state.emotionArticleLabel;
-                if(status.emotionArticleLabel) {
-                    emotionArticleLabel.label = status.emotionArticleLabel.label;
-                    emotionArticleLabel.intensity = status.emotionArticleLabel.intensity;
-                }
-
                 return this.setState({
                     article: article,
-                    paragraphsEmotionLabel: paragraphsEmotionLabel,
+                    paragraphsEmotionLabel: status.paragraphsEmotionLabel,
                     paragraphsError: paragraphsError,
-                    stanceArticleQuestionLabel: status.stanceArticleQuestionLabel || null,
-                    emotionArticleLabel: emotionArticleLabel,
+                    stanceArticleQuestionLabel: status.stanceArticleQuestionLabel,
+                    stanceArticleQuestionError: false,
+                    emotionArticleLabel: status.emotionArticleLabel,
+                    emotionArticleError: false
                 });
             })
             .catch(err => {
@@ -126,52 +112,47 @@ class Labelling extends React.Component {
             });
     }
 
-    handleEmotionParagraph(event, emotion, paragraph) {
+    handleEmotionParagraph(event, fieldToUpdate, data, paragraph) {
         event.preventDefault();
         let paragraphsEmotionLabel = {...this.state.paragraphsEmotionLabel};
-        paragraphsEmotionLabel[paragraph.consecutiveID].label = emotion;
+        paragraphsEmotionLabel[paragraph.consecutiveID][fieldToUpdate] = data;
+        if(data === "purely factual") {
+            paragraphsEmotionLabel[paragraph.consecutiveID].intensity = -1
+        }
+        else if(paragraphsEmotionLabel[paragraph.consecutiveID].intensity === -1) {
+            paragraphsEmotionLabel[paragraph.consecutiveID].intensity = null;
+        }
         let paragraphsError = {...this.state.paragraphsError};
         paragraphsError[paragraph.consecutiveID] = paragraphsError[paragraph.consecutiveID] &&
             (this.state.paragraphsEmotionLabel[paragraph.consecutiveID] === null ||
+                this.state.paragraphsEmotionLabel[paragraph.consecutiveID].label === null ||
                 this.state.paragraphsEmotionLabel[paragraph.consecutiveID].intensity === null);
         this.setState({paragraphsEmotionLabel, paragraphsError});
-        this.postToBackendStatus('/labelling/tag/paragraph/label', paragraph.consecutiveID, emotion);
+        this.postToBackendStatus('/labelling/tag/paragraph/emotion', paragraph.consecutiveID, paragraphsEmotionLabel[paragraph.consecutiveID]);
     }
 
-    handleEmotionIntensityParagraph(event, intensity, paragraph) {
+    handleStanceArticle(event, fieldToUpdate, data) {
         event.preventDefault();
-        let paragraphsEmotionLabel = {...this.state.paragraphsEmotionLabel};
-        paragraphsEmotionLabel[paragraph.consecutiveID].intensity = intensity;
-        let paragraphsError = {...this.state.paragraphsError};
-        paragraphsError[paragraph.consecutiveID] = paragraphsError[paragraph.consecutiveID] &&
-            (this.state.paragraphsEmotionLabel[paragraph.consecutiveID] === null ||
-                this.state.paragraphsEmotionLabel[paragraph.consecutiveID].label === null);
-        this.setState({paragraphsEmotionLabel, paragraphsError});
-        this.postToBackendStatus('/labelling/tag/paragraph/intensity', paragraph.consecutiveID, intensity);
+        const stanceArticleQuestionLabel = this.state.stanceArticleQuestionLabel;
+        stanceArticleQuestionLabel[fieldToUpdate] = data;
+        this.setState({stanceArticleQuestionLabel, stanceArticleQuestionError: false});
+        this.postToBackendStatus('/labelling/tag/article/stance', null, stanceArticleQuestionLabel);
     }
 
-    handleStanceArticle(event, stance) {
-        event.preventDefault();
-        this.setState({stanceArticleQuestionLabel: stance, stanceArticleQuestionError: false});
-        this.postToBackendStatus('/labelling/tag/article', null, stance);
-    }
-
-    handleEmotionArticle(event, emotion) {
+    handleEmotionArticle(event, fieldToUpdate, data) {
         event.preventDefault();
         const emotionArticleLabel = this.state.emotionArticleLabel;
-        emotionArticleLabel.label = emotion;
-        this.setState({emotionArticleLabel: emotionArticleLabel,
-            emotionArticleError: this.state.emotionArticleError && emotionArticleLabel.intensity === null});
-        this.postToBackendStatus('/labelling/tag/article/emotion/label', null, emotion);
-    }
-
-    handleEmotionIntensityArticle(event, intensity) {
-        event.preventDefault();
-        const emotionArticleLabel = this.state.emotionArticleLabel;
-        emotionArticleLabel.intensity = intensity;
-        this.setState({emotionArticleLabel: emotionArticleLabel,
-            emotionArticleError: this.state.emotionArticleError && emotionArticleLabel.label === null});
-        this.postToBackendStatus('/labelling/tag/article/emotion/intensity', null, intensity);
+        emotionArticleLabel[fieldToUpdate] = data;
+        if(data === "purely factual") {
+            emotionArticleLabel.intensity = -1
+        }
+        else if(emotionArticleLabel.intensity === -1) {
+            emotionArticleLabel.intensity = null;
+        }
+        this.setState({emotionArticleLabel,
+            emotionArticleError: this.state.emotionArticleError &&
+                (emotionArticleLabel.label === null || emotionArticleLabel.intensity === null)});
+        this.postToBackendStatus('/labelling/tag/article/emotion', null, emotionArticleLabel);
     }
 
     postToBackendStatus(entryPoint, elemID, data) {
@@ -291,14 +272,12 @@ class Labelling extends React.Component {
                 <Article articleJson={this.state.article}
                          paragraphsEmotionLabel={this.state.paragraphsEmotionLabel}
                          paragraphsError={this.state.paragraphsError}
-                         onClick={this.handleEmotionParagraph}
-                         onClickIntensity={this.handleEmotionIntensityParagraph}
+                         onClickEmotionParagraph={this.handleEmotionParagraph}
                          contentBackgroundColor={this.props.contentBackgroundColor}
                          instructionsTextColor={this.props.instructionsTextColor}
                 />
                 <ArticleEmotionQuestion question={this.state.article.stanceQuestion}
                                         onClick={this.handleEmotionArticle}
-                                        onClickIntensity={this.handleEmotionIntensityArticle}
                                         emotionStatus={this.state.emotionArticleLabel}
                                         error={this.state.emotionArticleError}
                                         instructionsTextColor={this.props.instructionsTextColor}

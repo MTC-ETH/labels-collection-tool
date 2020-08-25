@@ -42,8 +42,7 @@ class Article extends React.Component {
                                        emotionStatus={this.props.paragraphsEmotionLabel[par.consecutiveID]}
                                        error={this.props.paragraphsError[par.consecutiveID]}
                                        contentBackgroundColor={this.props.contentBackgroundColor}
-                                       onClick={(event, emotion) => {return this.props.onClick(event, emotion, par);}}
-                                       onClickIntensity={(event, intensity) => {return this.props.onClickIntensity(event, intensity, par);}}
+                                       onClick={(event, fieldToUpdate, data) => {return this.props.onClickEmotionParagraph(event, fieldToUpdate, data, par);}}
                                        instructionsTextColor={this.props.instructionsTextColor}>
                         {par.text}
                     </Paragraph>);

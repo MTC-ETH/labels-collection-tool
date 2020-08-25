@@ -25,8 +25,7 @@ class ArticleEmotionQuestion extends React.Component {
                 <Row className={"pb-1"} style={{background: this.props.error ? "#FF9991" : null}}>
                     <Col>
                         <PlutchikSelector emotionStatus={this.props.emotionStatus}
-                                          onClick={this.props.onClick}
-                                          onClickIntensity={this.props.onClickIntensity}/>
+                                          onClick={this.props.onClick}/>
                     </Col>
                 </Row>
             </Container>

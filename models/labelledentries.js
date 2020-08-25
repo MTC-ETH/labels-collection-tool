@@ -1,3 +1,5 @@
+const {emotionTagSchema, stanceTagSchema} = require("./emotionsStanceTagSchemas");
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -7,9 +9,12 @@ const labelledentriesSchema = new Schema({
         firstLabelledEnteredDate: {type: Date, default: null},
         finishedLabellingDate: {type: Date, default: null},
         articleID: String,
-        paragraphsEmotionLabel: [{paragraphConsecutiveID: Number, label: String, intensity: Number}], //0,1,2
-        stanceArticleQuestionLabel: String,
-        emotionArticleLabel: {type: {label: String, intensity: Number}, default: null},
+        paragraphsEmotionLabel: {type: Map, of: emotionTagSchema},
+        paragraphsEmotionLabelHistory: {type: Map, of: {type: [emotionTagSchema], default: []}},
+        stanceArticleQuestionLabel: stanceTagSchema,
+        stanceArticleQuestionLabelHistory: {type: [stanceTagSchema], default: []},
+        emotionArticleLabel: {type: emotionTagSchema, default: null},
+        emotionArticleLabelHistory: {type: [emotionTagSchema], default: []},
         deviceSpecs: {type: {
                 osName: String,
                 osVersion: String,
@@ -17,7 +22,7 @@ const labelledentriesSchema = new Schema({
                 browserVersion: String,
                 deviceType: String
             },
-        default: null}
+            default: null}
     },
     {
         timestamps: true

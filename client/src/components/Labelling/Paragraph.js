@@ -34,7 +34,6 @@ class Paragraph extends React.Component {
                     <PlutchikSelector
                         emotionStatus={this.props.emotionStatus}
                                       onClick={this.props.onClick}
-                    onClickIntensity={this.props.onClickIntensity}
                         instructionsTextColor={this.props.instructionsTextColor}/>
                 </Col>
             </Row>

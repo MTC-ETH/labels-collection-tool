@@ -36,7 +36,7 @@ class StanceSelectorAbstract extends SelectorAbstract {
                            fontSize: fontSize.toString() + "px",
                            borderRadius: 0
                        }}
-                       onClick={(e) => this.props.onClick(e, option.name)}>
+                       onClick={(e) => this.props.onClick(e, "label", option.name)}>
             <Container >
                 <Row className={"align-items-center"}>
                     <Col xs={12} sm={2} md={2} lg={2} xl={2} className={"p-0"} style={{
