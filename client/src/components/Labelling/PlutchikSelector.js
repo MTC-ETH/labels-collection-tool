@@ -27,7 +27,6 @@ class PlutchikSelector extends SelectorAbstract {
     ];
 
     render() {
-        console.log(this.props.emotionStatus);
         return (
             <Container>
                 <Row className={"align-items-center"}>

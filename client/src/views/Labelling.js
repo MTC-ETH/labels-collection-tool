@@ -14,16 +14,13 @@ import {browserName, browserVersion, deviceType, osName, osVersion} from "react-
 
 // const labellerID = "5f199424dcf1cfe56a7436a7";
 function getDeviceSpecs() {
-    const specifics = {
+    return  {
         osName: osName,
         osVersion: osVersion,
         browserName: browserName,
         browserVersion: browserVersion,
         deviceType: deviceType
     };
-    console.log(specifics);
-
-    return specifics;
 }
 
 class Labelling extends React.Component {
@@ -80,7 +77,6 @@ class Labelling extends React.Component {
         return axios.get(`/labelling/article?labellerID=${labellerID}`)
             .then(res => {
                 const {status, article} = res.data;
-                console.log(status);
                 const paragraphsError = {};
                 article.paragraphs.forEach((par) => {
                     paragraphsError[par.consecutiveID] = false;
@@ -163,9 +159,6 @@ class Labelling extends React.Component {
             elemID: elemID,
             data: data
         })
-            .then(response => {
-                console.log(response);
-            })
             .catch(error => {
                 console.log(error);
             });

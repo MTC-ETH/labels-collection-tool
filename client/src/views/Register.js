@@ -51,9 +51,6 @@ class AuthenticateLabeller extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log('Current values: ');
-        console.log(this.state);
-
         let errorMessage = "";
         if(this.state.name.length === 0) {
             errorMessage += "Invalid name. ";
@@ -91,12 +88,10 @@ class AuthenticateLabeller extends React.Component {
                 affiliation: this.state.affiliation,
             })
             .then(res => {
-                console.log(res);
                 this.setState({
                     success: true
                 });
                 setTimeout(() => {
-                    console.log('Timeout finished');
                     this.props.history.push('/authenticatelabeller');
                 }, 7000)
             })
