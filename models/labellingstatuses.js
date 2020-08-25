@@ -95,6 +95,68 @@ function updateLabellingStatusesDate(labeller, article) {
         });
 }
 
+function updateEmotionArticleLabel(labeller, article, data) {
+    return labellingstatuses.findOne({
+        'labeller': mongoose.Types.ObjectId(labeller),
+        'article': mongoose.Types.ObjectId(article),
+    }).exec()
+        .then(status => {
+            //push current status in history
+            if(status.emotionArticleLabel.enteredAt !== null) { //if it's null means it was the first labelled entered
+                status.emotionArticleLabelHistory.push(status.emotionArticleLabel);
+            }
+
+            //copy in new tag
+            status.emotionArticleLabel = data;
+
+            return status.save();
+        });
+}
+
+function updateStanceArticleQuestionLabel(labeller, article, data) {
+    return labellingstatuses.findOne({
+        'labeller': mongoose.Types.ObjectId(labeller),
+        'article': mongoose.Types.ObjectId(article),
+    }).exec().then(status => {
+        //push current status in history
+        if (status.stanceArticleQuestionLabel.enteredAt !== null) { //if it's null means it was the first labelled entered
+            status.stanceArticleQuestionLabelHistory.push(status.stanceArticleQuestionLabel);
+        }
+
+        //copy in new tag
+        status.stanceArticleQuestionLabel = data;
+
+        return status.save();
+    });
+}
+
+function updateParagraphsEmotionLabel(labeller, article, elemID, data) {
+    return labellingstatuses.findOne({
+        'labeller': mongoose.Types.ObjectId(labeller),
+        'article': mongoose.Types.ObjectId(article),
+    }).exec().then(status => {
+        //push current status in history
+        const stringID = String(elemID);
+        if (status.paragraphsEmotionLabel.get(stringID).enteredAt !== null) {
+            const newHistory = status.paragraphsEmotionLabelHistory.get(stringID);
+            newHistory.push(status.paragraphsEmotionLabel.get(stringID));
+            console.log(newHistory);
+            status.paragraphsEmotionLabelHistory.set(stringID, newHistory);
+            status.markModified('paragraphsEmotionLabelHistory');
+        }
+
+        //copy in new tag
+        const newEntry = data;
+        status.paragraphsEmotionLabel.set(stringID, newEntry);
+        status.markModified('paragraphsEmotionLabel');
+
+        return status.save();
+    });
+}
+
 module.exports = labellingstatuses;
 module.exports.getDefaultEmptySchema = getDefaultEmptySchema;
 module.exports.updateLabellingStatusesDate = updateLabellingStatusesDate;
+module.exports.updateEmotionArticleLabel = updateEmotionArticleLabel;
+module.exports.updateStanceArticleQuestionLabel = updateStanceArticleQuestionLabel;
+module.exports.updateParagraphsEmotionLabel = updateParagraphsEmotionLabel;

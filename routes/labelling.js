@@ -200,52 +200,8 @@ router.route('/ntagged').get((req, res) => {
         });
 });
 
-function updateParagraphEmotion(req, res) {
-    return labellingstatuses.findOne({
-            'labeller': mongoose.Types.ObjectId(req.body.labeller),
-            'article': mongoose.Types.ObjectId(req.body.article),
-        }).exec().then(status =>
-        {
-            //push current status in history
-            const stringID = String(req.body.elemID);
-            if(status.paragraphsEmotionLabel.get(stringID).enteredAt !== null) {
-                const newHistory = status.paragraphsEmotionLabelHistory.get(stringID);
-                newHistory.push(status.paragraphsEmotionLabel.get(stringID));
-                console.log(newHistory);
-                status.paragraphsEmotionLabelHistory.set(stringID, newHistory);
-                status.markModified('paragraphsEmotionLabelHistory');
-            }
-
-            //copy in new tag
-            const newEntry = req.body.data;
-            status.paragraphsEmotionLabel.set(stringID, newEntry);
-            status.markModified('paragraphsEmotionLabel');
-
-            return status.save();
-        }).then(() => {
-        console.log("Succesfully updated.");
-        return res.send('Successfully saved.');
-    }).catch(err => {
-        console.log(err);
-        return res.status(500).send({error: err});
-    }).then(() => labellingstatuses.updateLabellingStatusesDate(req.body.labeller, req.body.article));
-}
-
-function updateStanceArticleQuestionLabel(req, res) {
-    return labellingstatuses.findOne({
-        'labeller': mongoose.Types.ObjectId(req.body.labeller),
-        'article': mongoose.Types.ObjectId(req.body.article),
-    }).exec().then(status => {
-        //push current status in history
-        if(status.stanceArticleQuestionLabel.enteredAt !== null) { //if it's null means it was the first labelled entered
-            status.stanceArticleQuestionLabelHistory.push(status.stanceArticleQuestionLabel);
-        }
-
-        //copy in new tag
-        status.stanceArticleQuestionLabel = req.body.data;
-
-        return status.save();
-    })
+function updateStatus(updateFunction, res) {
+    return updateFunction()
         .then(() => {
             console.log("Succesfully updated.");
             return res.send('Successfully saved.');
@@ -258,44 +214,22 @@ function updateStanceArticleQuestionLabel(req, res) {
 // POST an intermediate result of tagging a stance question on article
 router.route('/tag/article/stance').post((req, res) => {
     console.log("labelling/tag/article/stance queried");
-    return updateStanceArticleQuestionLabel(req, res);
+    return updateStatus(() => labellingstatuses.updateStanceArticleQuestionLabel(req.body.labeller,
+        req.body.article, req.body.data), res);
 });
-
-function updateEmotionArticleLabel(req, res) {
-    return labellingstatuses.findOne({
-            'labeller': mongoose.Types.ObjectId(req.body.labeller),
-            'article': mongoose.Types.ObjectId(req.body.article),
-        }).exec()
-        .then(status => {
-            //push current status in history
-            if(status.emotionArticleLabel.enteredAt !== null) { //if it's null means it was the first labelled entered
-                status.emotionArticleLabelHistory.push(status.emotionArticleLabel);
-            }
-
-            //copy in new tag
-            status.emotionArticleLabel = req.body.data;
-
-            return status.save();
-        })
-        .then(() => {
-            console.log("Succesfully updated.");
-            return res.send('Successfully saved.');
-        }).catch(err => {
-            console.log(err);
-            return res.status(500).send({error: err});
-        }).then(() => labellingstatuses.updateLabellingStatusesDate(req.body.labeller, req.body.article));
-}
 
 // POST an intermediate result of tagging emotion label article level
 router.route('/tag/article/emotion').post((req, res) => {
     console.log("labelling/tag/article/emotion queried");
-    return updateEmotionArticleLabel(req, res);
+    return updateStatus(() => labellingstatuses.updateEmotionArticleLabel(req.body.labeller,
+        req.body.article, req.body.data), res);
 });
 
 // POST an intermediate result of tagging a paragraph
 router.route('/tag/paragraph/emotion').post((req, res) => {
     console.log("labelling/tag/paragraph/emotion queried");
-    return updateParagraphEmotion(req, res);
+    return updateStatus(() => labellingstatuses.updateParagraphsEmotionLabel(req.body.labeller,
+        req.body.article, req.body.elemID, req.body.data), res);
 });
 
 router.route('/submit').post((req, res) => {
