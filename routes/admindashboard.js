@@ -85,13 +85,6 @@ router.route('/status').get((req, res) => {
 
     queryPromises.push(labellers.countDocuments({}).exec().then(c => {return {nRegisteredLabellers: c}}));
     queryPromises.push(labelledentries.countDocuments({}).exec().then(c => {return {nTaggedArticles: c}}));
-    queryPromises.push(labelledentries.aggregate([
-        {$group: { _id: null, totalSize: { $sum: { $size: "$commentsEmotionLabel"}}}}])
-        .exec().then(r => {
-            if(!r || r.length <= 0) {
-                return {nTaggedComments: 0};
-            }
-            return {nTaggedComments: r[0].totalSize}}));
     queryPromises.push(labelledentries.distinct('article').exec()
         .then(entries => {return {nTaggedUniqueArticles: entries.length}}));
 

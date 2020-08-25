@@ -9,14 +9,6 @@ mongoose.connect(uri, {useNewUrlParser:true, useCreateIndex: true, useUnifiedTop
 
 const connection = mongoose.connection;
 
-function shuffleArray(array) {
-    const myrng = seedrandom('myrndseed');
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(myrng() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
 let articlesJson = require(`./json/articles`);
 
 //insert consecutive ids for paragraphs
@@ -31,8 +23,6 @@ articlesJson = articlesJson
             article.stanceQuestion = "Is the article in favour or against the topic it is talking about?"
         }
 
-        //comments are shuffled at insertion time
-        shuffleArray(article.comments);
         return article;
     });
 
@@ -49,7 +39,7 @@ connection.once("open", () => {
             if (collinfo) {
                 console.log("already exists, updating instead");
                 // articles.find({}).exec((err, res) => console.log(JSON.stringify(res)));
-                const allPromises = []
+                const allPromises = [];
                 articlesJson.forEach(art => {
                     allPromises.push(articles.findOneAndUpdate({articleID: art.articleID}, art).exec());
                 });

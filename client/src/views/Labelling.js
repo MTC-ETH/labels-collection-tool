@@ -2,9 +2,7 @@ import React from "react";
 import axios from 'axios';
 import queryString from 'query-string';
 import Article from "../components/Labelling/Article";
-import Comments from "../components/Labelling/CommentsContainer";
 import ArticleInstructions from "../components/Labelling/ArticleInstructions";
-import CommentsInstructions from "../components/Labelling/CommentsInstructions";
 import ArticleStanceQuestion from "../components/Labelling/ArticleStanceQuestion";
 import SubmitInstructionsAndButton from "../components/Labelling/SubmitInstructionsAndButton";
 import {Col, Container, UncontrolledAlert} from "reactstrap";
@@ -41,29 +39,22 @@ class Labelling extends React.Component {
             labellerID: null,
             labelledArticlesCount: null,
             article: null,
-            comments: null,
             paragraphsEmotionLabel: {},
             paragraphsError: {},
             stanceArticleQuestionLabel: null,
             stanceArticleQuestionError: false,
             emotionArticleLabel: {label: null, intensity: null},
             emotionArticleError: false,
-            commentsStanceLabel: {},
-            commentsEmotionLabel: {},
-            commentsError: {},
             serverFetchError: null,
         };
 
         this.handleEmotionArticle = this.handleEmotionArticle.bind(this);
         this.handleStanceArticle = this.handleStanceArticle.bind(this);
-        this.handleStanceComments = this.handleStanceComments.bind(this);
-        this.handleEmotionComments = this.handleEmotionComments.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.postToBackendStatus = this.postToBackendStatus.bind(this);
         this.fetchDataAndUpdateState = this.fetchDataAndUpdateState.bind(this);
         this.fetchLabelledArticlesCount = this.fetchLabelledArticlesCount.bind(this);
         this.handleEmotionIntensityArticle = this.handleEmotionIntensityArticle.bind(this);
-        this.handleEmotionIntensityComments = this.handleEmotionIntensityComments.bind(this);
         this.handleEmotionParagraph = this.handleEmotionParagraph.bind(this);
         this.handleEmotionIntensityParagraph = this.handleEmotionIntensityParagraph.bind(this);
     }
@@ -104,25 +95,6 @@ class Labelling extends React.Component {
                     paragraphsError[par.consecutiveID] = false;
                 });
 
-                const commentsStanceLabel = {};
-                const commentsEmotionLabel = {};
-                const commentsError = {};
-
-                status.commentsStanceLabel.forEach(entry => {
-                    commentsStanceLabel[entry.commentID] = entry.label;
-                });
-                status.commentsEmotionLabel.forEach(entry => {
-                    commentsEmotionLabel[entry.commentID] = {label: entry.label, intensity: entry.intensity};
-                });
-                article.comments.forEach((com) => {
-                    if (!(com.commentID in commentsStanceLabel)) {
-                        commentsStanceLabel[com.commentID] = null;
-                    }
-                    if (!(com.commentID in commentsEmotionLabel)) {
-                        commentsEmotionLabel[com.commentID] = {label: null, intensity: null};
-                    }
-                    commentsError[com.commentID] = false;
-                });
 
                 const emotionArticleLabel = this.state.emotionArticleLabel;
                 if(status.emotionArticleLabel) {
@@ -132,14 +104,10 @@ class Labelling extends React.Component {
 
                 return this.setState({
                     article: article,
-                    comments: article.comments,
                     paragraphsEmotionLabel: paragraphsEmotionLabel,
                     paragraphsError: paragraphsError,
                     stanceArticleQuestionLabel: status.stanceArticleQuestionLabel || null,
                     emotionArticleLabel: emotionArticleLabel,
-                    commentsStanceLabel: commentsStanceLabel,
-                    commentsEmotionLabel: commentsEmotionLabel,
-                    commentsError: commentsError,
                 });
             })
             .catch(err => {
@@ -206,19 +174,6 @@ class Labelling extends React.Component {
         this.postToBackendStatus('/labelling/tag/article/emotion/intensity', null, intensity);
     }
 
-    handleStanceComments(event, stance, comment) {
-        event.preventDefault();
-        let commentsStanceLabel = {...this.state.commentsStanceLabel};
-        commentsStanceLabel[comment.commentID] = stance;
-        let commentsError = {...this.state.commentsError};
-        commentsError[comment.commentID] = commentsError[comment.commentID] &&
-            (this.state.commentsEmotionLabel[comment.commentID] === null ||
-                this.state.commentsEmotionLabel[comment.commentID].label === null
-                || this.state.commentsEmotionLabel[comment.commentID].intensity === null);
-        this.setState({commentsStanceLabel, commentsError});
-        this.postToBackendStatus('/labelling/tag/comment/stance', comment.commentID, stance);
-    }
-
     postToBackendStatus(entryPoint, elemID, data) {
         axios.post(entryPoint, {
             labeller: this.state.labellerID,
@@ -232,35 +187,6 @@ class Labelling extends React.Component {
             .catch(error => {
                 console.log(error);
             });
-    }
-
-    handleEmotionComments(event, emotion, comment) {
-        console.log(emotion);
-        event.preventDefault();
-        let commentsEmotionLabel = {...this.state.commentsEmotionLabel};
-        commentsEmotionLabel[comment.commentID].label = emotion;
-        let commentsError = {...this.state.commentsError};
-        commentsError[comment.commentID] = commentsError[comment.commentID] &&
-            (this.state.commentsStanceLabel[comment.commentID] === null ||
-                this.state.commentsEmotionLabel[comment.commentID] === null ||
-                this.state.commentsEmotionLabel[comment.commentID].intensity === null);
-        this.setState({commentsEmotionLabel, commentsError});
-
-        this.postToBackendStatus('/labelling/tag/comment/emotion/label', comment.commentID, emotion);
-    }
-
-    handleEmotionIntensityComments(event, intensity, comment) {
-        event.preventDefault();
-        let commentsEmotionLabel = {...this.state.commentsEmotionLabel};
-        commentsEmotionLabel[comment.commentID].intensity = intensity;
-        let commentsError = {...this.state.commentsError};
-        commentsError[comment.commentID] = commentsError[comment.commentID] &&
-            (this.state.commentsStanceLabel[comment.commentID] === null ||
-            this.state.commentsEmotionLabel[comment.commentID] === null ||
-            this.state.commentsEmotionLabel[comment.commentID].intensity === null);
-        this.setState({commentsEmotionLabel, commentsError});
-
-        this.postToBackendStatus('/labelling/tag/comment/emotion/intensity', comment.commentID, intensity);
     }
 
     handleSubmit(event) {
@@ -290,26 +216,8 @@ class Labelling extends React.Component {
             error = true;
         }
 
-        let commentsError = {...this.state.commentsError};
-        Object.entries(this.state.commentsStanceLabel).forEach(
-            ([key, label]) => {
-                if(label == null) {
-                    error = true;
-                    commentsError[key] = true;
-                }
-            }
-        );
-        Object.entries(this.state.commentsEmotionLabel).forEach(
-            ([key, status]) => {
-                if(status === null || status.label === null || status.intensity === null) {
-                    error = true;
-                    commentsError[key] = true;
-                }
-            }
-        );
-
         if(error) {
-            this.setState({commentsError, paragraphsError, stanceArticleQuestionError, emotionArticleError});
+            this.setState({paragraphsError, stanceArticleQuestionError, emotionArticleError});
             alert("Please fill-in the missing entries (now in red) and try again");
             return;
         }
@@ -320,8 +228,6 @@ class Labelling extends React.Component {
             paragraphsEmotionLabel: this.state.paragraphsEmotionLabel,
             stanceArticleQuestionLabel: this.state.stanceArticleQuestionLabel,
             emotionArticleLabel: this.state.emotionArticleLabel,
-            commentsStanceLabel: this.state.commentsStanceLabel,
-            commentsEmotionLabel: this.state.commentsEmotionLabel,
             deviceSpecs: getDeviceSpecs(),
         })
             .then(response => {
@@ -402,19 +308,6 @@ class Labelling extends React.Component {
                                        stanceArticleQuestionLabel={this.state.stanceArticleQuestionLabel}
                                        error={this.state.stanceArticleQuestionError}
                                        instructionsTextColor={this.props.instructionsTextColor}
-                />
-                <CommentsInstructions
-                    instructionsTextColor={this.props.instructionsTextColor}
-                />
-                <Comments commentsJson={this.state.comments}
-                          commentsStanceLabel={this.state.commentsStanceLabel}
-                          commentsEmotionLabel={this.state.commentsEmotionLabel}
-                          commentsError={this.state.commentsError}
-                          onClickStance={this.handleStanceComments}
-                          onClickEmotion={this.handleEmotionComments}
-                          onClickEmotionIntensity={this.handleEmotionIntensityComments}
-                          contentBackgroundColor={this.props.contentBackgroundColor}
-                          instructionsTextColor={this.props.instructionsTextColor}
                 />
                 <SubmitInstructionsAndButton onClick={this.handleSubmit}
                                              instructionsTextColor={this.props.instructionsTextColor}

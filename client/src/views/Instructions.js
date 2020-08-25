@@ -5,7 +5,6 @@ import Row from "reactstrap/es/Row";
 import Header from "../components/Header";
 import queryString from 'query-string';
 import ArticleSectionInstructions from "../components/Instructions/ArticleSectionInstructions";
-import CommentsSectionInstructions from "../components/Instructions/CommentsSectionInstructions";
 import TechnicalInstructions from "../components/Instructions/TechnicalInstructions";
 import Footer from "../components/Footer";
 
@@ -29,8 +28,7 @@ class Instructions extends React.Component {
                 <Row><Col><h2>Instructions</h2></Col></Row>
                 <Row>
                     <Col>
-                        <p>For each page you are given an article divided in paragraphs and some comments
-                            made by readers under the respective article. <br/>
+                        <p>For each page you are given an article divided in paragraphs. <br/>
                             At any time of the process if you're feeling tired or strained feel free to stop and
                             continue
                             later, all your inputs are saved and nothing will be lost, also when stopping in the middle
@@ -38,7 +36,6 @@ class Instructions extends React.Component {
                     </Col>
                 </Row>
                 <ArticleSectionInstructions/>
-                <CommentsSectionInstructions/>
                 <TechnicalInstructions/>
                 <Row>
                     <Col>

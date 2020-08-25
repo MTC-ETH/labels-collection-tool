@@ -18,8 +18,6 @@ class AdminDashboard extends React.Component {
             nRegisteredLabellers: null,
             nTaggedArticles: null,
             nTaggedUniqueArticles: null,
-            nTaggedComments: null,
-            commentsPerArticle: null,
             labbellersPerArticle: null,
             multiLabelledArticles: null,
             averageTaggingTime: null
@@ -42,8 +40,6 @@ class AdminDashboard extends React.Component {
                     nRegisteredLabellers: res.data.nRegisteredLabellers,
                     nTaggedArticles: res.data.nTaggedArticles,
                     nTaggedUniqueArticles: res.data.nTaggedUniqueArticles,
-                    nTaggedComments: res.data.nTaggedComments,
-                    commentsPerArticle: res.data.commentsPerArticle,
                     labbellersPerArticle: res.data.interrater.labbellersPerArticle,
                     multiLabelledArticles: res.data.interrater.multiLabelledArticles,
                     averageTaggingTime: res.data.averageTaggingTime,
@@ -91,7 +87,6 @@ class AdminDashboard extends React.Component {
                 <InfoRow counter={this.state.nRegisteredLabellers}>Number of registered labellers:</InfoRow>
                 <InfoRow counter={this.state.nTaggedArticles}>Number of labelled articles:</InfoRow>
                 <InfoRow counter={this.state.nTaggedUniqueArticles}>Number of uniquely labelled articles:</InfoRow>
-                <InfoRow counter={this.state.nTaggedComments}>Number of labelled comments:</InfoRow>
                 <InfoRow counter={this.state.averageTaggingTime}>Average tagging time per article:</InfoRow>
 
             <Row className={"pt-2"}>
@@ -99,7 +94,6 @@ class AdminDashboard extends React.Component {
                     <h3>Preferences</h3>
                 </Col>
             </Row>
-            <InfoRow color={"warning"} counter={this.state.commentsPerArticle}>Number of comments per article:</InfoRow>
             <InfoRow color={"warning"} counter={this.state.labbellersPerArticle}>Number of labellers per article (interrater):</InfoRow>
             <InfoRow color={"warning"} fallback={"All"} counter={this.state.multiLabelledArticles}>Maximum number of interrated articles:</InfoRow>
 

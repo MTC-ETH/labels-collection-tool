@@ -1,16 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const commentsSchema = new Schema({
-        commentID: String,
-        articleID: String,
-        title: String,
-        text: String,
-    },
-    {
-        timestamps: true
-    });
-
 const articlesSchema = new Schema({
         articleID: String,
         source: {
@@ -22,7 +12,6 @@ const articlesSchema = new Schema({
         snippet: String,
         stanceQuestion: String,
     paragraphs: [{consecutiveID: Number, text: String}],
-    comments: [commentsSchema]
     },
     {
         timestamps: true

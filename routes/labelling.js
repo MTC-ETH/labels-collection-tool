@@ -34,8 +34,6 @@ function replyWithExistingStatus(status, res) {
     return articles.findOne({_id: status.article}).lean().exec()
         .then(matchingArticle => {
             if (matchingArticle) {
-                matchingArticle.comments = matchingArticle.comments
-                    .slice(0, status.limitNumberOfComments);
                 return res.json({status: status, article: matchingArticle});
             } else {
                 throw new Error("No matching article found for the status of this labeller");
@@ -129,7 +127,6 @@ function createAndReplyWithNewStatus(res, _labellerID) {
                 });
             }
             //associate labeller to this article and write this in the labellingstatus table
-            newArticle.comments = newArticle.comments.slice(0, config.commentsPerArticle);
             const newLabellingStatus = new labellingstatuses(
                 {
                     labeller: _labellerID,
@@ -140,13 +137,6 @@ function createAndReplyWithNewStatus(res, _labellerID) {
                     }),
                     stanceArticleQuestionLabel: null,
                     emotionArticleLabel: {label: null, intensity: null},
-                    commentsStanceLabel: newArticle.comments.map(com => {
-                        return {commentID: com.commentID, label: null}
-                    }),
-                    commentsEmotionLabel: newArticle.comments.map(com => {
-                        return {commentID: com.commentID, label: null, intensity: null}
-                    }),
-                    limitNumberOfComments: config.commentsPerArticle
                 });
 
             return newLabellingStatus.save()
@@ -318,25 +308,6 @@ router.route('/tag/paragraph/intensity').post((req, res) => {
         "paragraphConsecutiveID", "intensity");
 });
 
-// POST an intermediate result of tagging a comment stance
-router.route('/tag/comment/stance').post((req, res) => {
-    console.log("labelling/comment/stance queried");
-    return updatelabellingstatutes(req, res, "commentsStanceLabel", "commentID");
-});
-
-// POST an intermediate result of tagging a comment emotion
-router.route('/tag/comment/emotion/label').post((req, res) => {
-    console.log("labelling/tag/comment/emotion/label queried");
-    console.log(req.body);
-    return updatelabellingstatutes(req, res, "commentsEmotionLabel", "commentID");
-});
-
-router.route('/tag/comment/emotion/intensity').post((req, res) => {
-    console.log("labelling/tag/comment/emotion/intensity queried");
-    return updatelabellingstatutes(req, res, "commentsEmotionLabel",
-        "commentID", "intensity");
-});
-
 router.route('/submit').post((req, res) => {
     console.log("labelling/submit queried");
 
@@ -396,9 +367,6 @@ router.route('/submit').post((req, res) => {
             console.log(data.emotionArticleLabel);
             newEntry.emotionArticleLabel = data.emotionArticleLabel;
         }
-
-        reconciliate(newEntry, "commentsStanceLabel", "commentID");
-        reconciliate(newEntry, "commentsEmotionLabel", "commentID");
 
         // save the date in which the labeller finished labelling
         newEntry.finishedLabellingDate = Date.now();
