@@ -96,10 +96,7 @@ router.route('/status').get((req, res) => {
             let averageTime = nonNullEntries
                 .map((entry) => entry.finishedLabellingDate - entry.firstLabelledEnteredDate)
                 .reduce((a, b) => a + b, 0);
-            console.log(averageTime);
             averageTime /= nonNullEntries.length;
-            console.log(averageTime);
-            console.log(millisecToString(averageTime));
             return {averageTaggingTime: millisecToString(averageTime)};
         }));
 

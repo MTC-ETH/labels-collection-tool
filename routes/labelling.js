@@ -77,8 +77,6 @@ function createAndReplyWithNewStatus(res, _labellerID) {
                 }
                 }
             );
-            console.log(countArray);
-            console.log(aggregatedCounts);
             return Object.keys(aggregatedCounts)
                 .filter(articleID => aggregatedCounts[articleID] >= config.interrater.labbellersPerArticle);
         })
@@ -220,10 +218,8 @@ function updateParagraphEmotion(req, res) {
 
             //copy in new tag
             const newEntry = req.body.data;
-            console.log(req.body.data);
             status.paragraphsEmotionLabel.set(stringID, newEntry);
             status.markModified('paragraphsEmotionLabel');
-            console.log(status);
 
             return status.save();
         }).then(() => {
@@ -308,46 +304,18 @@ router.route('/submit').post((req, res) => {
     //reconciliation check between server status and client status
     const data = req.body;
 
-    // function reconciliateParagraphs(newEntry) {
-    //     for (let i = 0; i < newEntry.paragraphsEmotionLabel.length; ++i) {
-    //         const curr = newEntry.paragraphsEmotionLabel[i];
-    //
-    //         newEntry.paragraphsEmotionLabel[i].tag = _.assignIn(curr.tag,
-    //             data.paragraphsEmotionLabel[curr.paragraphConsecutiveID].tag);
-    //     }
-    // }
-
     return labellingstatuses.findOne({
         'labeller': mongoose.Types.ObjectId(req.body.labeller),
         'article': mongoose.Types.ObjectId(req.body.article),
     }).exec().then(queryRes => {
-        console.log(queryRes);
         let newEntry = {...queryRes._doc};
         //allows us to save into the other collection
         newEntry._id = mongoose.Types.ObjectId();
-        console.log(newEntry);
-        console.log(data);
 
         //make sure what the client posts is what we save by updating the values of the labelling status
-        console.log("BEFORE");
-        console.log(newEntry);
-        console.log("DATA");
-        console.log(data);
         newEntry = Object.assign(newEntry, data);
-        console.log("AFTER");
-        console.log(newEntry);
-        // reconciliateParagraphs(newEntry);
-        // newEntry.stanceArticleQuestionLabel = _.assignIn(newEntry.stanceArticleQuestionLabel,
-        //     data.stanceArticleQuestionLabel);
-        // newEntry.emotionArticleLabel = _.assignIn(newEntry.emotionArticleLabel, data.emotionArticleLabel);
-        //
 
-        // save the date in which the labeller finished labelling
         newEntry.finishedLabellingDate = Date.now();
-
-        //save the device specifications
-        newEntry.deviceSpecs = data.deviceSpecs;
-        console.log(newEntry.deviceSpecs);
 
         const newLabelledEntry = new labelledentries(newEntry);
         return newLabelledEntry.save().then(() => {
