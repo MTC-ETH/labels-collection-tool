@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Col, Container, FormGroup, Input, Label, Media, Row} from "reactstrap";
+import {Button, Col, Container, Media, Row} from "reactstrap";
 import SelectorAbstract from "./SelectorAbstract";
 
 import highVolSrc from "../../assets/imgs/speakerIconHigh.svg";
