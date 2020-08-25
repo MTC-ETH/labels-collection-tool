@@ -26,12 +26,12 @@ class Paragraph extends React.Component {
                     marginTop: -1000,
                     paddingBottom: 1000,
                 marginBottom:-1000}}
-                     xs={12} sm={7} md={7} lg={7} xl={7}
+                     xs={12} sm={6} md={6} lg={6} xl={6}
                 >
                     <div className={"pt-2 pb-2"}>{this.props.children}</div>
                 </Col>
 
-                <Col xs={12} sm={5} md={5} lg={5} xl={5}>
+                <Col xs={12} sm={6} md={6} lg={6} xl={6}>
                     <PlutchikSelector8WithIntensitySliderFactualAndUnsure2
                         emotionStatus={this.props.emotionStatus}
                                       onClick={this.props.onClick}

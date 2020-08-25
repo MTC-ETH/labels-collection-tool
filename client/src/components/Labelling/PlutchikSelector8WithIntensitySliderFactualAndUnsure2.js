@@ -122,24 +122,14 @@ class PlutchikSelector8WithIntensitySliderFactualAndUnsure2 extends SelectorAbst
                         </Button>
                     </Col>
                 </Row>
-                <Row className={"align-items-center"}>
-                            <Col className={"p-0"} xs={7} sm={7} md={7} lg={7} xl={7}>
+                <Row className={"align-items-center mt-1"}>
+                            <Col className={"p-0"}>
                         <FormGroup check>
                             <Label check>
                                 <Input type="checkbox"/>{' '}
-                                <div style={{fontSize: 14}}>I'm not sure of my answer, because:</div>
+                                <div style={{fontSize: 16}}>I'm not sure of my answer</div>
                             </Label>
                         </FormGroup>
-                            </Col>
-                            <Col xs={5} sm={5} md={5} lg={5} xl={5} className={"p-0 pt-1 pb-1"}>
-                                <Input type="text" name="text" id="exampleText" className="h-25"
-                                       style={{fontSize: 14,
-                                    boxSizing: "border-box",
-                                           paddingTop: "0px",
-                                           paddingBottom: "0px",
-                                           paddingLeft: "2px",
-                                           paddingRight: "2px"
-                                       }}/>
                             </Col>
                 </Row>
             </Container>
@@ -168,8 +158,8 @@ class PlutchikSelector8WithIntensitySliderFactualAndUnsure2 extends SelectorAbst
             styleDict.borderTop = "none";
         }
         return <Row >
-            <Col className={"p-0"} >
-                <Button block className={"pr-0 pl-0"}
+            <Col className={"pl-2 pr-2"} >
+                <Button block className={""}
                         style={styleDict}
                         size={"sm"}
                         onClick={(e) => this.props.onClickIntensity ? this.props.onClickIntensity(e, intensity) : () => null}
@@ -179,7 +169,7 @@ class PlutchikSelector8WithIntensitySliderFactualAndUnsure2 extends SelectorAbst
                             <Col className={"p-0"}>
                                 <Media left>
                                     <Media object style={{
-                                        maxWidth: '29%',
+                                        maxWidth: '21px',
                                         opacity: "80%"
                                     }}
                                            src={imgSrc} alt={text} />
