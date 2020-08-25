@@ -221,8 +221,8 @@ function updateParagraphEmotion(req, res) {
             //copy in new tag
             const newEntry = req.body.data;
             console.log(req.body.data);
-            newEntry.enteredAt = Date.now();
             status.paragraphsEmotionLabel.set(stringID, newEntry);
+            status.markModified('paragraphsEmotionLabel');
             console.log(status);
 
             return status.save();
@@ -247,7 +247,6 @@ function updateStanceArticleQuestionLabel(req, res) {
 
         //copy in new tag
         status.stanceArticleQuestionLabel = req.body.data;
-        status.stanceArticleQuestionLabel.enteredAt = Date.now();
 
         return status.save();
     })
@@ -279,7 +278,6 @@ function updateEmotionArticleLabel(req, res) {
 
             //copy in new tag
             status.emotionArticleLabel = req.body.data;
-            status.emotionArticleLabel.enteredAt = Date.now();
 
             return status.save();
         })
@@ -331,7 +329,13 @@ router.route('/submit').post((req, res) => {
         console.log(data);
 
         //make sure what the client posts is what we save by updating the values of the labelling status
-        newEntry = _.assignIn(newEntry, data);
+        console.log("BEFORE");
+        console.log(newEntry);
+        console.log("DATA");
+        console.log(data);
+        newEntry = Object.assign(newEntry, data);
+        console.log("AFTER");
+        console.log(newEntry);
         // reconciliateParagraphs(newEntry);
         // newEntry.stanceArticleQuestionLabel = _.assignIn(newEntry.stanceArticleQuestionLabel,
         //     data.stanceArticleQuestionLabel);

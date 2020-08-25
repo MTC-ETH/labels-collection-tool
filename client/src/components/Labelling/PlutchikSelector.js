@@ -98,7 +98,11 @@ class PlutchikSelector extends SelectorAbstract {
                             <Col className={"p-0"}>
                         <FormGroup check>
                             <Label check>
-                                <Input type="checkbox"/>{' '}
+                                <Input type="checkbox"
+                                       id={"test-id"}
+                                       checked={this.props.emotionStatus.notSure}
+                                       onChange={(e) =>
+                                           this.props.onClick(e, "notSure", !this.props.emotionStatus.notSure)}/>{' '}
                                 <div style={{fontSize: 16}}>I'm not sure of my answer</div>
                             </Label>
                         </FormGroup>

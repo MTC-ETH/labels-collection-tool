@@ -113,13 +113,13 @@ class Labelling extends React.Component {
     }
 
     handleEmotionParagraph(event, fieldToUpdate, data, paragraph) {
-        event.preventDefault();
         let paragraphsEmotionLabel = {...this.state.paragraphsEmotionLabel};
         paragraphsEmotionLabel[paragraph.consecutiveID][fieldToUpdate] = data;
+        paragraphsEmotionLabel[paragraph.consecutiveID].enteredAt = Date.now();
         if(data === "purely factual") {
             paragraphsEmotionLabel[paragraph.consecutiveID].intensity = -1
         }
-        else if(paragraphsEmotionLabel[paragraph.consecutiveID].intensity === -1) {
+        else if(fieldToUpdate === "label" && paragraphsEmotionLabel[paragraph.consecutiveID].intensity === -1) {
             paragraphsEmotionLabel[paragraph.consecutiveID].intensity = null;
         }
         let paragraphsError = {...this.state.paragraphsError};
@@ -132,23 +132,24 @@ class Labelling extends React.Component {
     }
 
     handleStanceArticle(event, fieldToUpdate, data) {
-        event.preventDefault();
         const stanceArticleQuestionLabel = this.state.stanceArticleQuestionLabel;
         stanceArticleQuestionLabel[fieldToUpdate] = data;
+        stanceArticleQuestionLabel.enteredAt = Date.now();
         this.setState({stanceArticleQuestionLabel, stanceArticleQuestionError: false});
         this.postToBackendStatus('/labelling/tag/article/stance', null, stanceArticleQuestionLabel);
     }
 
     handleEmotionArticle(event, fieldToUpdate, data) {
-        event.preventDefault();
         const emotionArticleLabel = this.state.emotionArticleLabel;
         emotionArticleLabel[fieldToUpdate] = data;
+        emotionArticleLabel.enteredAt = Date.now();
         if(data === "purely factual") {
             emotionArticleLabel.intensity = -1
         }
-        else if(emotionArticleLabel.intensity === -1) {
+        else if(fieldToUpdate === "label" && emotionArticleLabel.intensity === -1) {
             emotionArticleLabel.intensity = null;
         }
+
         this.setState({emotionArticleLabel,
             emotionArticleError: this.state.emotionArticleError &&
                 (emotionArticleLabel.label === null || emotionArticleLabel.intensity === null)});
@@ -171,7 +172,6 @@ class Labelling extends React.Component {
     }
 
     handleSubmit(event) {
-        event.preventDefault();
         let error = false;
 
         let paragraphsError = {...this.state.paragraphsError};
