@@ -2,7 +2,7 @@ import React from "react";
 
 // reactstrap components
 import {Col, Row} from "reactstrap";
-import PlutchikSelector8WithIntensitySlider from "../Labelling/PlutchikSelector8WithIntensitySlider";
+import PlutchikSelector from "../Labelling/PlutchikSelector";
 
 class ArticleSectionInstructions extends React.Component {
     render() {
@@ -37,7 +37,7 @@ class ArticleSectionInstructions extends React.Component {
                         borderStyle: "dashed",
                         // borderWidth: "thin"
                     }}>
-                        <PlutchikSelector8WithIntensitySlider/>
+                        <PlutchikSelector/>
                     </div>
                 </Col>
             </Row>

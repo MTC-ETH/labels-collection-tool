@@ -2,9 +2,8 @@ import React from "react";
 
 // reactstrap components
 import {Col, Container, Row} from "reactstrap";
-import PlutchikSelector8WithIntensitySlider from "./PlutchikSelector8WithIntensitySlider";
-import PlutchikSelector8WithIntensitySliderFactualAndUnsure2
-    from "./PlutchikSelector8WithIntensitySliderFactualAndUnsure2";
+import PlutchikSelector
+    from "./PlutchikSelector";
 
 class ArticleEmotionQuestion extends React.Component {
     static defaultProps = {
@@ -25,9 +24,9 @@ class ArticleEmotionQuestion extends React.Component {
                 </Row>
                 <Row className={"pb-1"} style={{background: this.props.error ? "#FF9991" : null}}>
                     <Col>
-                        <PlutchikSelector8WithIntensitySliderFactualAndUnsure2 emotionStatus={this.props.emotionStatus}
-                                                              onClick={this.props.onClick}
-                                                              onClickIntensity={this.props.onClickIntensity}/>
+                        <PlutchikSelector emotionStatus={this.props.emotionStatus}
+                                          onClick={this.props.onClick}
+                                          onClickIntensity={this.props.onClickIntensity}/>
                     </Col>
                 </Row>
             </Container>
