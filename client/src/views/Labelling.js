@@ -11,6 +11,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ArticleEmotionQuestion from "../components/Labelling/ArticleEmotionQuestion";
 import {browserName, browserVersion, deviceType, osName, osVersion} from "react-device-detect";
+import PlutchikSelector from "../components/Labelling/PlutchikSelector";
 
 // const labellerID = "5f199424dcf1cfe56a7436a7";
 function getDeviceSpecs() {
@@ -112,7 +113,7 @@ class Labelling extends React.Component {
         let paragraphsEmotionLabel = {...this.state.paragraphsEmotionLabel};
         paragraphsEmotionLabel[paragraph.consecutiveID][fieldToUpdate] = data;
         paragraphsEmotionLabel[paragraph.consecutiveID].enteredAt = Date.now();
-        if(data === "purely factual") {
+        if(data === PlutchikSelector.emotionlessLabel) {
             paragraphsEmotionLabel[paragraph.consecutiveID].intensity = -1
         }
         else if(fieldToUpdate === "label" && paragraphsEmotionLabel[paragraph.consecutiveID].intensity === -1) {
@@ -139,7 +140,7 @@ class Labelling extends React.Component {
         const emotionArticleLabel = this.state.emotionArticleLabel;
         emotionArticleLabel[fieldToUpdate] = data;
         emotionArticleLabel.enteredAt = Date.now();
-        if(data === "purely factual") {
+        if(data === PlutchikSelector.emotionlessLabel) {
             emotionArticleLabel.intensity = -1
         }
         else if(fieldToUpdate === "label" && emotionArticleLabel.intensity === -1) {
@@ -184,8 +185,8 @@ class Labelling extends React.Component {
 
         let emotionArticleError = this.state.emotionArticleError;
         if(this.state.emotionArticleLabel === null ||
-        this.state.emotionArticleLabel.label === null ||
-        this.state.emotionArticleLabel.intensity === null) {
+            this.state.emotionArticleLabel.label === null ||
+            this.state.emotionArticleLabel.intensity === null) {
             emotionArticleError = true;
             error = true;
         }
@@ -212,7 +213,7 @@ class Labelling extends React.Component {
                     this.fetchLabelledArticlesCount(this.state.labellerID); //there was an error before, retry
                 }
                 this.fetchDataAndUpdateState(this.state.labellerID).then(() =>
-                window.scrollTo(0, 0));
+                    window.scrollTo(0, 0));
             })
             .catch(error => {
                 alert("Server error, please try again");

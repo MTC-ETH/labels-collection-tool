@@ -4,14 +4,12 @@ import {Button, Container, Row, Col} from "reactstrap";
 
 class StanceSelectorAbstract extends SelectorAbstract {
 
-
     constructor(props, context) {
         super(props, context);
-
         this.getButtonObject = this.getButtonObject.bind(this);
     }
 
-    options = [
+    static options = [
         {name: "In favour", color: "2FB774", emoji: "👍"},
         {name: "Discussing", color: "FBAF64", emoji: "☝️"},//👐🏽☝️👐
         {name: "Against", color: "F15A61", emoji: "👎"},

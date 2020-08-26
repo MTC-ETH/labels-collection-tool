@@ -4,8 +4,6 @@ import StanceSelectorAbstract from "./StanceSelectorAbstract";
 import ImNotSureCheckboxRow from "./ImNotSureCheckboxRow";
 
 class StanceSelectorOrizontal extends StanceSelectorAbstract {
-
-
     render() {
         return (
             <Container>

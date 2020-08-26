@@ -1,11 +1,9 @@
 import React from "react";
 
-// reactstrap components
 import {Col, Container, Media, Row} from "reactstrap";
 import headerImg from "../assets/imgs/ETHMTCHeader.png";
 
 class Header extends React.Component {
-
   render() {
       return (
           <div style={{background: "#ededed"}}>

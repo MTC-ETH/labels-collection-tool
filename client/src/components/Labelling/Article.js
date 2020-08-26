@@ -1,6 +1,5 @@
 import React from "react";
 
-// reactstrap components
 import {Col, Container, Row} from "reactstrap";
 import Paragraph from "./Paragraph";
 

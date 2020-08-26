@@ -1,6 +1,5 @@
 import React from "react";
 
-// reactstrap components
 import {Col, FormGroup, Input, Label, Row} from "reactstrap";
 
 class ImNotSureCheckboxRow extends React.Component {

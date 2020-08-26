@@ -1,9 +1,7 @@
 import React from "react";
 
-// reactstrap components
 import {Col, Row} from "reactstrap";
-import PlutchikSelector
-    from "./PlutchikSelector";
+import PlutchikSelector from "./PlutchikSelector";
 
 class Paragraph extends React.Component {
     static defaultProps = {

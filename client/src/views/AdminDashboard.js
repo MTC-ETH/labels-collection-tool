@@ -10,7 +10,9 @@ import Footer from "../components/Footer";
 import secrets from "../assets/json/secrets"
 import queryString from "query-string";
 
+
 class AdminDashboard extends React.Component {
+
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -56,7 +58,6 @@ class AdminDashboard extends React.Component {
                 FileDownload(JSON.stringify(response.data, null, 4), collectionName + '.json');
             });
     }
-
 
     render() {
         if(!this.state.authenticated) {

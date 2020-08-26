@@ -1,6 +1,5 @@
 import React from "react";
 
-// reactstrap components
 import {Button, Col, Container, Row} from "reactstrap";
 
 class ArticleInstructions extends React.Component {

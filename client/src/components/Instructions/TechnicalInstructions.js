@@ -1,6 +1,5 @@
 import React from "react";
 
-// reactstrap components
 import {Col, Row} from "reactstrap";
 
 class TechnicalInstructions extends React.Component {

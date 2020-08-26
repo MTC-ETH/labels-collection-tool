@@ -1,6 +1,5 @@
 import React from "react";
 
-// reactstrap components
 import {Col, Row} from "reactstrap";
 import PlutchikSelector from "../Labelling/PlutchikSelector";
 
@@ -35,7 +34,6 @@ class ArticleSectionInstructions extends React.Component {
                     <div  className={"p-2"} style={{
                         border: "0.10em",
                         borderStyle: "dashed",
-                        // borderWidth: "thin"
                     }}>
                         <PlutchikSelector/>
                     </div>

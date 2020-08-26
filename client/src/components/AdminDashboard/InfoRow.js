@@ -2,7 +2,7 @@ import React from "react";
 import {Badge, Col, Row} from "reactstrap";
 
 class InfoRow extends React.Component {
-    // Set default props
+
     static defaultProps = {
         color: "primary",
     };

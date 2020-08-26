@@ -1,9 +1,7 @@
 import React from "react";
 
-// reactstrap components
 import {Col, Container, Row} from "reactstrap";
-import PlutchikSelector
-    from "./PlutchikSelector";
+import PlutchikSelector from "./PlutchikSelector";
 
 class ArticleEmotionQuestion extends React.Component {
     static defaultProps = {
