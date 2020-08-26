@@ -97,6 +97,9 @@ router.route('/status').get((req, res) => {
                 .map((entry) => entry.finishedLabellingDate - entry.firstLabelledEnteredDate)
                 .reduce((a, b) => a + b, 0);
             averageTime /= nonNullEntries.length;
+            if(averageTime === null || averageTime === undefined || isNaN(averageTime) || averageTime < 0) {
+                return {averageTaggingTime: "Not computable"};
+            }
             return {averageTaggingTime: millisecToString(averageTime)};
         }));
 

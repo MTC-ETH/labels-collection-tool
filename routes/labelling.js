@@ -200,7 +200,7 @@ router.route('/ntagged').get((req, res) => {
         });
 });
 
-function updateStatus(updateFunction, res) {
+function updateStatus(req, res, updateFunction) {
     return updateFunction()
         .then(() => {
             console.log("Succesfully updated.");
@@ -214,22 +214,22 @@ function updateStatus(updateFunction, res) {
 // POST an intermediate result of tagging a stance question on article
 router.route('/tag/article/stance').post((req, res) => {
     console.log("labelling/tag/article/stance queried");
-    return updateStatus(() => labellingstatuses.updateStanceArticleQuestionLabel(req.body.labeller,
-        req.body.article, req.body.data), res);
+    return updateStatus(req, res, () => labellingstatuses.updateStanceArticleQuestionLabel(req.body.labeller,
+        req.body.article, req.body.data));
 });
 
 // POST an intermediate result of tagging emotion label article level
 router.route('/tag/article/emotion').post((req, res) => {
     console.log("labelling/tag/article/emotion queried");
-    return updateStatus(() => labellingstatuses.updateEmotionArticleLabel(req.body.labeller,
-        req.body.article, req.body.data), res);
+    return updateStatus(req, res, () => labellingstatuses.updateEmotionArticleLabel(req.body.labeller,
+        req.body.article, req.body.data));
 });
 
 // POST an intermediate result of tagging a paragraph
 router.route('/tag/paragraph/emotion').post((req, res) => {
     console.log("labelling/tag/paragraph/emotion queried");
-    return updateStatus(() => labellingstatuses.updateParagraphsEmotionLabel(req.body.labeller,
-        req.body.article, req.body.elemID, req.body.data), res);
+    return updateStatus(req, res, () => labellingstatuses.updateParagraphsEmotionLabel(req.body.labeller,
+        req.body.article, req.body.elemID, req.body.data));
 });
 
 router.route('/submit').post((req, res) => {
