@@ -1,6 +1,10 @@
 # env virable files
 **/.env
 
+# data about registered labellers
+json/labellers.json
+
+
 # dependencies
 /node_modules
 /.pnp
