@@ -128,7 +128,7 @@ class PlutchikSelector extends SelectorAbstract {
         let fontColor = "black";
         if(this.props.emotionStatus !== undefined && this.props.emotionStatus !== null
             && this.props.emotionStatus.label !== null
-            && this.props.emotionStatus.label !== this.emotionlessLabel) {
+            && this.props.emotionStatus.label !== PlutchikSelector.emotionlessLabel) {
             backgroundColor = SelectorAbstract.neutralColor;
             fontColor = SelectorAbstract.neutralFontColor;
         }
@@ -184,7 +184,7 @@ class PlutchikSelector extends SelectorAbstract {
         if(!margitTop) {
             styleDict.borderTop = "none";
         }
-        return <Row >
+        return <Row key={"levelButton" + text + intensity}>
             <Col className={"pl-2 pr-2"} >
                 <Button block
                         style={styleDict}
