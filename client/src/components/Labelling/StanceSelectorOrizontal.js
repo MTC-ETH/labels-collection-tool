@@ -8,7 +8,7 @@ class StanceSelectorOrizontal extends StanceSelectorAbstract {
         return (
             <Container>
                 <Row>
-                {this.options.map((option, index) => {
+                {StanceSelectorAbstract.options.map((option, index) => {
                     let borders = "pr-1 pl-0";
                     if(option.name.toLowerCase() === "unrelated"){
                         borders += " ml-2"

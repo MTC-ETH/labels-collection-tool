@@ -9,12 +9,21 @@ class StanceSelectorAbstract extends SelectorAbstract {
         this.getButtonObject = this.getButtonObject.bind(this);
     }
 
+    // static options = [
+    //     {name: "In favour", color: "#2FB774", emoji: "👍"},
+    //     {name: "Discussing", color: "#FBAF64", emoji: "☝️"},//👐🏽☝️👐
+    //     {name: "Against", color: "#F15A61", emoji: "👎"},
+    //     {name: "Unrelated", color: "#E7E6E6", emoji: String.fromCodePoint(0x2049)}, //⁉️️
+    // ];
+
     static options = [
-        {name: "In favour", color: "2FB774", emoji: "👍"},
-        {name: "Discussing", color: "FBAF64", emoji: "☝️"},//👐🏽☝️👐
-        {name: "Against", color: "F15A61", emoji: "👎"},
-        {name: "Unrelated", color: "E7E6E6", emoji: String.fromCodePoint(0x2049)}, //⁉️️
+        {name: "dafür", color: "#2FB774", emoji: "👍"},
+        {name: "diskutierend", color: "#FBAF64", emoji: "☝️"},//👐🏽☝️👐
+        {name: "gegen", color: "#F15A61", emoji: "👎"},
+        {name: "nicht verwandt", color: "#E7E6E6", emoji: String.fromCodePoint(0x2049)}, //⁉️️
     ];
+
+
 
     getButtonObject(option, fontSize) {
         let color, fontColor;
@@ -24,12 +33,12 @@ class StanceSelectorAbstract extends SelectorAbstract {
             fontColor = "black";
         }
         else {
-            color = this.neutralColor;
-            fontColor = "#" + this.neutralFontColor;
+            color = SelectorAbstract.neutralColor;
+            fontColor = SelectorAbstract.neutralFontColor;
         }
 
         return (<Button className="p-0"
-                       style={{background: "#" + color + "DA",
+                       style={{background: color + "DA",
                            width: "100%",
                            color: fontColor,
                            fontSize: fontSize.toString() + "px",

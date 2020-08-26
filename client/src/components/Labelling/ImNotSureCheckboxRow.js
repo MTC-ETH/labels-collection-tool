@@ -6,7 +6,10 @@ class ImNotSureCheckboxRow extends React.Component {
     static defaultProps = {
         fontSize: 16
     };
-  render() {
+
+    static text = "Ich bin mir meiner Antwort nicht sicher";
+
+    render() {
       return <Row className={"align-items-center mt-1"}>
               <Col className={"p-0"}>
                   <FormGroup check>
@@ -16,7 +19,7 @@ class ImNotSureCheckboxRow extends React.Component {
                                  checked={this.props.checked}
                                  onChange={(e) =>
                                      this.props.onClick(e, "notSure", !this.props.checked)}/>{' '}
-                          <div style={{fontSize: this.props.fontSize}}>I'm not sure of my answer</div>
+                          <div style={{fontSize: this.props.fontSize}}>{ImNotSureCheckboxRow.text}</div>
                       </Label>
                   </FormGroup>
               </Col>

@@ -22,8 +22,6 @@ class SubmitInstructionsAndButton extends React.Component {
                     </Row>
                     <Button className="p-1"
                             style={{
-                                // background: "#" + color,
-                                // color: "black",
                                 width: "100%",
                                 fontSize: "25px"
                             }}

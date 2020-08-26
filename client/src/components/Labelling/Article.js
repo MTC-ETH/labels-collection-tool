@@ -28,10 +28,10 @@ class Article extends React.Component {
                 <Row style={{
                     color: this.props.instructionsTextColor,
                 }} className={"text-center mt-3 mb-n2"}>
-                    <Col xs={12} sm={7} md={7} lg={7} xl={7}>
+                    <Col xs={12} sm={5} md={5} lg={5} xl={5}>
                         <h5>Article paragraph</h5>
                     </Col>
-                    <Col xs={12} sm={5} md={5} lg={5} xl={5}>
+                    <Col xs={12} sm={7} md={7} lg={7} xl={7}>
                         <h5>Emotion and intensity?</h5>
                     </Col>
                 </Row>
