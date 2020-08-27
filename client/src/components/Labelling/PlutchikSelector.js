@@ -33,6 +33,11 @@ class PlutchikSelector extends SelectorAbstract {
         [{name: "Traurigkeit", color: "#74A9DB", emoji: "😞"}, {name: "Empörung", color: "#A490C6", emoji: "🤢"}, {name: "Wut", color: "#F3736D", emoji: "😡"}, {name: "Überraschung", color: "#2CB0D9", emoji: "😮"}],
     ];
 
+    //first flatten then map, then spread and assign
+    static emotionsMap = Object.assign({}, ...[].concat.apply([],PlutchikSelector.emotions).map(em => {
+        return {[em.name]: {color: em.color, emoji: em.emoji}}
+    }));
+
     // static emotionlessLabel = "purely factual";
 
     static emotionlessLabel = "sachlich";
@@ -48,6 +53,10 @@ class PlutchikSelector extends SelectorAbstract {
         {image: mediumVolSrc, label: "mittlere", value: 1, borderTop: false, backgroundColor: "#c3c3c3"},
         {image: lowVolSrc, label: "schwach", value: 0, borderTop: false, backgroundColor: "#e3e3e3"},
     ];
+
+    static intensitiesMap = Object.assign({}, ...[].concat.apply([],PlutchikSelector.intensities).map(int => {
+        return {[int.label]: int}
+    }));
 
     render() {
         return (

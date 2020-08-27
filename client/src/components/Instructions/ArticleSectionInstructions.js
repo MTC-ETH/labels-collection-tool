@@ -23,14 +23,14 @@ class ArticleSectionInstructions extends React.Component {
                         a definition of emotions widely used in the scientific literature.
                         </p>
                 </Col>
-                <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+                <Col xs={12} sm={12} md={5} lg={5} xl={5}>
                     <p>The widget which allows to select the emotion is visible on the right.
                         You can only select one emotion per paragraph. If in doubt, select the emotion which is
                         conveyed in a stronger manner by the text. After selecting the emotion, select its intensity
                         among <i>low, medium, high</i>.
                         </p>
                 </Col>
-                <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+                <Col xs={12} sm={12} md={7} lg={7} xl={7} className={"p-0"}>
                     <div  className={"p-2"} style={{
                         border: "0.10em",
                         borderStyle: "dashed",
