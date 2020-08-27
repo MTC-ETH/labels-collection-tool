@@ -11,16 +11,16 @@ class ArticleStanceQuestion extends React.Component {
   render() {
       return (
           <>
-            <Container className="shape-container align-items-center pt-4" >
+            <Container className="shape-container align-items-center" >
                 <Row style={{
                     color: this.props.instructionsTextColor
                 }}>
                     <Col>
-                        <h5>Stance of article towards topic</h5>
-                        <p>Please now select how the article replies to the following question:</p>
+                        <h3>Stance of article towards topic</h3>
+                        <h6>Please now select how the article replies to the following question:</h6>
                     </Col>
                 </Row>
-                <Row className={"pb-1"} style={{background: this.props.error ? "#FF9991" : null,
+                <Row style={{background: this.props.error ? "#FF9991" : null,
                     color: this.props.instructionsTextColor}}>
                     <Col>
                     <h5>{this.props.question}</h5>

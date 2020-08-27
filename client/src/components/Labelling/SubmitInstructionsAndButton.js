@@ -11,12 +11,12 @@ class SubmitInstructionsAndButton extends React.Component {
     render() {
         return (
             <>
-                <Container className="shape-container align-items-center pt-4" style={{
+                <Container className="shape-container align-items-center pt-2" style={{
                     color: this.props.instructionsTextColor
                 }}>
                     <Row>
                         <Col>
-                            <h5>Submit</h5>
+                            <h3>Submit</h3>
                             <p>If everything looks good to you, submit and go to next article to be labelled</p>
                         </Col>
                     </Row>

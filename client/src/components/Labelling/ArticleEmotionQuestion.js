@@ -10,17 +10,16 @@ class ArticleEmotionQuestion extends React.Component {
 
   render() {
       return (
-          <>
-            <Container className="shape-container align-items-center pt-4" >
+            <Container className="shape-container align-items-center" >
                 <Row style={{
                     color: this.props.instructionsTextColor
                 }}>
                     <Col>
-                        <h5>Emotion of the whole article</h5>
-                        <p>What emotion better summarizes the one conveyed by all the text of the article? </p>
+                        <h3>Emotion of the whole article</h3>
+                        <h6>What emotion better summarizes the one conveyed by all the text of the article? </h6>
                     </Col>
                 </Row>
-                <Row className={"pb-1"} style={{background: this.props.error ? "#FF9991" : null}}>
+                <Row style={{background: this.props.error ? "#FF9991" : null}}>
                     <Col>
                         <PlutchikSelector emotionStatus={this.props.emotionStatus}
                                           onClick={this.props.onClick}
@@ -28,7 +27,6 @@ class ArticleEmotionQuestion extends React.Component {
                     </Col>
                 </Row>
             </Container>
-        </>
     );
   }
 }

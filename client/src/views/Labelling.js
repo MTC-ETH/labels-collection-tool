@@ -24,6 +24,12 @@ function getDeviceSpecs() {
     };
 }
 
+function ContainedHr() {
+    return <Container className={"p-0 mt-4 mb-4"}>
+        <hr/>
+    </Container>;
+}
+
 class Labelling extends React.Component {
 
     static defaultProps = {
@@ -270,18 +276,21 @@ class Labelling extends React.Component {
                          contentBackgroundColor={this.props.contentBackgroundColor}
                          instructionsTextColor={this.props.instructionsTextColor}
                 />
+                <ContainedHr/>
                 <ArticleEmotionQuestion question={this.state.article.stanceQuestion}
                                         onClick={this.handleEmotionArticle}
                                         emotionStatus={this.state.emotionArticleLabel}
                                         error={this.state.emotionArticleError}
                                         instructionsTextColor={this.props.instructionsTextColor}
                 />
+                <ContainedHr/>
                 <ArticleStanceQuestion question={this.state.article.stanceQuestion}
                                        onClick={this.handleStanceArticle}
                                        stanceStatus={this.state.stanceArticleQuestionLabel}
                                        error={this.state.stanceArticleQuestionError}
                                        instructionsTextColor={this.props.instructionsTextColor}
                 />
+                <ContainedHr/>
                 <SubmitInstructionsAndButton onClick={this.handleSubmit}
                                              instructionsTextColor={this.props.instructionsTextColor}
                 />

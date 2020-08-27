@@ -16,13 +16,13 @@ class ArticleInstructions extends React.Component {
                     <Col>
                         <Row>
                             <Col>
-                            <h4>Instructions</h4>
+                            <h3>Instructions</h3>
                             </Col>
                         </Row>
                         <Row>
                             <Col xs={12} sm={9} md={9} lg={10} xl={10}>
                             <p>Please read the article carefully. For each paragraph, select an emotion on the right
-                                side that best replies to the question: "Which is the emotion conveyed in this paragraph?".
+                                side that best replies to the question: <b>"Which is the emotion conveyed in this paragraph?"</b>.
                                 It’s possible to select only one emotion per paragraph. If in doubt, select the emotion which is conveyed in a stronger manner by the text.</p>
                         </Col>
                         <Col xs={12} sm={3} md={3} lg={2} xl={2}>

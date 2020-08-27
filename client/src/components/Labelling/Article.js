@@ -17,7 +17,6 @@ class Article extends React.Component {
       const { articleJson } = this.props;
 
       return (
-          <>
             <Container className="shape-container align-items-center">
                 <Row style={{background: this.props.contentBackgroundColor}}>
                     <Col>
@@ -46,7 +45,6 @@ class Article extends React.Component {
                     </Paragraph>);
                 })}
             </Container>
-        </>
     );
   }
 }
