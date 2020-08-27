@@ -117,7 +117,7 @@ class PlutchikSelector extends SelectorAbstract {
                     </Col>
                 </Row>
                 <ImNotSureCheckboxRow fontSize={this.props.imNotSureFontSize}
-                                      checked={this.props.emotionStatus.notSure}
+                                      checked={this.props.emotionStatus !== undefined && this.props.emotionStatus !== null && this.props.emotionStatus.notSure}
                                       onClick={this.props.onClick}/>
             </Container>
         );
@@ -190,7 +190,7 @@ class PlutchikSelector extends SelectorAbstract {
                         style={styleDict}
                         size={"sm"}
                         onClick={(e) => this.props.onClick ? this.props.onClick(e, "intensity", intensity) : () => null}
-                        disabled={this.props.emotionStatus.intensity === -1}
+                        disabled={this.props.emotionStatus !== undefined && this.props.emotionStatus !== null && this.props.emotionStatus.intensity === -1}
                         className={"pl-0 pr-0"}
                 >
                     <Container>

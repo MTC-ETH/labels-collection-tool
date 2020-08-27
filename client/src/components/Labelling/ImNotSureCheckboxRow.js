@@ -17,8 +17,8 @@ class ImNotSureCheckboxRow extends React.Component {
                           <Input type="checkbox"
                                  id={"test-id"}
                                  checked={this.props.checked}
-                                 onChange={(e) =>
-                                     this.props.onClick(e, "notSure", !this.props.checked)}/>{' '}
+                                 onChange={(e) => this.props.onClick ?
+                                     this.props.onClick(e, "notSure", !this.props.checked) : () => null}/>{' '}
                           <div style={{fontSize: this.props.fontSize}}>{ImNotSureCheckboxRow.text}</div>
                       </Label>
                   </FormGroup>
