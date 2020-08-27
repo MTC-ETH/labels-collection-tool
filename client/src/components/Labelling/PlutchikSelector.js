@@ -50,7 +50,7 @@ class PlutchikSelector extends SelectorAbstract {
 
     static intensities = [
         {image: highVolSrc, label: "stark", value: 2, borderTop: true, backgroundColor: "#a9a9a9"},
-        {image: mediumVolSrc, label: "mittlere", value: 1, borderTop: false, backgroundColor: "#c3c3c3"},
+        {image: mediumVolSrc, label: "mittel", value: 1, borderTop: false, backgroundColor: "#c3c3c3"},
         {image: lowVolSrc, label: "schwach", value: 0, borderTop: false, backgroundColor: "#e3e3e3"},
     ];
 

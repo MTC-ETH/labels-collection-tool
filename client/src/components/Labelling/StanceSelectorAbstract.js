@@ -17,10 +17,10 @@ class StanceSelectorAbstract extends SelectorAbstract {
     // ];
 
     static options = [
-        {name: "dafür", color: "#2FB774", emoji: "👍"},
-        {name: "diskutierend", color: "#FBAF64", emoji: "☝️"},//👐🏽☝️👐
-        {name: "gegen", color: "#F15A61", emoji: "👎"},
-        {name: "nicht verwandt", color: "#E7E6E6", emoji: String.fromCodePoint(0x2049)}, //⁉️️
+        {name: "Ja, dafür", color: "#2FB774", emoji: "👍"},
+        {name: "Diskutierend", color: "#FBAF64", emoji: "☝️"},//👐🏽☝️👐
+        {name: "Nein, gegen", color: "#F15A61", emoji: "👎"},
+        {name: "Kein Bezug", color: "#E7E6E6", emoji: String.fromCodePoint(0x2049)}, //⁉️️
     ];
 
 

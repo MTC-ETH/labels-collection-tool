@@ -90,7 +90,7 @@ class EmotionsExamplesInstructions extends React.Component {
                             die Psyche. Amerikanische Experten warnen vor einer historischen Welle mentale
                             Gesundheitsprobleme, die dem Land bevorsteht: Depressionen, Drogenmissbrauch,
                             posttraumatische Belastungsstörung und Selbstmord.</ExampleTableLine>
-                        <ExampleTableLine emotionName={"Angst"} intensityName={"mittlere"}>
+                        <ExampleTableLine emotionName={"Angst"} intensityName={"mittel"}>
                             Das Problem: Das Parlament verlangt nun ein Sondergesetz. Und riskiert damit, dass ganz viel
                             wertvolle Zeit verloren geht. Und die Kurve wieder steigt.
                         </ExampleTableLine>
@@ -119,7 +119,7 @@ class EmotionsExamplesInstructions extends React.Component {
                             die Psyche. Amerikanische Experten warnen vor einer historischen Welle mentale
                             Gesundheitsprobleme, die dem Land bevorsteht: Depressionen, Drogenmissbrauch,
                             posttraumatische Belastungsstörung und Selbstmord.</ExampleTableLine>
-                        <ExampleTableLine emotionName={"Angst"} intensityName={"mittlere"}>
+                        <ExampleTableLine emotionName={"Angst"} intensityName={"mittel"}>
                             Das Problem: Das Parlament verlangt nun ein Sondergesetz. Und riskiert damit, dass ganz viel
                             wertvolle Zeit verloren geht. Und die Kurve wieder steigt.
                         </ExampleTableLine>

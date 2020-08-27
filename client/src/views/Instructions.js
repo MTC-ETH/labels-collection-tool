@@ -37,7 +37,7 @@ class Instructions extends React.Component {
                     </Col>
                 </Row>
                 <ArticleSectionInstructions/>
-                <EmotionsExamplesInstructions/>
+                {/*<EmotionsExamplesInstructions/>*/}
                 <TechnicalInstructions/>
                 <Row>
                     <Col>
