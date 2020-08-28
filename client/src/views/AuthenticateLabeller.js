@@ -4,6 +4,7 @@ import {Button, Container, Form, FormGroup, Input, Label} from "reactstrap";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Cookies from 'js-cookie';
+import queryString from "query-string";
 
 class AuthenticateLabeller extends React.Component {
 
@@ -12,7 +13,8 @@ class AuthenticateLabeller extends React.Component {
 
         this.state = {
             token: null,
-            rememberMe: true
+            rememberMe: true,
+            target: "labelling"
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -20,11 +22,16 @@ class AuthenticateLabeller extends React.Component {
     }
 
     componentDidMount() {
-        const token = Cookies.get('token');
+        const token = Cookies.get('tokenRemember');
         console.log("Token in cookies: ");
         console.log(token);
         if(token) {
             this.setState({token});
+        }
+        const params = queryString.parse(this.props.location.search);
+        let target = params.target;
+        if(target) {
+            this.setState({target});
         }
     }
 
@@ -41,12 +48,13 @@ class AuthenticateLabeller extends React.Component {
         axios.get("/authenticatelabeller/valid?token=" + this.state.token)
             .then(response => {
                 if(response.data.valid) {
+                    Cookies.set("token", this.state.token);
                     if(this.state.rememberMe) {
-                        Cookies.set("token", this.state.token);
+                        Cookies.set("tokenRemember", this.state.token);
                     } else {
-                        Cookies.remove("token");
+                        Cookies.remove("tokenRemember");
                     }
-                    this.props.history.push("/labelling?token=" + this.state.token);
+                    this.props.history.push("/" + this.state.target + "?token=" + this.state.token);
                 } else {
                     alert(response.data.message);
                 }
@@ -78,7 +86,7 @@ class AuthenticateLabeller extends React.Component {
                             Remember the token next time
                             </div>
                         </FormGroup>
-                        <Button onClick={this.handleSubmit} block>Start labelling</Button>
+                        <Button onClick={this.handleSubmit} block>Log in</Button>
                     </Form>
                 </Container>
                 <Footer/>
