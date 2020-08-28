@@ -242,7 +242,9 @@ class Labelling extends React.Component {
 
     render() {
         if(this.state.serverFetchError !== null) {
-            return (<Container>
+            return (            <>
+                <Header selectedPage={"labelling"}/>
+                <Container>
                 <Row>
                     <Col>
                         <UncontrolledAlert color="danger" fade={true}>
@@ -255,7 +257,9 @@ class Labelling extends React.Component {
                         </UncontrolledAlert>
                     </Col>
                 </Row>
-            </Container>);
+            </Container>
+                <Footer/>
+                <>);
         }
 
         if(this.state.article === null) {
