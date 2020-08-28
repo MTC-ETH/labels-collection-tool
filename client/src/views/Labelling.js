@@ -13,6 +13,7 @@ import ArticleEmotionQuestion from "../components/Labelling/ArticleEmotionQuesti
 import {browserName, browserVersion, deviceType, osName, osVersion} from "react-device-detect";
 import PlutchikSelector from "../components/Labelling/PlutchikSelector";
 import ContainedHr from "../components/ContainedHr";
+import Cookies from "js-cookie";
 
 // const labellerID = "5f199424dcf1cfe56a7436a7";
 function getDeviceSpecs() {
@@ -58,13 +59,30 @@ class Labelling extends React.Component {
 
     componentDidMount() {
         const params = queryString.parse(this.props.location.search);
-        this.setState({labellerID: params.token});
-        if(!params.token) {
-            this.props.history.push("/authenticatelabeller");
-        }
+        let token = params.token;
+        const fromEmail = Boolean(params.email);
 
-        this.fetchDataAndUpdateState(params.token);
-        this.fetchLabelledArticlesCount(params.token);
+        if(token && fromEmail) {
+            Cookies.set('token', token);
+        }
+        else {
+            const cookieToken = Cookies.get('token');
+            if (cookieToken && token && cookieToken !== token) {
+                Cookies.set('token', token);
+            }
+
+            if (!token) {
+                if (cookieToken) {
+                    token = Cookies.get('token');
+                } else {
+                    this.props.history.push("/authenticatelabeller");
+                }
+            }
+        }
+        this.setState({labellerID: token});
+
+        this.fetchDataAndUpdateState(token);
+        this.fetchLabelledArticlesCount(token);
     }
 
     fetchLabelledArticlesCount(labellerID) {
