@@ -1,12 +1,29 @@
 import React from "react";
 
-import {Button, Col, Container, Row} from "reactstrap";
+import {Button, Col, Container, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
+import EmotionsExamples from "../Instructions/EmotionsExamples";
+import EmotionsExampleBodyRow from "../Instructions/EmotionsExamplesBodyRow";
+import StanceExamplesBodyRow from "../Instructions/StanceExamplesBodyRow";
+import ContainedHr from "../ContainedHr";
 
 class ArticleInstructions extends React.Component {
     static defaultProps = {
         instructionsTextColor: "#1e0ead"
     };
-  render() {
+
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+            modal: false
+        };
+        this.toggleModal = this.toggleModal.bind(this);
+    }
+
+    toggleModal() {
+        this.setState({modal: !this.state.modal});
+    }
+
+    render() {
       return (
           <>
             <Container className="shape-container align-items-center pt-2" style={{
@@ -26,10 +43,39 @@ class ArticleInstructions extends React.Component {
                                 It’s possible to select only one emotion per paragraph. If in doubt, select the emotion which is conveyed in a stronger manner by the text.</p>
                         </Col>
                         <Col xs={12} sm={3} md={3} lg={2} xl={2}>
-                            <Button href={"/instructions?token=" + this.props.token}
+                            <Button
+                                // href={"/instructions?token=" + this.props.token}
                                     style={{backgroundColor: this.props.instructionsTextColor + "AF"}}
+                                    onClick={this.toggleModal}
                                     block>
-                                More instructions</Button>
+                                Show me examples</Button>
+                            <Modal size="lg" style={{maxWidth: '1250px', width: '80%'}} isOpen={this.state.modal} toggle={this.toggleModal}>
+                                <ModalHeader toggle={this.toggleModal}>Biespiele</ModalHeader>
+                                <ModalBody>
+                                    <Container>
+                                        <Row>
+                                            <Col>
+                                                <h3>Emotionen</h3>
+                                            </Col>
+                                        </Row>
+                                        <EmotionsExampleBodyRow/>
+                                        <ContainedHr/>
+                                        <Row>
+                                            <Col>
+                                                <h3>Stance</h3>
+                                            </Col>
+                                        </Row>
+                                        <StanceExamplesBodyRow/>
+                                    </Container>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button color="primary"
+                                            href={"/instructions?token=" + this.props.token}
+                                    target={"_blank"}>
+                                        Open instructions page</Button>{' '}
+                                    <Button color="secondary" onClick={this.toggleModal}>Close</Button>
+                                </ModalFooter>
+                            </Modal>
                         </Col>
                         </Row>
                         <h5>Title and subtitle of the article:</h5>
