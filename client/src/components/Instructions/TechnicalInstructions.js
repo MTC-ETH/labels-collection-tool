@@ -7,7 +7,7 @@ class TechnicalInstructions extends React.Component {
         return <>
             <Row>
                 <Col>
-                    <h4>Technical instructions and remuneration</h4>
+                    <h3>Technical instructions and remuneration</h3>
                     <h5>Technical</h5>
                     <p>Once you're done with one article you are free to label the next one
                     and as many as you want up to a maximum of XX. As previously mentioned you can pause

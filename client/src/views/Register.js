@@ -140,7 +140,7 @@ class AuthenticateLabeller extends React.Component {
                         <span className="alert-inner--text ml-1">
                             <strong>Success!</strong> Please check your email ({this.state.email}),
                             you'll find a link to begin the study. You'll be redirected soon to the authentication
-                            page. If the redirection doesn't work please click <a href={"/authenticatelabeller"}>here</a>.
+                            page. If the redirection does not work please click <a href={"/authenticatelabeller"}>here</a>.
                                         </span>
                     </UncontrolledAlert>}
                 {this.state.success ? null : (<>

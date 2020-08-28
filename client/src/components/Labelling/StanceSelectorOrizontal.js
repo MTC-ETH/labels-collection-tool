@@ -21,7 +21,11 @@ class StanceSelectorOrizontal extends StanceSelectorAbstract {
                 })
                 }
                     </Row>
-                <ImNotSureCheckboxRow fontSize={18} checked={this.props.stanceStatus.notSure} onClick={this.props.onClick}/>
+                <ImNotSureCheckboxRow fontSize={18}
+                                      checked={this.props.stanceStatus === null
+                                      || this.props.stanceStatus === undefined
+                                          ? false : this.props.stanceStatus.notSure}
+                                      onClick={this.props.onClick}/>
             </Container>
         );
     }

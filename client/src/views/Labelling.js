@@ -12,6 +12,7 @@ import Footer from "../components/Footer";
 import ArticleEmotionQuestion from "../components/Labelling/ArticleEmotionQuestion";
 import {browserName, browserVersion, deviceType, osName, osVersion} from "react-device-detect";
 import PlutchikSelector from "../components/Labelling/PlutchikSelector";
+import ContainedHr from "../components/ContainedHr";
 
 // const labellerID = "5f199424dcf1cfe56a7436a7";
 function getDeviceSpecs() {
@@ -22,12 +23,6 @@ function getDeviceSpecs() {
         browserVersion: browserVersion,
         deviceType: deviceType
     };
-}
-
-function ContainedHr() {
-    return <Container className={"p-0 mt-4 mb-4"}>
-        <hr/>
-    </Container>;
 }
 
 class Labelling extends React.Component {

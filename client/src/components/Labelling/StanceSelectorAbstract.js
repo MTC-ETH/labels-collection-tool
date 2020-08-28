@@ -23,11 +23,14 @@ class StanceSelectorAbstract extends SelectorAbstract {
         {name: "Kein Bezug", color: "#E7E6E6", emoji: String.fromCodePoint(0x2049)}, //⁉️️
     ];
 
-
+    static optionsMap = Object.assign({}, ...StanceSelectorAbstract.options.map(em => {
+        return {[em.name]: em}
+    }));
 
     getButtonObject(option, fontSize) {
         let color, fontColor;
-        if(this.props.stanceStatus === null || this.props.stanceStatus.label === null ||
+        if(this.props.stanceStatus === undefined || this.props.stanceStatus === null
+            || this.props.stanceStatus.label === null ||
             this.props.stanceStatus.label === option.name) {
             color = option.color;
             fontColor = "black";
@@ -44,7 +47,7 @@ class StanceSelectorAbstract extends SelectorAbstract {
                            fontSize: fontSize.toString() + "px",
                            borderRadius: 0
                        }}
-                       onClick={(e) => this.props.onClick(e, "label", option.name)}>
+                       onClick={this.props.onClick ? (e) => this.props.onClick(e, "label", option.name) : () => null}>
             <Container >
                 <Row className={"align-items-center"}>
                     <Col xs={12} sm={2} md={2} lg={2} xl={2} className={"p-0"} style={{

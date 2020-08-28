@@ -29,13 +29,27 @@ class PlutchikSelector extends SelectorAbstract {
     // ];
 
     static emotions = [
-        [{name: "Freude", color: "#FFDE7A", emoji: "😊"}, {name: "Vertrauen", color: "#ACD46A", emoji: "🤝"}, {name: "Angst", color: "#2FB774", emoji: "😨"}, {name: "Erwartung", color: "#FBAF64", emoji: "👀"}],
-        [{name: "Traurigkeit", color: "#74A9DB", emoji: "😞"}, {name: "Empörung", color: "#A490C6", emoji: "🤢"}, {name: "Wut", color: "#F3736D", emoji: "😡"}, {name: "Überraschung", color: "#2CB0D9", emoji: "😮"}],
+        [{name: "Freude", color: "#FFDE7A", emoji: "😊",
+            synonyms: ["Glück", "Begeisterung", "Hochgefühl", "Freude", "Vergnügen", "Lust", "Fröhlichkeit"]},
+            {name: "Vertrauen", color: "#ACD46A", emoji: "🤝",
+            synonyms: ["Zutrauen", "Sicherheit", "optimistische Gefühle"]},
+            {name: "Angst", color: "#2FB774", emoji: "😨",
+            synonyms: ["Schrecken", "Furcht", "Panik", "Beklemmung", "Bestürzung", "Befürchtung", "Besorgnis", "Sorge"]},
+            {name: "Antizipation", color: "#FBAF64", emoji: "👀",
+            synonyms: ["Interesse", "Wachsamkeit", "Vorgriff", "Erwartung", "Verdacht"]}],
+        [{name: "Traurigkeit", color: "#74A9DB", emoji: "😞",
+        synonyms: ["Betrübnis", "Schmerz", "Trauer", "tiefes Mitgefühl", "Kummer"]},
+            {name: "Ekel", color: "#A490C6", emoji: "🤢",
+            synonyms: ["Empörung", "Langweile", "Abscheu", "Entrüstung"]},
+            {name: "Ärger", color: "#F3736D", emoji: "😡",
+            synonyms: ["Verdruss", "Wut", "Zorn", "Feindseligkeit", "Aggressivität", "Groll"]},
+            {name: "Überraschung", color: "#2CB0D9", emoji: "😮",
+            synonyms: ["Erstaunen", "Verblüffung", "Verwunderung", "Verstörtheit"]}],
     ];
 
     //first flatten then map, then spread and assign
     static emotionsMap = Object.assign({}, ...[].concat.apply([],PlutchikSelector.emotions).map(em => {
-        return {[em.name]: {color: em.color, emoji: em.emoji}}
+        return {[em.name]: em}
     }));
 
     // static emotionlessLabel = "purely factual";
@@ -51,10 +65,10 @@ class PlutchikSelector extends SelectorAbstract {
     static intensities = [
         {image: highVolSrc, label: "stark", value: 2, borderTop: true, backgroundColor: "#a9a9a9"},
         {image: mediumVolSrc, label: "mittel", value: 1, borderTop: false, backgroundColor: "#c3c3c3"},
-        {image: lowVolSrc, label: "schwach", value: 0, borderTop: false, backgroundColor: "#e3e3e3"},
+        {image: lowVolSrc, label: "wenig", value: 0, borderTop: false, backgroundColor: "#e3e3e3"},
     ];
 
-    static intensitiesMap = Object.assign({}, ...[].concat.apply([],PlutchikSelector.intensities).map(int => {
+    static intensitiesMap = Object.assign({}, ...PlutchikSelector.intensities.map(int => {
         return {[int.label]: int}
     }));
 

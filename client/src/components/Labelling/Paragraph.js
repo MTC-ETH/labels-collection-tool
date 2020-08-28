@@ -6,12 +6,13 @@ import PlutchikSelector from "./PlutchikSelector";
 class Paragraph extends React.Component {
     static defaultProps = {
         contentBackgroundColor: "#f2f0e6",
-        instructionsTextColor: "#1e0ead"
+        instructionsTextColor: "#1e0ead",
+        margins: "m1-3 mt-4 mb-4"
     };
 
   render() {
       return (
-            <Row className={"m1-3 mt-4 mb-4 align-items-center"}
+            <Row className={this.props.margins + " align-items-center"}
                  style={{background: this.props.error ? "#FF9991" : null,
                  overflow: "hidden"}}
             >
