@@ -75,7 +75,7 @@ class Labelling extends React.Component {
                 if (cookieToken) {
                     token = Cookies.get('token');
                 } else {
-                    this.props.history.push("/authenticatelabeller");
+                    this.props.history.push("/authenticatelabeller?target=labelling");
                 }
             }
         }
@@ -263,7 +263,7 @@ class Labelling extends React.Component {
         }
         return (
             <>
-                <Header/>
+                <Header selectedPage={"labelling"}/>
                 <Container>
                     <Row>
                         <Col xs={12} sm={9} md={9} lg={10} xl={10}>

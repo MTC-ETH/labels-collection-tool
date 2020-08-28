@@ -28,7 +28,7 @@ class Instructions extends React.Component {
 
     render() {
         return (<>
-            <Header/>
+            <Header selectedPage={"instructions"}/>
             <Container>
                 <Row><Col><h2>Instructions</h2></Col></Row>
                 <Row>

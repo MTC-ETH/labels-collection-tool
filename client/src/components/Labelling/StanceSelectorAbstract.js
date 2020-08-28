@@ -29,6 +29,9 @@ class StanceSelectorAbstract extends SelectorAbstract {
 
     getButtonObject(option, fontSize) {
         let color, fontColor;
+        console.log(this.props.stanceStatus);
+        console.log(this.props.stanceStatus.label === option.name);
+
         if(this.props.stanceStatus === undefined || this.props.stanceStatus === null
             || this.props.stanceStatus.label === null ||
             this.props.stanceStatus.label === option.name) {

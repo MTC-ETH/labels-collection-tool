@@ -13,6 +13,7 @@ import Home from "./views/Home";
 import Instructions from "./views/Instructions";
 import TermsAndConditions from "./views/TermsAndConditions";
 import {checkMobile} from "./views/NotAvailableOnMobile";
+import PersonalPage from "./views/PersonalPage";
 
 ReactDOM.render(
     <>
@@ -25,6 +26,7 @@ ReactDOM.render(
                 <Route path="/register" exact render={props => <Register {...props} />} />
                 <Route path="/instructions" exact render={props => <Instructions {...props} />} />
                 <Route path="/termsandconditions" exact render={props => <TermsAndConditions {...props} />} />
+                <Route path="/personalpage" exact render={props => <PersonalPage {...props} />} />
                 <Route component={NoMatch}/>
             </Switch>
         </BrowserRouter>

@@ -8,7 +8,7 @@ import Footer from "../components/Footer";
 class TermsAndConditions extends React.Component {
     render() {
         return (<>
-            <Header/>
+            <Header selectedPage={"termsandconditions"}/>
             <Container>
                 <Row><Col><h2>Terms and conditions</h2></Col></Row>
                 <Row>

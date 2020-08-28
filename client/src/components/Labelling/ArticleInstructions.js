@@ -1,7 +1,6 @@
 import React from "react";
 
 import {Button, Col, Container, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
-import EmotionsExamples from "../Instructions/EmotionsExamples";
 import EmotionsExampleBodyRow from "../Instructions/EmotionsExamplesBodyRow";
 import StanceExamplesBodyRow from "../Instructions/StanceExamplesBodyRow";
 import ContainedHr from "../ContainedHr";

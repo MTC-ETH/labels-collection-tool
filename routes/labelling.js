@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const _ = require('lodash');
 const mongoose = require('mongoose');
 
 const articles = require(`../models/articles`);
@@ -8,24 +7,7 @@ const labellers = require(`../models/labellers`);
 const labelledentries = require(`../models/labelledentries`);
 
 const config = require('../config');
-
-function getTokenFromRequest(req, res) {
-    let labellerID = _.get(req, "query.labellerID", null);
-    if(!labellerID) {
-        res.status(400).send({message: "Please provide labellerID in query"});
-        return null;
-    }
-
-    //convert to mongooseID and check it is valid id
-    let _labellerID;
-    try {
-        _labellerID = mongoose.Types.ObjectId(labellerID)
-    } catch (err) {
-        res.status(400).send({message: "labellerID is not a valid mongoose ID", error: err});
-        return null;
-    }
-    return _labellerID;
-}
+const {getTokenFromRequest} = require("./utils");
 
 function replyWithExistingStatus(status, res) {
     console.log("Already find a status, replying with that one");

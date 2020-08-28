@@ -4,7 +4,6 @@ import {
     Col,
     Collapse,
     Container,
-    Media,
     Nav,
     Navbar,
     NavbarBrand, NavbarText,
@@ -13,9 +12,33 @@ import {
     NavLink,
     Row
 } from "reactstrap";
-import headerImg from "../assets/imgs/ETHMTCHeader.png";
+
+class NavItemSelectable extends React.Component {
+    static defaultProps = {
+        selectedPage: "/",
+        pageName: "",
+    };
+
+    render() {
+        const style = {};
+        const isSelected = this.props.selectedPage === this.props.pageName;
+        if(isSelected) {
+            style.color = "black";
+            style.textDecoration = "underline";
+        }
+        return <NavItem>
+            <NavLink style={style} href={"/" + this.props.pageName}>
+                {this.props.children}
+            </NavLink>
+        </NavItem>;
+    }
+}
 
 class Header extends React.Component {
+
+    static defaultProps = {
+        selectedPage: "/"
+    };
 
     constructor(props, context) {
         super(props, context);
@@ -34,52 +57,55 @@ class Header extends React.Component {
       return (
           <>
               <div style={{background: "#ededed"}}>
-          </div>
+              </div>
               <div>
                   <Navbar color="light" light expand="lg" className={"mb-3"}>
-                      <Container >
+                      <Container>
 
-                      <NavbarBrand  href="/">
-                          <Container>
-                              <Row>
-                                  <Col className={"p-0"}>
-                                      <img
-                                          alt="MTC"
-                                          style={{height: "100%", maxHeight: 38}}
-                                          src={require("../assets/imgs/MTCLogoHigher.png")}
-                                      />
-                                  </Col>
-                                  <Col className={"p-0 pl-3"}>
-                                      <div style={{textAlign: "center", fontSize: 17, lineHeight: "120%"}}>
-                                          <b>Emotion<br/>& Stance</b>
-                                      </div>
-                                  </Col>
-                              </Row>
-                          </Container>
-                      </NavbarBrand>
-                      <NavbarToggler onClick={this.toggle}/>
-                      <Collapse isOpen={this.state.isOpen} navbar>
-                          <Nav className="mr-auto" navbar>
-                              <NavItem>
-                                  <NavLink href="/instructions">Instructions</NavLink>
-                              </NavItem>
-                              <NavItem>
-                                  <NavLink href="/labelling">Labelling</NavLink>
-                              </NavItem>
-                              <NavItem>
-                                  <NavLink href="/authenticatelabeller">Authentication</NavLink>
-                              </NavItem>
-                          </Nav>
-                          <NavbarText><img
-                              alt="ETH"
-                              style={{height: "100%", maxHeight: 38, opacity: "70%"}}
-                              src={require("../assets/imgs/ETHLogoHigher.png")}
-                          /></NavbarText>
-                      </Collapse>
+                          <NavbarBrand href="/">
+                              <Container>
+                                  <Row>
+                                      <Col className={"p-0"}>
+                                          <img
+                                              alt="MTC"
+                                              style={{height: "100%", maxHeight: 38}}
+                                              src={require("../assets/imgs/MTCLogoHigher.png")}
+                                          />
+                                      </Col>
+                                      <Col className={"p-0 pl-3"}>
+                                          <div style={{textAlign: "center", fontSize: 17, lineHeight: "120%"}}>
+                                              <b>Emotion<br/>& Stance</b>
+                                          </div>
+                                      </Col>
+                                  </Row>
+                              </Container>
+                          </NavbarBrand>
+                          <NavbarToggler onClick={this.toggle}/>
+                          <Collapse isOpen={this.state.isOpen} navbar>
+                              <Nav className="mr-auto" navbar>
+                                  <NavItemSelectable selectedPage={this.props.selectedPage} pageName={"instructions"}>
+                                      Instructions
+                                  </NavItemSelectable>
+                                  <NavItemSelectable selectedPage={this.props.selectedPage} pageName={"labelling"}>
+                                      Labelling
+                                  </NavItemSelectable>
+                                  <NavItemSelectable selectedPage={this.props.selectedPage} pageName={"personalpage"}>
+                                      Personal Page
+                                  </NavItemSelectable>
+                                  <NavItemSelectable selectedPage={this.props.selectedPage} pageName={"authenticatelabeller"}>
+                                      Authentication
+                                  </NavItemSelectable>
+                              </Nav>
+                              <NavbarText><img
+                                  alt="ETH"
+                                  style={{height: "100%", maxHeight: 38, opacity: "70%"}}
+                                  src={require("../assets/imgs/ETHLogoHigher.png")}
+                              /></NavbarText>
+                          </Collapse>
                       </Container>
                   </Navbar>
               </div>
-              </>
+          </>
     );
   }
 }

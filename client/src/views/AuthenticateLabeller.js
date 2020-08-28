@@ -63,7 +63,7 @@ class AuthenticateLabeller extends React.Component {
 
     render() {
         return (<>
-                <Header/>
+                <Header selectedPage={"authenticatelabeller"}/>
                 <Container className="shape-container align-items-center">
                     <h2>Labeller Authentication</h2>
                     <Form>

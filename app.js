@@ -41,6 +41,9 @@ app.use('/register/', registerRouter);
 const backupRouter = require('./routes/backup');
 app.use('/backup/', backupRouter);
 
+const personalpageRouter = require('./routes/personalpage');
+app.use('/personalpage/', personalpageRouter);
+
 backupRouter.buildMailerJob();
 
 if (process.env.NODE_ENV === 'production') {

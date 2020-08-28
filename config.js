@@ -11,4 +11,6 @@ config.interrater.labbellersPerArticle = 30;
 //set to null in order to multilabel all the articles
 config.interrater.multiLabelledArticles = null;
 
+config.moneyPerArticle = 3.50;
+
 module.exports = config;
