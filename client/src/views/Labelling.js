@@ -242,7 +242,7 @@ class Labelling extends React.Component {
 
     render() {
         if(this.state.serverFetchError !== null) {
-            return (            <>
+            return <>
                 <Header selectedPage={"labelling"}/>
                 <Container>
                 <Row>
@@ -259,7 +259,7 @@ class Labelling extends React.Component {
                 </Row>
             </Container>
                 <Footer/>
-                <>);
+                </>;
         }
 
         if(this.state.article === null) {
