@@ -16,8 +16,8 @@ class ArticleStanceQuestion extends React.Component {
                     color: this.props.instructionsTextColor
                 }}>
                     <Col>
-                        <h3>Stance of article towards topic</h3>
-                        <h6>Please now select how the article replies to the following question:</h6>
+                        <h3>Standpunkt des Artikels zum Thema</h3>
+                        <h6>Bitte wählen Sie nun aus, wie der Artikel auf die folgende Frage antwortet:</h6>
                     </Col>
                 </Row>
                 <Row style={{background: this.props.error ? "#FF9991" : null,

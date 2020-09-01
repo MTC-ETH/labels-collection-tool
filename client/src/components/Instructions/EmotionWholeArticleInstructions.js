@@ -10,7 +10,7 @@ class EmotionWholeArticleInstructions extends React.Component {
                     <p>
                         Nachdem Sie alle Absätze des Artikels gelesen und beschriftet haben, werden Sie auch gebeten,
                         dem gesamten Artikel eine Emotionsbeschriftung zuzuweisen. Dies sollte die Frage beantworten:
-                        "<i><b>Welche Emotion fasst den gesamten Inhalt des Artikels am Besten zusammen?</b></i>"
+                        "<i><b>Welche Emotion wird vom gesamten Text am Stärksten vermittelt?</b></i>"
                         <br/>
                         Um diese Frage zu beantworten, wird Ihnen die gleiche Benutzeroberfläche präsentiert,
                         die auch für die Beschriftung der Absätze verwendet wird.

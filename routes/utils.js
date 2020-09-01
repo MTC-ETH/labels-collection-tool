@@ -49,7 +49,7 @@ function getTokenFromRequest(req, res) {
     let labellerID = _.get(req, "query.labellerID", null);
     if(!labellerID) {
         console.log("Please provide labellerID in query");
-        res.status(400).send({message: "Please provide labellerID in query"});
+        res.status(400).send({message: "Bitte geben Sie die labellerID in der Anfrage"});
         return null;
     }
 
@@ -59,7 +59,7 @@ function getTokenFromRequest(req, res) {
         _labellerID = mongoose.Types.ObjectId(labellerID)
     } catch (err) {
         console.log("labellerID is not a valid mongoose ID");
-        res.status(400).send({message: "labellerID is not a valid mongoose ID", error: err});
+        res.status(400).send({message: "labellerID ist keine gültige mongoose ID", error: err});
         return null;
     }
     return _labellerID;

@@ -101,8 +101,8 @@ function createAndReplyWithNewStatus(res, _labellerID) {
         .then(newArticle => {
             if (newArticle === null) {
                 return res.status(400).send({
-                    message: "No article found. Either the database is " +
-                        "empty or all the articles have been labelled",
+                    message: "Kein Artikel gefunden. Entweder ist die Datenbank leer oder " +
+                        "alle Artikel sind beschriftet.",
                     error: null
                 });
             }
@@ -140,7 +140,8 @@ router.route('/article').get((req, res) => {
         })
         .then(exists => {
             if(!exists) {
-                return res.status(400).send({message: "labellerID doesn't exist in database, please use a valid one",
+                return res.status(400).send({message: "labellerID existiert nicht in der Datenbank, " +
+                        "bitte verwenden Sie eine gültige.",
                     error: null});
             }
             //exists

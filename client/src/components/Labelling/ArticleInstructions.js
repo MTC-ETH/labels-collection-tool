@@ -32,14 +32,18 @@ class ArticleInstructions extends React.Component {
                     <Col>
                         <Row>
                             <Col>
-                            <h3>Instructions</h3>
+                            <h3>Anleitungen</h3>
                             </Col>
                         </Row>
                         <Row>
                             <Col xs={12} sm={9} md={9} lg={10} xl={10}>
-                            <p>Please read the article carefully. For each paragraph, select an emotion on the right
-                                side that best replies to the question: <b>"Which is the emotion conveyed in this paragraph?"</b>.
-                                It’s possible to select only one emotion per paragraph. If in doubt, select the emotion which is conveyed in a stronger manner by the text.</p>
+                            <p>
+                                Bitte lesen Sie den Artikel sorgfältig durch. Wählen Sie für jeden Absatz auf der
+                                rechten Seite eine Emotion aus, die die folgende Frage am Besten beantwortet:
+                                "<b><i>Welches ist das Gefühl, das in diesem Absatz vermittelt wird?</i></b>". Es ist
+                                nur eine Emotion pro Absatz möglich. Wählen Sie im Zweifelsfall die Emotion aus, die
+                                durch den Text am Stärksten vermittelt wird.
+                            </p>
                         </Col>
                         <Col xs={12} sm={3} md={3} lg={2} xl={2}>
                             <Button
@@ -47,7 +51,7 @@ class ArticleInstructions extends React.Component {
                                     style={{backgroundColor: this.props.instructionsTextColor + "AF"}}
                                     onClick={this.toggleModal}
                                     block>
-                                Show me examples</Button>
+                                Zeigen Sie mir Beispiele</Button>
                             <Modal size="lg" style={{maxWidth: '1250px', width: '80%'}} isOpen={this.state.modal} toggle={this.toggleModal}>
                                 <ModalHeader toggle={this.toggleModal}>Biespiele</ModalHeader>
                                 <ModalBody>
@@ -61,7 +65,7 @@ class ArticleInstructions extends React.Component {
                                         <ContainedHr/>
                                         <Row>
                                             <Col>
-                                                <h3>Stance</h3>
+                                                <h3>Standpunkt</h3>
                                             </Col>
                                         </Row>
                                         <StanceExamplesBodyRow/>
@@ -77,7 +81,7 @@ class ArticleInstructions extends React.Component {
                             </Modal>
                         </Col>
                         </Row>
-                        <h5>Title and subtitle of the article:</h5>
+                        <h5>Titel und Untertitel des Artikels:</h5>
                     </Col>
                 </Row>
             </Container>

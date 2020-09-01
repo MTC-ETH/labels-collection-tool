@@ -16,8 +16,9 @@ class SubmitInstructionsAndButton extends React.Component {
                 }}>
                     <Row>
                         <Col>
-                            <h3>Submit</h3>
-                            <p>If everything looks good to you, submit and go to next article to be labelled</p>
+                            <h3>Einreichen</h3>
+                            <p>Wenn alles für Sie gut aussieht, reichen Sie es ein und gehen Sie zum nächsten Artikel,
+                                der beschriftet werden soll</p>
                         </Col>
                     </Row>
                     <Button className="p-1"
@@ -26,7 +27,11 @@ class SubmitInstructionsAndButton extends React.Component {
                                 fontSize: "25px"
                             }}
                             onClick={this.props.onClick}>
-                        <b><span role="img" aria-label="arrow left">➡️</span> Submit and go to next article <span role="img" aria-label="arrow left">➡️</span>️</b>
+                        <b>
+                            <span role="img" aria-label="arrow left">➡️ </span>
+                             Einreichen und zum nächsten Artikel gehen
+                            <span role="img" aria-label="arrow left"> ➡️</span>️
+                        </b>
                     </Button>
                 </Container>
             </>

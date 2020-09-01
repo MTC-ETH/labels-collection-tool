@@ -269,14 +269,14 @@ class Labelling extends React.Component {
             <>
                 <Header selectedPage={"labelling"}/>
                 <Container>
-                    <Row>
-                        <Col xs={12} sm={9} md={9} lg={10} xl={10}>
-                            <h2>Labelling Procedure</h2>
+                    <Row className={"align-items-center"}>
+                        <Col xs={12} sm={8} md={8} lg={9} xl={9}>
+                            <h2>Verfahren zur Beschriftung</h2>
                         </Col>
-                        <Col xs={12} sm={3} md={3} lg={2} xl={2} className={"text-center"}>
+                        <Col xs={12} sm={4} md={4} lg={3} xl={3} className={"text-center"}>
                             {this.state.labelledArticlesCount ?
                                 <div style={{color: this.props.instructionsTextColor}}>
-                                    # labelled articles: {this.state.labelledArticlesCount}
+                                    # gekennzeichnete Artikel: {this.state.labelledArticlesCount}
                                 </div>
                                 : null}
                         </Col>

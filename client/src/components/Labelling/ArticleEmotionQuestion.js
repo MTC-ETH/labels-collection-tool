@@ -15,8 +15,8 @@ class ArticleEmotionQuestion extends React.Component {
                     color: this.props.instructionsTextColor
                 }}>
                     <Col>
-                        <h3>Emotion of the whole article</h3>
-                        <h6>What emotion better summarizes the one conveyed by all the text of the article? </h6>
+                        <h3>Emotion des gesamten Artikels</h3>
+                        <h6>Welche Emotion wird vom gesamten Text am Stärksten vermittelt?</h6>
                     </Col>
                 </Row>
                 <Row style={{background: this.props.error ? "#FF9991" : null}}>
