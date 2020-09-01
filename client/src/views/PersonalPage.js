@@ -53,11 +53,11 @@ class PersonalPage extends React.Component {
                             <h3>Infos</h3>
                         </Col>
                     </Row>
-                        <InfoRow counter={this.state.infos.nTaggedArticles}>Number of labelled articles:</InfoRow>
-                        <InfoRow counter={this.state.infos.money}>Corresponding remuneration (CHF):</InfoRow>
+                        <InfoRow counter={this.state.infos.nTaggedArticles}>Anzahl der etikettierten Artikel:</InfoRow>
+                        <InfoRow counter={this.state.infos.money}>Entsprechende Vergütung (CHF):</InfoRow>
                         <Row className={"pt-3"}>
                             <Col>
-                                <h3>Actions</h3>
+                                <h3>Aktionen</h3>
                             </Col>
                         </Row>
                         <Row>
@@ -65,12 +65,12 @@ class PersonalPage extends React.Component {
                                 <Button block
                                         onClick={() => this.handleDownload("labelledentries")}
                                 href={"/labelling?labellerID="+this.state.token}>
-                                    Start Labelling
+                                    Beschriftung beginnen
                                 </Button>
                             </Col>
                             <Col xs={12} sm={3} md={3} lg={3} xl={3}>
                                 <Button block color="danger" onClick={this.handleLogout}>
-                                    Log out
+                                    Abmelden
                                 </Button>
                             </Col>
                         </Row>
