@@ -10,7 +10,7 @@ class NoMatch extends React.Component {
         return (<>
             <Header/>
             <Container>
-                <Row><Col><h2>Error 404</h2></Col></Row>
+                <Row><Col><h2>Fehler 404</h2></Col></Row>
             <Row>
                 <Col>
                     <UncontrolledAlert color="danger" fade={true}>
@@ -18,7 +18,7 @@ class NoMatch extends React.Component {
                                         <i className="ni ni-support-16" />
                                     </span>
                         <span className="alert-inner--text ml-1">
-                        <strong>Error 404!</strong> The page you're searching for cannot be found.
+                        <strong>Fehler 404</strong> Die von Ihnen gesuchte Seite kann nicht gefunden werden.
                                     </span>
                     </UncontrolledAlert>
                 </Col>
@@ -30,7 +30,7 @@ class NoMatch extends React.Component {
                             style={{width: "100%"}}
                             color={"primary"}
                             href={"/"}>
-                        Go to Home
+                        Gehen Sie auf die Homepage.
                     </Button>
                 </Col>
             </Row>
