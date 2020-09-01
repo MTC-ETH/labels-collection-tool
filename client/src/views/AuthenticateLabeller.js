@@ -65,11 +65,13 @@ class AuthenticateLabeller extends React.Component {
         return (<>
                 <Header selectedPage={"authenticatelabeller"}/>
                 <Container className="shape-container align-items-center">
-                    <h2>Labeller Authentication</h2>
+                    <h2>Authentifizierung zur Beschriftung</h2>
                     <Form>
                         <FormGroup>
-                            <Label for="token">Please enter you personal token, sent to you in the registration email.
-                                If you lost your token, please <a href={"/register"}>register</a> with the same email and it will be recovered for you.
+                            <Label for="token">Bitte geben Sie Ihr persönliches Kürzel ein, das Sie im
+                                Registrierungs-E-Mail erhalten haben. Wenn Sie Ihr Token verloren haben,
+                                <a href={"/register"}> registrieren</a> Sie sich bitte mit der gleichen E-Mail und
+                                es wird für Sie wiederhergestellt.
                             </Label>
                             <Input onChange={this.handleInputChange}
                                    value={this.state.token === null || this.state.token === undefined ?
@@ -83,10 +85,10 @@ class AuthenticateLabeller extends React.Component {
                                    id={"rememberMe"}
                                    checked={this.state.rememberMe}
                                    onChange={() => this.setState({rememberMe: !this.state.rememberMe})}/>{' '}
-                            Remember the token next time
+                                Erinnern Sie sich beim nächsten Mal an das Token
                             </div>
                         </FormGroup>
-                        <Button onClick={this.handleSubmit} block>Log in</Button>
+                        <Button onClick={this.handleSubmit} block>Anmelden</Button>
                     </Form>
                 </Container>
                 <Footer/>

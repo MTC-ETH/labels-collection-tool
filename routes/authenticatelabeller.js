@@ -20,15 +20,16 @@ router.route('/valid').get((req, res) => {
         _labellerID = mongoose.Types.ObjectId(token);
     } catch (err) {
         console.log("Not a mongoose id.");
-        return res.json({valid: false, message: "The token is not a valid identifier, " +
-                "check its correctness and try again."});
+        return res.json({valid: false, message: "Das Token ist kein gültiger Bezeichner." +
+                " Überprüfen Sie seine Richtigkeit und versuchen Sie es erneut."});
     }
 
     return labellers.findOne({_id: _labellerID}).exec()
         .then(queryRes => {
             if(!queryRes) {
                 console.log("Labeller not registered or not found.");
-                return res.json({valid: false, message: "Labeller not registered or not found, please try again."});
+                return res.json({valid: false, message: "Beschrifter nicht registriert oder nicht " +
+                        "gefunden, bitte versuchen Sie es erneut."});
             }
             console.log("Labeller found. OK.");
             return res.json({valid: true, message: "OK."});
