@@ -84,16 +84,16 @@ class Header extends React.Component {
                           <Collapse isOpen={this.state.isOpen} navbar>
                               <Nav className="mr-auto" navbar>
                                   <NavItemSelectable selectedPage={this.props.selectedPage} pageName={"instructions"}>
-                                      Instructions
+                                      Anleitungen
                                   </NavItemSelectable>
                                   <NavItemSelectable selectedPage={this.props.selectedPage} pageName={"labelling"}>
-                                      Labelling
+                                      Beschriftung
                                   </NavItemSelectable>
                                   <NavItemSelectable selectedPage={this.props.selectedPage} pageName={"personalpage"}>
-                                      Personal Page
+                                      Persönliche Seite
                                   </NavItemSelectable>
                                   <NavItemSelectable selectedPage={this.props.selectedPage} pageName={"authenticatelabeller"}>
-                                      Authentication
+                                      Authentifizierung
                                   </NavItemSelectable>
                               </Nav>
                               <NavbarText><img

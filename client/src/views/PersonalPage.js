@@ -47,7 +47,7 @@ class PersonalPage extends React.Component {
         return (<>
                 <Header selectedPage={"personalpage"}/>
                 <Container className="shape-container align-items-center">
-                    <h2>Personal Page - {this.state.infos.name} {this.state.infos.surname}</h2>
+                    <h2>Persönliche Seite - {this.state.infos.name} {this.state.infos.surname}</h2>
                     <Row className={"pt-3"}>
                         <Col>
                             <h3>Infos</h3>
