@@ -20,13 +20,13 @@ class NotAvailableOnMobile extends React.Component {
             <Header/>
             <Alert color={"danger"}>
                 <Container>
-                <Row><Col><h2>Not available on mobile</h2></Col></Row>
+                <Row><Col><h2>Nicht verfügbar auf Mobiltelefonen</h2></Col></Row>
                 <Row>
                     <Col>
                         <p>
-                            In order to retain high quality data, it's not possible to use the website
-                            from mobile devices, as stated in the instructions page. <br/>
-                            Please open the page from another device.
+                            Wie in der Anleitung beschrieben, ist es nicht möglich, die Website von mobilen Geräten
+                            aus zu nutzen, um eine hohe Datenqualität zu gewährleisten.  <br/>
+                            Bitte öffnen Sie die Seite von einem anderen Gerät aus.
                         </p>
                     </Col>
                 </Row>
