@@ -22,35 +22,37 @@ class StanceInstructions extends React.Component {
     render() {
         return <Row>
             <Col>
-                <h3>3 - Stance of the article towards a topic</h3>
-                <h5>Task definition</h5>
-                <p>You are then asked to select the stance of the article towards
-                    a given topic. You are given a question and 4 possible answers <i>in favour, discussing,
-                        against</i> and <i>unrelated</i>. An example question can be: <i>Should abortion be legal?</i>.
-                    The meaning of the four possible answers follows:</p>
+                <h3>3 - Standpunkt des Artikels zu einem Thema</h3>
+                <h5>Definition der Aufgabe</h5>
+                <p>
+                    Sie werden dann gebeten, den Standpunkt des Artikels zu einem bestimmten Thema auszuwählen.
+                    Sie erhalten eine Frage und 4 mögliche Antworten <i>Ja, dafür, diskutierend, Nein, dagegen</i> und
+                    <i>ohne Bezug</i>. Eine Beispielfrage kann sein: <i>Sollte Abtreibung legal sein?</i> Es folgt die
+                    Bedeutung der vier Antwortmöglichkeiten:
+                </p>
                 <ul>
                     <li>
-                        <i>Ja, dafür</i> means the article agrees with the question and
-                        has a positive stance towards the topic
+                        <i>Ja, dafür</i> bedeutet, dass der Artikel mit der Frage übereinstimmt und einen
+                        positiven Standpunkt zum Thema einnimmt.
                     </li>
                     <li>
-                        <i>Diskutierend</i> means the article talks about the topic, but does not take
-                        a clear stance
+                        <i>Diskutierend</i> bedeutet, dass der Artikel über das Thema spricht,
+                        aber keinen klaren Standpunkt einnimmt.
                     </li>
                     <li>
-                        <i>Nein, gegen</i> means the article disagrees with the question and
-                        has a negative stance towards the topic
+                        <i>Nein, gegen</i> bedeutet, dass der Artikel mit der Frage nicht einverstanden ist und
+                        einen negativen Standpunkt gegenüber dem Thema einnimmt.
                     </li>
                     <li>
-                        <i>Kein Bezug</i> means the article does not talk about the topic and does not address the
-                        question.
+                        <i>Kein Bezug</i> bedeutet, dass der Artikel nicht über das Thema spricht und nicht auf die
+                        Frage eingeht.
                     </li>
                 </ul>
-                <h5>User interface example</h5>
-                Below you can find an example of how the user interface looks. Again, feel free to
-                play with the interface.
+                <h5>Beispiel der Benutzeroberfläche</h5>
+                Unten finden Sie ein Beispiel, wie die Benutzeroberfläche aussieht. Auch hier können Sie ruhig mit
+                der Oberfläche spielen.
                 <div className={"mt-2"}>
-                    <h5 style={{color: Labelling.defaultProps.instructionsTextColor}}>Should abortion be legal?</h5>
+                    <h5 style={{color: Labelling.defaultProps.instructionsTextColor}}>Sollte Abtreibung legal sein?</h5>
                 </div>
                 <StanceSelectorOrizontal onClick={this.handleStanceArticle}
                                          stanceStatus={this.state.stanceArticleQuestionLabel}/>

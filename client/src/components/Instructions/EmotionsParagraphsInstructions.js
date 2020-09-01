@@ -32,40 +32,37 @@ class EmotionsParagraphsInstructions extends React.Component {
         return <>
             <Row>
                 <Col>
-                    <h3>1 - Emotion of each paragraph</h3>
-                    <h5>Task definition</h5>
-                    <p>Read the article carefully; for each paragraph, select one emotion on the right
-                        side that best replies to the question: "<i><b>Which is the emotion conveyed in this paragraph?</b></i>".
-                        You can choose among one of the 8 primary emotions of the <a
+                    <h3>1 - Emotion jedes einzelnen Absatzes</h3>
+                    <h5>Definition der Aufgabe</h5>
+                    <p>
+                        Lesen Sie den Artikel sorgfältig durch; wählen Sie für jeden Absatz auf der rechten Seite eine
+                        Emotion aus, die die Frage am besten beantwortet: "<i><b>Welches ist das Gefühl, das in diesem
+                        Absatz vermittelt wird?</b></i>" Sie können zwischen einer der 8 primären Emotionen des
+                        <a
                             href={"https://en.wikipedia.org/wiki/Robert_Plutchik#Plutchik's_wheel_of_emotions"}
                             target={"_blank"}
-                            rel="noopener noreferrer"> Plutchik wheel of emotions</a>,
-                        a definition of emotions widely used in the scientific literature. The 8 emotions are:
-                        <i> Freude, Traurigkeit, Vertrauen, Ekel, Angst, Ärger, Antizipation, Überraschung</i>.
-                        You can only select one emotion per paragraph. If in doubt, select the emotion which is
-                        conveyed in a stronger manner by the text. <br/>
-                        After selecting the emotion, select its intensity
-                        among <i>wenig, mittel, stark</i>. <br/>
-                        If you're unsure of your answer you can signal this by selecting the option "Ich bin mir meiner
-                        Antwort nicht sicher."
+                            rel="noopener noreferrer"> Plutchik-Rades der Emotionen</a> wählen, einer in der
+                        wissenschaftlichen Literatur weit verbreiteten Definition von
+                        Emotionen. Die 8 Emotionen sind: <i> Freude, Traurigkeit, Vertrauen, Ekel, Angst, Ärger,
+                        Antizipation, Überraschung</i>. Sie können nur eine Emotion pro Absatz auswählen. Wählen Sie im
+                        Zweifelsfall die Emotion aus, die durch den Text am Stärksten vermittelt wird.<br/>
+                        Nachdem Sie die Emotion ausgewählt haben, wählen Sie ihre Intensität:
+                        <i> wenig, mittel, stark</i>. <br/>
+                        Wenn Sie sich bei Ihrer Antwort nicht sicher sind, können Sie dies durch die Option
+                        "Ich bin mir meiner Antwort nicht sicher" signalisieren.
                         </p>
                 </Col>
-                {/*<Col xs={12} sm={12} md={7} lg={7} xl={7} className={"p-0"}>*/}
-                {/*    <div  className={"p-2"} style={{*/}
-                {/*        border: "0.10em",*/}
-                {/*        borderStyle: "dashed",*/}
-                {/*    }}>*/}
-                {/*        <PlutchikSelector/>*/}
-                {/*    </div>*/}
-                {/*</Col>*/}
             </Row>
             <Row>
                 <Col>
-                    <h5>User interface example</h5>
-                    <p>Below you can find an example of how the user interface looks. On the left you find the paragraph
-                        and on the right the widget which allows you to select the emotion and its strength.
-                        Feel free to play with the widget and, for example, click on (<i>Ärger</i>) and then on
-                        (<i>mittel</i>), which would be the correct answers for this paragraph.</p>
+                    <h5>Beispiel der Benutzeroberfläche</h5>
+                    <p>
+                        Unten finden Sie ein Beispiel, wie die Benutzeroberfläche aussieht. Auf der linken Seite
+                        finden Sie den Absatz und auf der rechten Seite das Widget, mit dem Sie die Emotion und ihre
+                        Stärke auswählen können. Spielen Sie ruhig mit dem Widget herum und klicken Sie zum Beispiel
+                        auf (<i>Ärger</i>) und dann auf (<i>mittel</i>), was die richtigen Antworten für diesen
+                        Absatz wären.
+                    </p>
                 </Col>
             </Row>
             <Row>

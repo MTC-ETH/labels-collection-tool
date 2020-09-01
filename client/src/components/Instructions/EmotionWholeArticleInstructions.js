@@ -6,13 +6,14 @@ class EmotionWholeArticleInstructions extends React.Component {
     render() {
         return <Row>
                 <Col>
-                    <h3>2 - Emotion of the whole article</h3>
-                    <p>After reading and labelling all the paragraphs of the article you will be asked also to assign
-                        an emotion label to the whole article. This should answer the question
-                        "<i><b>What emotion better summarizes the one conveyed by all the text of the article?</b></i>".
+                    <h3>2 - Emotion des ganzen Artikels</h3>
+                    <p>
+                        Nachdem Sie alle Absätze des Artikels gelesen und beschriftet haben, werden Sie auch gebeten,
+                        dem gesamten Artikel eine Emotionsbeschriftung zuzuweisen. Dies sollte die Frage beantworten:
+                        "<i><b>Welche Emotion fasst den gesamten Inhalt des Artikels am Besten zusammen?</b></i>"
                         <br/>
-                        To answer this question you will be presented the same user interface used to label the
-                        paragraphs.
+                        Um diese Frage zu beantworten, wird Ihnen die gleiche Benutzeroberfläche präsentiert,
+                        die auch für die Beschriftung der Absätze verwendet wird.
                         </p>
                 </Col>
             </Row>;

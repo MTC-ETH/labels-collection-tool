@@ -30,20 +30,21 @@ class Instructions extends React.Component {
         return (<>
             <Header selectedPage={"instructions"}/>
             <Container>
-                <Row><Col><h2>Instructions</h2></Col></Row>
+                <Row><Col><h2>Anleitungen</h2></Col></Row>
                 <Row>
                     <Col>
-                        <p>For each page you are given an article divided in paragraphs. You will be asked to:</p>
+                        <p>Für jede Seite erhalten Sie einen in Absätze unterteilten Artikel.
+                            Sie werden dazu aufgefordert:</p>
                         <ol>
-                            <li>Assign an <b>emotion</b> label to each <b>paragraph</b></li>
-                            <li>Assign an <b>emotion</b> label to the <b>whole article</b></li>
-                            <li>Assess the <b>stance</b> of the <b>article</b> towards a given topic</li>
+                            <li>Jedem <b>Absatz</b> ein <b>Emotions</b>-Label zuzuordnen</li>
+                            <li>Dem <b>gesamten Artikel</b> ein <b>Emotions</b>-Label</li>
+                            <li>Den <b>Standpunkt</b> des <b>Artikels</b> zu einem bestimmten Thema zu bewerten</li>
                         </ol>
                          <p>
-                            At any time of the process if you're feeling tired or strained feel free to stop and
-                            continue
-                            later, all your inputs are saved and nothing will be lost, also when stopping in the middle
-                            of an article.</p>
+                             Wenn Sie sich zu irgendeinem Zeitpunkt des Prozesses müde oder angestrengt fühlen,
+                             können Sie jederzeit aufhören und später weitermachen, alle Ihre Eingaben werden
+                             gespeichert. Nichts geht verloren, auch wenn Sie mitten in einem Artikel aufhören.
+                         </p>
                     </Col>
                 </Row>
                 <EmotionsParagraphsInstructions/>
@@ -60,7 +61,7 @@ class Instructions extends React.Component {
                         <Button className="p-1"
                                 size={"lg"}
                                 href={this.state.token ? "/labelling?token=" + this.state.token : "/labelling"} block>
-                            Start or continue labelling
+                            Beschriftung beginnen oder fortsetzen
                         </Button>
                     </Col>
                 </Row>

@@ -14,7 +14,7 @@ class StanceExamples extends React.Component {
         return <Container className={"p-0 mt-3"}>
             <Row>
                 <Col>
-                    <h5>Beispiele von Stance</h5>
+                    <h5>Beispiele von Standpunkten</h5>
                     <Button id="togglerStance" onClick={() => this.setState({show: !this.state.show})}>
                         {this.state.show ? "Beispiele ausblenden" : "Beispiele einblenden"}
                     </Button>

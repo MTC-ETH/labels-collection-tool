@@ -60,25 +60,26 @@ class StanceExamplesBodyRow extends React.Component {
                         </thead>
                         <tbody>
                         <ExampleTableLine stanceName={"Ja, dafür"}>
-                            The choice over when and whether to have children is central to a woman’s independence
-                            and ability to determine her future.
+                            Die Entscheidung darüber, wann und ob Kinder geboren werden sollen, ist von zentraler
+                            Bedeutung für die Unabhängigkeit einer Frau und ihre Fähigkeit, ihre Zukunft zu bestimmen.
                         </ExampleTableLine>
                         <ExampleTableLine stanceName={"Diskutierend"}>
-                            If we conclude that abortion is not morally wrong, that doesn't mean that it's right to
-                            have an abortion; we need to ask whether having an abortion is the best thing
-                            (or least bad thing) to do in each particular case.
-                            If we conclude that abortion is morally wrong, that doesn't mean that it's always
-                            impermissible to have an abortion; we need to ask whether having an abortion is less wrong
-                            than the alternatives.
+                            Wenn wir zu dem Schluss kommen, dass Abtreibung nicht moralisch falsch ist, bedeutet das
+                            nicht, dass es richtig ist, abzutreiben; wir müssen uns fragen, ob eine Abtreibung in jedem
+                            Einzelfall das Beste (oder das am wenigsten Schlechte) ist. Wenn wir zu dem Schluss kommen,
+                            dass ein Schwangerschaftsabbruch moralisch falsch ist, bedeutet das nicht, dass es immer
+                            unzulässig ist, abzutreiben; wir müssen uns fragen, ob ein Schwangerschaftsabbruch weniger
+                            falsch ist als die Alternativen.
                         </ExampleTableLine>
                         <ExampleTableLine stanceName={"Nein, gegen"}>
-                            The killing of an innocent human being is wrong, even if that human being has yet to be born.
+                            Die Tötung eines unschuldigen Menschen ist falsch, auch wenn dieser Mensch noch nicht
+                            geboren ist.
                         </ExampleTableLine>
                         <ExampleTableLine stanceName={"Kein Bezug"}>
-                            Most female business owners who have attended networking events can relate to this
-                            scenario: You walk into a crowded seminar and can count the number of women there on one
-                            hand. When women entrepreneurs talk business with primarily male executives, it can be
-                            unnerving.
+                            Die meisten Unternehmerinnen, die an Networking-Veranstaltungen teilgenommen haben,
+                            können sich auf dieses Szenario beziehen: Sie betreten ein überfülltes Seminar und
+                            können die Anzahl der Frauen dort an einer Hand abzählen. Wenn Unternehmerinnen mit
+                            überwiegend männlichen Führungskräften über Geschäfte sprechen, kann das beunruhigend sein.
                         </ExampleTableLine>
                         </tbody>
                     </Table>
