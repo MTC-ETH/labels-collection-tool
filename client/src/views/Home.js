@@ -10,36 +10,42 @@ class Home extends React.Component {
         return (<>
             <Header/>
             <Container>
-                <Row><Col><h2>Emotions & Stance Project - Labelling Tool</h2></Col></Row>
+                <Row><Col><h2>Projekt Emotionen & Standpunkt - Labelling-Tool</h2></Col></Row>
                 <Row>
                     <Col>
                         <p>
-                            Welcome to the labelling tool related to the project emotion & stance detection
-                            from the ETH <a target="_blank" rel="noopener noreferrer" href="https://mtc.ethz.ch">
-                            Media Technology Center (MTC)</a>. This online tool has the purpose of collecting the necessary data for the project.
-                            To achieve this, humans are shown newspapers articles and are asked to assign them
-                            to an emotion and a stance.
+                            Willkommen beim Labelling-Tool für das Projekt Emotionen- und Standpunkterkennung des
+                            ETH <a target="_blank" rel="noopener noreferrer" href="https://mtc.ethz.ch">
+                            Media Technology Center (MTC)</a>. Dieses Online-Tool hat den Zweck, die für das Projekt
+                            notwendigen Daten zu sammeln. Um dies zu erreichen, werden Menschen Zeitungsartikel
+                            gezeigt und gebeten, diese einer Emotion und einem Standpunkt zuzuordnen.
                         </p>
-                        <h4>Project description</h4>
-                        <p>The goal of the project is to create an artificial intelligence (AI) tool that
-                            automatically detects
-                        the stance and the emotion of news paper articles. What emotions does the article
-                        convey? What stance does it take towards a given topic?<br/>
-                        Emotion and stance detection can help to curate content and to understand reactions, behaviors,
-                        opinions and feelings of readers. Furthermore, it can help alleviating the problem of
-                        polarization and opinion bias in the media.<br/>
-                        While technologies to estimate emotion and stance for English have seen large
-                            advances, they lack behind for German. We aim at closing this gap.</p>
+                        <h4>Beschreibung des Projekts</h4>
+                        <p>Ziel des Projekts ist es, ein Tool mittels künstlichen Intelligenz (KI) zu schaffen,
+                            das automatisch den Standpunkt und die Emotion von Zeitungsartikeln erkennt. Welche
+                            Emotionen vermittelt der Artikel? Welche Standpunkt nimmt er zu einem bestimmten Thema ein?
+                            <br/>
+                            Die Erkennung von Emotionen und Standpunkten kann helfen, Inhalte zu kuratieren und
+                            Reaktionen, Verhaltensweisen, Meinungen und Gefühle der Leser zu verstehen. Darüber
+                            hinaus kann sie dazu beitragen, das Problem der Polarisierung und der Verzerrung von
+                            Meinungen in den Medien zu mildern.<br/>
+                            Im englischen Sprachraum konnten bereits grosse Fortschritte bei der Bestimmung von
+                            Emotionen und Standpunkten erzielt werden, im deutschsprachigen Raum hingegen ist die
+                            Technologie noch nicht so weit. Unser Ziel ist es, diese Lücke zu schließen.
+                        </p>
 
-                        <h4>Your role as the human labeller and your tasks</h4>
-                        <p>To train the AI tool we need a dataset of news articles
-                        paired with stance and emotion labels. A label is a tag or a category assigned to a piece of text.
-                            For example, in the
-                            context of emotions, the label <i>joy</i> could be assigned to the text <i>I'm so happy</i>.
-                            You will play a crucial role in this labelling work. <br/>
-                        For each article you will be asked to assign a label to every paragraph with an emotion tag and reply to a
-                        question regarding the stance of an article towards a topic. <br/>
-                            For more details about the task and the remuneration please see the <a href={"/instructions"}>instructions page</a>.</p>
+                        <h4>Ihre Rolle als Beschrifter und Ihre Aufgabens</h4>
+                        <p>
+                            Um das KI-Tool zu trainieren, benötigen wir einen Datensatz von Nachrichtenartikeln,
+                            gepaart mit Standpunkt- und Emotionsbeschriftungen. Ein Label ist ein Tag oder eine
+                            Kategorie, die einem Text zugeordnet ist. Im Zusammenhang mit Emotionen könnte zum Beispiel
+                            das Label "<i>Freude</i>" dem Text "<i>Ich bin so glücklich</i>” zugeordnet werden.
+                            Sie werden bei dieser Beschriftungsarbeit eine entscheidende Rolle spielen.<br/>
+                            Für jeden Artikel werden Sie gebeten, jedem Absatz ein Label mit einem Emotionstag
+                            zuzuordnen und eine Frage bezüglich des Standpunkts eines Artikels zu beantworten. <br/>
+                            Weitere Einzelheiten über die Aufgabe und die Vergütung finden Sie auf der
+                            <a href={"/instructions"}> Anleitungsseite</a>.
+                        </p>
                     </Col>
                 </Row>
                 <Row>
@@ -47,7 +53,7 @@ class Home extends React.Component {
                         <Button className="p-1"
                                 size={"lg"}
                                 href={"/register"} block>
-                            Register as labeller
+                            Als Beschrifter registrieren
                         </Button>
                     </Col>
                 </Row>
@@ -55,7 +61,7 @@ class Home extends React.Component {
                     <Col>
                         <Button className="p-1"
                                 href={"/authenticatelabeller"} block>
-                            Continue labelling (your token is required)
+                            Beschriftung fortsetzen (Ihr Token ist erforderlich)
                         </Button>
                     </Col>
                 </Row>
