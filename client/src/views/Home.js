@@ -37,7 +37,7 @@ class Home extends React.Component {
                         <h4>Ihre Rolle als Beschrifter und Ihre Aufgabens</h4>
                         <p>
                             Um das KI-Tool zu trainieren, benötigen wir einen Datensatz von Nachrichtenartikeln,
-                            gepaart mit Standpunkt- und Emotionsbeschriftungen. Ein Label ist ein Tag oder eine
+                            gepaart mit Standpunkt und Emotions beschriftungen. Ein Label ist ein Tag oder eine
                             Kategorie, die einem Text zugeordnet ist. Im Zusammenhang mit Emotionen könnte zum Beispiel
                             das Label "<i>Freude</i>" dem Text "<i>Ich bin so glücklich</i>” zugeordnet werden.
                             Sie werden bei dieser Beschriftungsarbeit eine entscheidende Rolle spielen.<br/>

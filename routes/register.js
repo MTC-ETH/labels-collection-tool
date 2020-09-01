@@ -21,18 +21,18 @@ function sendRegistrationEmailAndWriteInDB(name, surname, email, affiliation, sm
             const mailOpts = {
                 from: process.env.EMAIL, // This is ignored by Gmail
                 to: email,
-                subject: '[MTC] emotions and stance project registration',
+                subject: '[MTC] Emotionen & Standpunkt Projekt - Anmeldung',
                 text:
-                    `Dear ${name},
-Thank you for registering to the MTC emotion and stance project. You can read the instructions and then start working 
-by clicking on this link: ${link}. This will also confirm your account.
+                    `Lieber ${name},
+Vielen Dank, dass Sie sich für das Emotionen & Standpunkt Projekt von MTC angemeldet haben. 
+Sie können die Anleitungen lesen und dann mit der Arbeit beginnen indem Sie auf diesen Link klicken: ${link}. Dadurch wird auch Ihr Konto bestätigt.
 
-Please note down your personal id for future use: ${idToken}
+Bitte notieren Sie sich Ihre persönliche ID (Token) für die zukünftige Verwendung: ${idToken}
 
-For any problem or enquiry feel free to reply to this email and we will get back to you.
-Thanks for helping us advancing research!
-All the best,
-The emotion and stance MTC team`
+Wenn Sie ein Problem oder eine Anfrage haben, können Sie gerne auf diese E-Mail antworten und wir werden uns mit Ihnen in Verbindung setzen.
+Danke, dass Sie uns helfen, die Forschung voranzubringen!
+Ich wünsche Ihnen alles Gute,
+Emotionen & Standpunkt Projekt des MTC-Teams`
             };
             return smtpTrans.sendMail(mailOpts).then(info => console.log(info));
         })
@@ -49,25 +49,26 @@ function sendAlreadyExistingEmail(name, surname, email, affiliation, idToken, sm
     const mailOpts = {
         from: process.env.EMAIL, // This is ignored by Gmail
         to: email,
-        subject: '[MTC] already registered emotions and stance project',
+        subject: '[MTC] Emotionen & Standpunkt Projekt - bereits angemeldet',
         text:
-            `Dear ${name},
-You have attemped to use this email to register to the MTC emotion and stance study, but the email is already in use. 
-You can start working by clicking on this link: ${link}. This will also confirm your account if not confirmed yet.
+            `Lieber ${name},
+Sie haben versucht, diese E-Mail zu benutzen, um sich für die Emotionen & Standpunkt Projekt des MTC zu anmelden, aber die E-Mail wird bereits verwendet. 
+Sie können die Anleitungen lesen und dann mit der Arbeit beginnen indem Sie auf diesen Link klicken: ${link}. Dadurch wird auch Ihr Konto bestätigt.
 
-Please note down your personal id for future use: ${idToken}
+Bitte notieren Sie sich Ihre persönliche ID (Token) für die zukünftige Verwendung: ${idToken}
 
-For any problem or enquiry feel free to reply to this email and we will get back to you.
-Thanks for helping us advancing ML research!
-All the best,
-The emotion and stance MTC team`
+Wenn Sie ein Problem oder eine Anfrage haben, können Sie gerne auf diese E-Mail antworten und wir werden uns mit Ihnen in Verbindung setzen.
+Danke, dass Sie uns helfen, die Forschung voranzubringen!
+Ich wünsche Ihnen alles Gute,
+Emotionen & Standpunkt Projekt des MTC-Teams`
     };
 
     return smtpTrans.sendMail(mailOpts).then(info => console.log(info))
         .then(() => {
             console.log("Email sent successfully.");
-            res.status(400).json({error: null, message: "email already in use. A second email with the link " +
-                    "to begin the study has been sent to " + email + ". Please use that link or another email."});
+            res.status(400).json({error: null, message: "E-Mail bereits in Gebrauch. Eine zweite E-Mail mit dem Link " +
+                    "zum Beginn der Studie wurde per E-Mail (" + email +  ") verschickt. Bitte benutzen Sie diesen " +
+                    "Link oder eine andere E-Mail"});
         });
 }
 
@@ -99,7 +100,7 @@ router.route('/').post((req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({error: err, message: "Internal server error, please try again."});
+            res.status(500).json({error: err, message: "Interner Serverfehler, bitte versuchen Sie es erneut."});
         });
 });
 
