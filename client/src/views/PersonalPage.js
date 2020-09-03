@@ -55,6 +55,7 @@ class PersonalPage extends React.Component {
                     </Row>
                         <InfoRow counter={this.state.infos.nTaggedArticles}>Anzahl der etikettierten Artikel:</InfoRow>
                         <InfoRow counter={this.state.infos.money}>Entsprechende Vergütung (CHF):</InfoRow>
+                        <InfoRow counter={this.state.token}>Token:</InfoRow>
                         <Row className={"pt-3"}>
                             <Col>
                                 <h3>Aktionen</h3>
