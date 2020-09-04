@@ -151,6 +151,68 @@ function getNotSureStatistics() {
         });
 }
 
+function getChangeIdeaStatistics() {
+    return labelledentries.find({}).exec()
+        .then(entries => {
+            const resultMap = {};
+            let nParagraphs = 0;
+            let nArticles = 0;
+            let nParagraphsChanged = 0;
+            let nEmotionArticlesChanged = 0;
+            let nStanceArticlesChanged = 0;
+
+            function didChangeIdea(history, final) {
+                let nClicksUsed = history.length;
+
+                //if he clicked on notSure this means he had to do two clicks to reach a worthy state
+                if(final.notSure) {
+                    nClicksUsed--;
+                }
+
+                //if he selected a normal emotion and not "purely factual"
+                //this means he had to do two clicks to reach a worthy state
+                if(final.intensity !== undefined && final.intensity !== null && final.intensity !== -1) {
+                    nClicksUsed--;
+                }
+                if(nClicksUsed < 0) {
+                    console.log("ERROR: nClicksUsed negative!")
+                }
+
+                return nClicksUsed > 0;
+            }
+
+            entries.forEach(entry => {
+                nArticles++;
+                //paragraphs
+                entry.paragraphsEmotionLabelHistory.forEach((parHistory, parKey) => {
+                    nParagraphs++;
+                    if(didChangeIdea(parHistory, entry.paragraphsEmotionLabel.get(parKey))) {
+                        nParagraphsChanged++;
+                    }
+                });
+
+                //emotion of article
+                if(didChangeIdea(entry.emotionArticleLabelHistory,
+                    entry.emotionArticleLabel)) {
+                    nEmotionArticlesChanged++;
+                }
+
+                //stance of article
+                if(didChangeIdea(entry.stanceArticleQuestionLabelHistory,
+                    entry.stanceArticleQuestionLabel)) {
+                    nStanceArticlesChanged++;
+                }
+            });
+
+            resultMap.changedIdeaParagraphsPercentage = nParagraphsChanged / nParagraphs * 100.0;
+            resultMap.changedIdeaEmotionArticlePercentage = nEmotionArticlesChanged / nArticles * 100.0;
+            resultMap.changedIdeaStanceArticlePercentage = nStanceArticlesChanged / nArticles * 100.0;
+
+            return resultMap;
+        });
+}
+
+
 router.route('/status').get((req, res) => {
     console.log("admindashboard/status queried");
     const queryPromises = [];
@@ -161,8 +223,8 @@ router.route('/status').get((req, res) => {
         .then(entries => {return {nTaggedUniqueArticles: entries.length}}));
 
     queryPromises.push(getTaggingTimeStatistics());
-
     queryPromises.push(getNotSureStatistics());
+    queryPromises.push(getChangeIdeaStatistics());
 
 
     //check that the labellerID exists

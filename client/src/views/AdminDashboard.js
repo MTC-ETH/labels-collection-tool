@@ -96,7 +96,7 @@ class AdminDashboard extends React.Component {
         <Container className="shape-container align-items-center">
             <Row className={"pt-2"}>
                 <Col>
-                <h3>Infos</h3>
+                <h3>Statistics</h3>
                 </Col>
             </Row>
 
@@ -129,6 +129,17 @@ class AdminDashboard extends React.Component {
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "notSureStanceArticlePercentage"))}>
                 Percentage of not sure ticked on article stance:
             </InfoRow>
+            <br/>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "changedIdeaParagraphsPercentage"))}>
+                Percentage of paragraph emotion on which idea was changed:
+            </InfoRow>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "changedIdeaEmotionArticlePercentage"))}>
+                Percentage of article emotion on which idea was changed:
+            </InfoRow>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "changedIdeaStanceArticlePercentage"))}>
+                Percentage of article stance on which idea was changed:
+            </InfoRow>
+
 
             <Row className={"pt-2"}>
                 <Col>
