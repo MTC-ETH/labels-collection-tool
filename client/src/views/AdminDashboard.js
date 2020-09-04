@@ -10,6 +10,18 @@ import Footer from "../components/Footer";
 import secrets from "../assets/json/secrets"
 import queryString from "query-string";
 
+function formatPercentage(perc) {
+    if(perc === null || perc === undefined || isNaN(perc)) {
+        return "Not computable";
+    }
+    return perc.toFixed(2) + " %";
+}
+
+function getSafely(obj, key) {
+    return key.split(".").reduce(function(o, x) {
+        return (typeof o == "undefined" || o === null || o === undefined) ? o : o[x];
+    }, obj);
+}
 
 class AdminDashboard extends React.Component {
 
@@ -17,12 +29,7 @@ class AdminDashboard extends React.Component {
         super(props, context);
         this.state = {
             authenticated: false,
-            nRegisteredLabellers: null,
-            nTaggedArticles: null,
-            nTaggedUniqueArticles: null,
-            labbellersPerArticle: null,
-            multiLabelledArticles: null,
-            averageTaggingTime: null
+            data: null,
         }
     }
 
@@ -38,14 +45,21 @@ class AdminDashboard extends React.Component {
 
         axios.get("/admindashboard/status")
             .then(res => {
+                console.log(res.data);
                 this.setState({
-                    nRegisteredLabellers: res.data.nRegisteredLabellers,
-                    nTaggedArticles: res.data.nTaggedArticles,
-                    nTaggedUniqueArticles: res.data.nTaggedUniqueArticles,
-                    labbellersPerArticle: res.data.interrater.labbellersPerArticle,
-                    multiLabelledArticles: res.data.interrater.multiLabelledArticles,
-                    averageTaggingTime: res.data.averageTaggingTime,
-                })
+                    data: res.data
+                    // nRegisteredLabellers: res.data.nRegisteredLabellers,
+                    // nTaggedArticles: res.data.nTaggedArticles,
+                    // nTaggedUniqueArticles: res.data.nTaggedUniqueArticles,
+                    // labbellersPerArticle: res.data.interrater.labbellersPerArticle,
+                    // multiLabelledArticles: res.data.interrater.multiLabelledArticles,
+                    // averageTaggingTime: res.data.averageTaggingTime,
+                    // averageTaggingTimePerParagraph: res.data.averageTaggingTimePerParagraph,
+                    // notSureParagraphsPercentage: res.data.notSureParagraphsPercentage,
+                    // notSureEmotionArticlePercentage: res.data.notSureEmotionArticlePercentage,
+                    // notSureStanceArticlePercentage: res.data.notSureStanceArticlePercentage
+
+            })
             })
             .catch(err => {
                 console.log(err);
@@ -80,23 +94,54 @@ class AdminDashboard extends React.Component {
             <Header/>
             <Container><Row><Col><h2>Admin Dashboard</h2></Col></Row></Container>
         <Container className="shape-container align-items-center">
-                <Row className={"pt-2"}>
-                    <Col>
-                    <h3>Infos</h3>
-                    </Col>
-                </Row>
-                <InfoRow counter={this.state.nRegisteredLabellers}>Number of registered labellers:</InfoRow>
-                <InfoRow counter={this.state.nTaggedArticles}>Number of labelled articles:</InfoRow>
-                <InfoRow counter={this.state.nTaggedUniqueArticles}>Number of uniquely labelled articles:</InfoRow>
-                <InfoRow counter={this.state.averageTaggingTime}>Average tagging time per article:</InfoRow>
+            <Row className={"pt-2"}>
+                <Col>
+                <h3>Infos</h3>
+                </Col>
+            </Row>
+
+            <h5>Labelling advancement</h5>
+            <InfoRow counter={getSafely(this.state.data, "nRegisteredLabellers")}>
+                Number of registered labellers:
+            </InfoRow>
+            <InfoRow counter={getSafely(this.state.data, "nTaggedArticles")}>
+                Number of labelled articles:
+            </InfoRow>
+            <InfoRow counter={getSafely(this.state.data, "nTaggedUniqueArticles")}>
+                Number of uniquely labelled articles:
+            </InfoRow>
+
+            <h5 className={"mt-2"}>Time measurements</h5>
+            <InfoRow counter={getSafely(this.state.data, "averageTaggingTime")}>
+                Average tagging time per article:
+            </InfoRow>
+            <InfoRow counter={getSafely(this.state.data, "averageTaggingTimePerParagraph")}>
+                Average tagging time per paragraph:
+            </InfoRow>
+
+            <h5 className={"mt-2"}>Not sure and changed answers</h5>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "notSureParagraphsPercentage"))}>
+                Percentage of not sure ticked on paragraph emotion:
+            </InfoRow>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "notSureEmotionArticlePercentage"))}>
+                Percentage of not sure ticked on article emotion:
+            </InfoRow>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "notSureStanceArticlePercentage"))}>
+                Percentage of not sure ticked on article stance:
+            </InfoRow>
 
             <Row className={"pt-2"}>
                 <Col>
                     <h3>Preferences</h3>
                 </Col>
             </Row>
-            <InfoRow color={"warning"} counter={this.state.labbellersPerArticle}>Number of labellers per article (interrater):</InfoRow>
-            <InfoRow color={"warning"} fallback={"All"} counter={this.state.multiLabelledArticles}>Maximum number of interrated articles:</InfoRow>
+            <InfoRow color={"warning"} counter={getSafely(this.state.data, "config.interrater.labbellersPerArticle")}>
+                Number of labellers per article (interrater):
+            </InfoRow>
+            <InfoRow color={"warning"} fallback={"All"}
+                     counter={getSafely(this.state.data, "config.interrater.multiLabelledArticles")}>
+                Maximum number of interrated articles:
+            </InfoRow>
 
             <Row className={"pt-4"}>
                     <Col>

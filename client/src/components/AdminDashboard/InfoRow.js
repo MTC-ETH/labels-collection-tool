@@ -10,7 +10,7 @@ class InfoRow extends React.Component {
     render() {
         return <Row>
             <Col>{this.props.children}</Col>
-            <Col>{this.props.counter !== null ?
+            <Col>{this.props.counter !== null && this.props.counter !== undefined ?
                 (<Badge color={this.props.color}>{this.props.counter}</Badge>)
                 : ((this.props.fallback !== null && this.props.fallback !== undefined) ?
                     <Badge color={this.props.color}>{this.props.fallback}</Badge> : null)}

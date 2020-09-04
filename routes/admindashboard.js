@@ -79,6 +79,78 @@ router.route('/all').get((req, res) => {
         });
 });
 
+function getTaggingTimeStatistics() {
+    return labelledentries.find({}).exec()
+        .then(entries => {
+            const resultMap = {};
+            const nonNullEntries = entries
+                .filter((entry) => entry.finishedLabellingDate !== null && entry.finishedLabellingDate !== undefined
+                    && entry.firstLabelledEnteredDate !== null && entry.firstLabelledEnteredDate !== undefined);
+
+            const totalTime = nonNullEntries
+                .map((entry) => entry.finishedLabellingDate - entry.firstLabelledEnteredDate)
+                .reduce((a, b) => a + b, 0);
+
+            const averageTime =  totalTime / nonNullEntries.length;
+            if (averageTime === null || averageTime === undefined || isNaN(averageTime) || averageTime < 0) {
+                resultMap.averageTaggingTime = "Not computable";
+            }
+            resultMap.averageTaggingTime = millisecToString(averageTime);
+
+            const totalParagraphs = nonNullEntries
+                .map((entry) => entry.paragraphsEmotionLabel.size)
+                .reduce((a, b) => a + b, 0);
+
+            const averageTimePerParagraph = totalTime / totalParagraphs;
+            if (averageTimePerParagraph === null || averageTimePerParagraph === undefined ||
+                isNaN(averageTimePerParagraph) || averageTimePerParagraph < 0) {
+                resultMap.averageTaggingTimePerParagraph = "Not computable";
+            }
+            resultMap.averageTaggingTimePerParagraph = millisecToString(averageTimePerParagraph);
+
+            return resultMap;
+        });
+}
+
+function getNotSureStatistics() {
+    return labelledentries.find({}).exec()
+        .then(entries => {
+            const resultMap = {};
+            let nParagraphs = 0;
+            let nArticles = 0;
+            let nParagraphsNotSure = 0;
+            let nEmotionArticlesNotSure = 0;
+            let nStanceArticlesNotSure = 0;
+
+            entries.forEach(entry => {
+               nArticles++;
+               //not sure paragraphs
+               entry.paragraphsEmotionLabel.forEach((parTag) => {
+                   nParagraphs++;
+                   if(parTag.notSure) {
+                       nParagraphsNotSure++;
+                   }
+               });
+
+               //not sure global emotion of article
+                if(entry.emotionArticleLabel.notSure) {
+                    nEmotionArticlesNotSure++;
+                }
+
+                //not sure stance of article
+                if(entry.stanceArticleQuestionLabel.notSure) {
+                    nStanceArticlesNotSure++;
+                }
+            });
+
+            resultMap.notSureParagraphsPercentage = nParagraphsNotSure / nParagraphs * 100.0;
+            resultMap.notSureEmotionArticlePercentage = nEmotionArticlesNotSure / nArticles * 100.0;
+            resultMap.notSureStanceArticlePercentage = nStanceArticlesNotSure / nArticles * 100.0;
+
+            return resultMap;
+        });
+}
+
 router.route('/status').get((req, res) => {
     console.log("admindashboard/status queried");
     const queryPromises = [];
@@ -88,20 +160,9 @@ router.route('/status').get((req, res) => {
     queryPromises.push(labelledentries.distinct('article').exec()
         .then(entries => {return {nTaggedUniqueArticles: entries.length}}));
 
-    queryPromises.push(labelledentries.find({}).exec()
-        .then(entries => {
-            const nonNullEntries = entries
-                .filter((entry) => entry.finishedLabellingDate !== null && entry.finishedLabellingDate !== undefined
-                    && entry.firstLabelledEnteredDate !== null && entry.firstLabelledEnteredDate !== undefined);
-            let averageTime = nonNullEntries
-                .map((entry) => entry.finishedLabellingDate - entry.firstLabelledEnteredDate)
-                .reduce((a, b) => a + b, 0);
-            averageTime /= nonNullEntries.length;
-            if(averageTime === null || averageTime === undefined || isNaN(averageTime) || averageTime < 0) {
-                return {averageTaggingTime: "Not computable"};
-            }
-            return {averageTaggingTime: millisecToString(averageTime)};
-        }));
+    queryPromises.push(getTaggingTimeStatistics());
+
+    queryPromises.push(getNotSureStatistics());
 
 
     //check that the labellerID exists
@@ -109,9 +170,9 @@ router.route('/status').get((req, res) => {
         .then(arrOfObjects => Object.assign({}, ...arrOfObjects)) //just flattens the objects
         .then(status => {
             console.log("Replying with current status");
-            const withConfig = Object.assign({}, config, status);
-            console.log(withConfig);
-            res.json(withConfig);
+            status.config = config;
+            console.log(status);
+            res.json(status);
         })
         .catch(err => {
             console.log(err);
