@@ -24,6 +24,42 @@ function checkAdminToken(req, res) {
     return true;
 }
 
+function flattenLabelledEntriesToCsv() {
+    const header = ["articleID", "labeller", "type of tag", "label", "intensity", "notSure"];
+    const lines = [];
+    return labelledentries.find({}).exec()
+        .then(entries => {
+           entries.forEach(entry => {
+               entry.paragraphsEmotionLabel.forEach((label, parKey) =>
+                   lines.push([entry.articleID, entry.labeller, "paragraph " + parKey,
+                       getUniqueEmotionRepresentation(label.label), label.intensity, label.notSure]));
+               lines.push([entry.articleID, entry.labeller, "emotion article",
+                   getUniqueEmotionRepresentation(entry.emotionArticleLabel.label), entry.emotionArticleLabel.intensity, entry.emotionArticleLabel.notSure]);
+               lines.push([entry.articleID, entry.labeller, "stance article",
+                   getUniqueStanceRepresentation(entry.stanceArticleQuestionLabel.label), "N.a.", entry.stanceArticleQuestionLabel.notSure]);
+           });
+
+            function compare( a, b ) {
+                const compareTwo = (fieldA, fieldB) => String(fieldA).localeCompare(fieldB);
+
+                const order = [0,2,1];
+                for(let i of order) {
+                    const res = compareTwo(a[i],b[i]);
+                    if (res !== 0){
+                        return res;
+                    }
+                }
+                return 0;
+            }
+
+            lines.sort(compare);
+
+            return header.join(",") + "\r\n" +
+                lines.map(line => line.map(entry => JSON.stringify(entry)).join(",")).join('\r\n')
+                +"\r\n";
+        });
+}
+
 function replyWithDowloadableTable(res, mongooseModel) {
     console.log(mongooseModel.collection.collectionName);
     return mongooseModel.find({})
@@ -45,6 +81,24 @@ router.route('/labelledentries').get((req, res) => {
         return false;
     }
     return replyWithDowloadableTable(res, labelledentries);
+});
+
+router.route('/labelledentriescsv').get((req, res) => {
+    console.log("admindashboard/labelledentriescsv queried");
+    if(!checkAdminToken(req, res)) {
+        return false;
+    }
+    return flattenLabelledEntriesToCsv()
+        .then(queryRes => {
+            console.log("Succesfully authenticated, returning records");
+            res.set("Content-Disposition", "attachment; filename=labelledentries.csv");
+            res.type('application/json');
+            res.json(queryRes);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).send(err);
+        });
 });
 
 router.route('/labellers').get((req, res) => {
@@ -151,7 +205,7 @@ function getNotSureStatistics() {
         });
 }
 
-function getChangeIdeaStatistics() {
+function getChangedIdeaStatistics() {
     return labelledentries.find({}).exec()
         .then(entries => {
             const resultMap = {};
@@ -212,6 +266,142 @@ function getChangeIdeaStatistics() {
         });
 }
 
+const uniqueStanceRepresentation = new Map();
+uniqueStanceRepresentation.set("gegen", "Nein, gegen");
+uniqueStanceRepresentation.set("dafür", "Ja, dafür");
+uniqueStanceRepresentation.set("diskutierend", "Diskutierend");
+uniqueStanceRepresentation.set("nicht verwandt", "Kein Bezug");
+
+function getUniqueStanceRepresentation(stanceLabel) {
+    return uniqueStanceRepresentation.get(stanceLabel) || stanceLabel;
+}
+
+const uniqueEmotionRepresentation = new Map();
+uniqueEmotionRepresentation.set("Erwartung", "Antizipation");
+uniqueEmotionRepresentation.set("Empörung", "Ekel");
+uniqueEmotionRepresentation.set("Wut", "Ärger");
+
+function getUniqueEmotionRepresentation(emotionLabel) {
+    return uniqueEmotionRepresentation.get(emotionLabel) || emotionLabel;
+}
+
+function computeDisagreementEmotionLabel(entries) {
+    let oneDisagreesEmotionLabel = false;
+    for (let i = 1; i < entries.length; i++) {
+        oneDisagreesEmotionLabel = oneDisagreesEmotionLabel ||
+            getUniqueEmotionRepresentation(entries[i - 1].label) !==
+            getUniqueEmotionRepresentation(entries[i].label);
+        if (oneDisagreesEmotionLabel) {
+            break;
+        }
+    }
+
+    let oneDisagreesEmotionIntensity = false;
+    const validIntensities = entries.map(entry => entry.intensity).filter(intensity => intensity !== -1);
+    for (let i = 1; i < validIntensities.length; i++) {
+        oneDisagreesEmotionIntensity = oneDisagreesEmotionIntensity ||
+                validIntensities[i - 1] !== validIntensities[i];
+        if (oneDisagreesEmotionIntensity) {
+            break;
+        }
+    }
+
+    return [oneDisagreesEmotionLabel, oneDisagreesEmotionIntensity];
+}
+
+function getInterraterStatistics() {
+    return labelledentries.find({}).exec()
+        .then(entries => {
+            const groupedByArticle = {};
+            entries.forEach(entry => {
+                if(entry.articleID in groupedByArticle) {
+                    groupedByArticle[entry.articleID].push(entry);
+                } else {
+                    groupedByArticle[entry.articleID] = [entry];
+                }
+            });
+            let nUniqueArticles = 0;
+            let nUniqueParagraphs = 0;
+            let nAtLeastOneDisagreesEmotionLabelParagraphs = 0;
+            let nAtLeastOneDisagreesIntensityParagraphs = 0;
+            let nPerfectAgreementEmotionParagraphs = 0;
+            let nAtLeastOneDisagreesEmotionLabelArticles = 0;
+            let nAtLeastOneDisagreesEmotionIntensityArticles = 0;
+            let nPerfectAgreementEmotionArticles = 0;
+            let nAtLeastOneDisagreesStanceLabelArticles = 0;
+            //let nPerfectAgreementStanceLabelArticles = 100 - %nAtLeastOneDisagreesStanceLabelArticles;
+
+            for (const [_, byArticle] of Object.entries(groupedByArticle)) {
+                const paragraphs = [];
+                const emotionArticles = [];
+                const stanceArticles = [];
+                nUniqueArticles++;
+                //order / group by paragraph
+                byArticle.forEach(entry => {
+                    let i = 0;
+                    entry.paragraphsEmotionLabel.forEach(label => {
+                        if(paragraphs.length <= i) {
+                            paragraphs.push([]);
+                            nUniqueParagraphs++;
+                        }
+                        paragraphs[i].push(label);
+                        i++;
+                    });
+                    emotionArticles.push(entry.emotionArticleLabel);
+                    stanceArticles.push(entry.stanceArticleQuestionLabel);
+                });
+                paragraphs.forEach(samePars => {
+                    const [oneDisagreesLabel, oneDisagreesIntensity] = computeDisagreementEmotionLabel(samePars);
+                    if(oneDisagreesLabel) {
+                        nAtLeastOneDisagreesEmotionLabelParagraphs++;
+                    }
+                    if(oneDisagreesIntensity) {
+                        nAtLeastOneDisagreesIntensityParagraphs++;
+                    }
+                    if(!oneDisagreesLabel && !oneDisagreesIntensity) {
+                        nPerfectAgreementEmotionParagraphs++;
+                    }
+                });
+                const [oneDisagreesEmotionLabelArticle, oneDisagreesEmotionIntensityArticle] =
+                    computeDisagreementEmotionLabel(emotionArticles);
+                if(oneDisagreesEmotionLabelArticle) {
+                    nAtLeastOneDisagreesEmotionLabelArticles++;
+                }
+                if(oneDisagreesEmotionIntensityArticle) {
+                    nAtLeastOneDisagreesEmotionIntensityArticles++;
+                }
+                if(!oneDisagreesEmotionLabelArticle && !oneDisagreesEmotionIntensityArticle) {
+                    nPerfectAgreementEmotionArticles++;
+                }
+
+                let oneDisagreesStanceLabelArticle = false;
+                for(let i = 1; i < stanceArticles.length; i++) {
+                    oneDisagreesStanceLabelArticle = oneDisagreesStanceLabelArticle ||
+                        getUniqueStanceRepresentation(stanceArticles[i-1].label)
+                        !== getUniqueStanceRepresentation(stanceArticles[i].label);
+                    if(oneDisagreesStanceLabelArticle) {
+                        break;
+                    }
+                }
+                if(oneDisagreesStanceLabelArticle) {
+                    nAtLeastOneDisagreesStanceLabelArticles++;
+                }
+            }
+
+            return {
+                percAtLeastOneDisagreesEmotionLabelParagraphs: nAtLeastOneDisagreesEmotionLabelParagraphs / nUniqueParagraphs * 100.0,
+                percAtLeastOneDisagreesEmotionIntensityParagraphs: nAtLeastOneDisagreesIntensityParagraphs / nUniqueParagraphs * 100.0,
+                percPerfectAgreementEmotionParagraphs: nPerfectAgreementEmotionParagraphs / nUniqueParagraphs * 100.0,
+
+                percAtLeastOneDisagreesEmotionLabelArticles: nAtLeastOneDisagreesEmotionLabelArticles / nUniqueArticles * 100.0,
+                percAtLeastOneDisagreesEmotionIntensityArticles: nAtLeastOneDisagreesEmotionIntensityArticles / nUniqueArticles * 100.0,
+                percPerfectAgreementEmotionArticles: nPerfectAgreementEmotionArticles / nUniqueArticles * 100.0,
+
+                percAtLeastOneDisagreesStanceArticles: nAtLeastOneDisagreesStanceLabelArticles / nUniqueArticles * 100.0
+            }
+        });
+}
+
 
 router.route('/status').get((req, res) => {
     console.log("admindashboard/status queried");
@@ -224,7 +414,8 @@ router.route('/status').get((req, res) => {
 
     queryPromises.push(getTaggingTimeStatistics());
     queryPromises.push(getNotSureStatistics());
-    queryPromises.push(getChangeIdeaStatistics());
+    queryPromises.push(getChangedIdeaStatistics());
+    queryPromises.push(getInterraterStatistics());
 
 
     //check that the labellerID exists

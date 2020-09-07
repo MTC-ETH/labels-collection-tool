@@ -48,17 +48,6 @@ class AdminDashboard extends React.Component {
                 console.log(res.data);
                 this.setState({
                     data: res.data
-                    // nRegisteredLabellers: res.data.nRegisteredLabellers,
-                    // nTaggedArticles: res.data.nTaggedArticles,
-                    // nTaggedUniqueArticles: res.data.nTaggedUniqueArticles,
-                    // labbellersPerArticle: res.data.interrater.labbellersPerArticle,
-                    // multiLabelledArticles: res.data.interrater.multiLabelledArticles,
-                    // averageTaggingTime: res.data.averageTaggingTime,
-                    // averageTaggingTimePerParagraph: res.data.averageTaggingTimePerParagraph,
-                    // notSureParagraphsPercentage: res.data.notSureParagraphsPercentage,
-                    // notSureEmotionArticlePercentage: res.data.notSureEmotionArticlePercentage,
-                    // notSureStanceArticlePercentage: res.data.notSureStanceArticlePercentage
-
             })
             })
             .catch(err => {
@@ -70,6 +59,13 @@ class AdminDashboard extends React.Component {
         axios.get("/admindashboard/" + collectionName + "?token=" + secrets.admintoken)
             .then((response) => {
                 FileDownload(JSON.stringify(response.data, null, 4), collectionName + '.json');
+            });
+    }
+
+    handleDownloadCsv(collectionName) {
+        axios.get("/admindashboard/" + collectionName + "?token=" + secrets.admintoken)
+            .then((response) => {
+                FileDownload(response.data, collectionName + '.csv');
             });
     }
 
@@ -121,24 +117,49 @@ class AdminDashboard extends React.Component {
 
             <h5 className={"mt-2"}>Not sure and changed answers</h5>
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "notSureParagraphsPercentage"))}>
-                Percentage of not sure ticked on paragraph emotion:
+                % of not sure ticked on paragraph emotion:
             </InfoRow>
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "notSureEmotionArticlePercentage"))}>
-                Percentage of not sure ticked on article emotion:
+                % of not sure ticked on article emotion:
             </InfoRow>
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "notSureStanceArticlePercentage"))}>
-                Percentage of not sure ticked on article stance:
+                % of not sure ticked on article stance:
             </InfoRow>
             <br/>
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "changedIdeaParagraphsPercentage"))}>
-                Percentage of paragraph emotion on which idea was changed:
+                % of paragraph emotion on which idea was changed:
             </InfoRow>
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "changedIdeaEmotionArticlePercentage"))}>
-                Percentage of article emotion on which idea was changed:
+                % of article emotion on which idea was changed:
             </InfoRow>
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "changedIdeaStanceArticlePercentage"))}>
-                Percentage of article stance on which idea was changed:
+                % of article stance on which idea was changed:
             </InfoRow>
+
+            <h5 className={"mt-2"}>Interrater agreement</h5>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "percAtLeastOneDisagreesEmotionLabelParagraphs"))}>
+                % of paragraph emotion label in which at least one disagrees:
+            </InfoRow>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "percAtLeastOneDisagreesEmotionIntensityParagraphs"))}>
+                % of paragraph emotion intensity in which at least one disagrees*:
+            </InfoRow>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "percPerfectAgreementEmotionParagraphs"))}>
+                % of paragraph emotion in which all agree both on label and intensity:
+            </InfoRow>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "percAtLeastOneDisagreesEmotionLabelArticles"))}>
+                % of article emotion label in which at least one disagrees:
+            </InfoRow>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "percAtLeastOneDisagreesEmotionIntensityArticles"))}>
+                % of article emotion intensity in which at least one disagrees*:
+            </InfoRow>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "percPerfectAgreementEmotionArticles"))}>
+                % of article emotion in which all agree both on label and intensity:
+            </InfoRow>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "percAtLeastOneDisagreesStanceArticles"))}>
+                % of article stance in which at least one disagrees:
+            </InfoRow>
+            <Row className={"mt-1"}><Col><p>* The intensity disagreement is computed removing the entries that are tagged as
+            "sachlich"</p></Col></Row>
 
 
             <Row className={"pt-2"}>
@@ -160,10 +181,18 @@ class AdminDashboard extends React.Component {
                 </Col>
                 </Row>
                 <Row>
-                    <Col><Button block onClick={() => this.handleDownload("labelledentries")}>Download Labelled Data</Button></Col>
-                    <Col><Button block onClick={() => this.handleDownload("labellers")}>Download Labellers Data</Button></Col>
-                    <Col><Button onClick={() => this.handleDownload("articles")}>Download Articles Data</Button></Col>
-                    <Col><Button color="warning" onClick={() => this.handleDownload("all")}>Download All Data</Button></Col>
+                    <Col>
+                        <p>Download:</p>
+                    </Col>
+                </Row>
+            <Row>
+                    <Col><Button block onClick={() => this.handleDownload("labelledentries")}>Labelled Data</Button></Col>
+                    <Col><Button color="info" block onClick={() => this.handleDownloadCsv("labelledentriescsv")}>Labelled Data (CSV)</Button></Col>
+                    <Col><Button block onClick={() => this.handleDownload("labellers")}>Labellers Data</Button></Col>
+                    <Col><Button block onClick={() => this.handleDownload("articles")}>Articles Data</Button></Col>
+                </Row>
+                <Row className={"mt-2"}>
+                    <Col><Button block color="warning" onClick={() => this.handleDownload("all")}>Download All Data</Button></Col>
                 </Row>
                 <Row className={"mt-2"}>
                 </Row>
