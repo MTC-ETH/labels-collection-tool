@@ -188,7 +188,8 @@ class AdminDashboard extends React.Component {
 
 
             <Row className={"mt-1"}><Col><p>* The intensity agreement is computed removing the entries that are tagged as
-            "sachlich"</p></Col></Row>
+            "sachlich"; this, especially for K values, can make the measure unreliable, other measures can be explored.
+            </p></Col></Row>
 
 
             <Row className={"pt-2"}>
