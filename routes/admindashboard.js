@@ -309,17 +309,22 @@ function computeDisagreementEmotionLabel(entries) {
     return [oneDisagreesEmotionLabel, oneDisagreesEmotionIntensity];
 }
 
+function groupByArticle(entries) {
+    const groupedByArticle = {};
+    entries.forEach(entry => {
+        if (entry.articleID in groupedByArticle) {
+            groupedByArticle[entry.articleID].push(entry);
+        } else {
+            groupedByArticle[entry.articleID] = [entry];
+        }
+    });
+    return groupedByArticle;
+}
+
 function getInterraterStatistics() {
     return labelledentries.find({}).exec()
         .then(entries => {
-            const groupedByArticle = {};
-            entries.forEach(entry => {
-                if(entry.articleID in groupedByArticle) {
-                    groupedByArticle[entry.articleID].push(entry);
-                } else {
-                    groupedByArticle[entry.articleID] = [entry];
-                }
-            });
+            const groupedByArticle = groupByArticle(entries);
             let nUniqueArticles = 0;
             let nUniqueParagraphs = 0;
             let nAtLeastOneDisagreesEmotionLabelParagraphs = 0;
@@ -402,6 +407,54 @@ function getInterraterStatistics() {
         });
 }
 
+function getFleissKEmotionsParagraphs() {
+    return labelledentries.find({}).exec()
+        .then(entries => {
+            function getEmptyFleissRow() {
+                return Object.assign({}, ...config.emotionsWithFactual.map(emotion => {return {[emotion]: 0};}));
+            }
+
+            const groupedByArticle = groupByArticle(entries);
+            const fleissTable = [];
+            let votesAssigned = 0;
+            let numberOfParagraphs = 0;
+
+            for (const [_, byArticle] of Object.entries(groupedByArticle)) {
+                const fleissTablePerArticle = {};
+                byArticle.forEach(article => {
+                    article.paragraphsEmotionLabel.forEach((label, parKey) => {
+                        if(!(fleissTablePerArticle.hasOwnProperty(parKey))) {
+                            fleissTablePerArticle[parKey] = getEmptyFleissRow();
+                            numberOfParagraphs++;
+                        }
+                        fleissTablePerArticle[parKey][getUniqueEmotionRepresentation(label.label)]++;
+                        votesAssigned++;
+                    });
+                });
+                console.log(fleissTablePerArticle);
+                fleissTable.push(...Object.keys(fleissTablePerArticle).map(parKey => fleissTablePerArticle[parKey]));
+            }
+            console.log(fleissTable);
+            // sum of cols
+            const Pe = config.emotionsWithFactual.map(emotion => {
+                let emotionCount = 0;
+                fleissTable.forEach(row => emotionCount += row[emotion]);
+                return emotionCount / votesAssigned;
+            })
+                .map(colSum => colSum*colSum)
+                .reduce((a, b) => a + b, 0);
+            //sum of rows
+            const P = fleissTable.map(row => {
+                    const rowTotal = Object.keys(row).map(rowKey => row[rowKey]).reduce((a, b) => a + b, 0);
+                    const squaredThenTotal = Object.keys(row).map(rowKey => row[rowKey]*row[rowKey]).reduce((a, b) => a + b, 0);
+                    return (squaredThenTotal - rowTotal)/(rowTotal*(rowTotal-1));
+            })
+                .reduce((a, b) => a + b, 0)
+            / numberOfParagraphs;
+            return {fleissKParagraphs: (P - Pe) / (1 - Pe)};
+        });
+}
+
 
 router.route('/status').get((req, res) => {
     console.log("admindashboard/status queried");
@@ -416,6 +469,7 @@ router.route('/status').get((req, res) => {
     queryPromises.push(getNotSureStatistics());
     queryPromises.push(getChangedIdeaStatistics());
     queryPromises.push(getInterraterStatistics());
+    queryPromises.push(getFleissKEmotionsParagraphs());
 
 
     //check that the labellerID exists

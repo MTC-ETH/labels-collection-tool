@@ -2,7 +2,7 @@ import React from "react";
 import axios from 'axios';
 import FileDownload from 'js-file-download';
 
-import {Button, Col, Container, Row, UncontrolledAlert} from "reactstrap";
+import {Button, Col, Container, Label, Row, UncontrolledAlert} from "reactstrap";
 import InfoRow from "../components/AdminDashboard/InfoRow";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -158,6 +158,11 @@ class AdminDashboard extends React.Component {
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "percAtLeastOneDisagreesStanceArticles"))}>
                 % of article stance in which at least one disagrees:
             </InfoRow>
+
+            <InfoRow counter={getSafely(this.state.data, "fleissKParagraphs")}>
+                <a href={"https://en.wikipedia.org/wiki/Fleiss%27_kappa"} target={"_blank"} rel="noopener noreferrer">Fleiss K </a> for paragraphs emotion label:
+            </InfoRow>
+
             <Row className={"mt-1"}><Col><p>* The intensity disagreement is computed removing the entries that are tagged as
             "sachlich"</p></Col></Row>
 

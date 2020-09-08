@@ -13,4 +13,6 @@ config.interrater.multiLabelledArticles = null;
 
 config.moneyPerArticle = 3.50;
 
+config.emotionsWithFactual = ["Freude", "Vertrauen", "Angst", "Antizipation", "Traurigkeit", "Ekel", "Ärger", "Überraschung", "sachlich"];
+
 module.exports = config;
