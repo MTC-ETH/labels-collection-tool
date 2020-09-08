@@ -14,5 +14,6 @@ config.interrater.multiLabelledArticles = null;
 config.moneyPerArticle = 3.50;
 
 config.emotionsWithFactual = ["Freude", "Vertrauen", "Angst", "Antizipation", "Traurigkeit", "Ekel", "Ärger", "Überraschung", "sachlich"];
-
+config.emotionIntensities = [0,1,2];
+config.stanceLabels = ["Ja, dafür", "Diskutierend", "Nein, gegen", "Kein Bezug"];
 module.exports = config;

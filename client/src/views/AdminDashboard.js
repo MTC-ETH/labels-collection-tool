@@ -12,7 +12,7 @@ import queryString from "query-string";
 
 function formatPercentage(perc) {
     if(perc === null || perc === undefined || isNaN(perc)) {
-        return "Not computable";
+        return null;
     }
     return perc.toFixed(2) + " %";
 }
@@ -20,6 +20,12 @@ function formatPercentage(perc) {
 function getSafely(obj, key) {
     return key.split(".").reduce(function(o, x) {
         return (typeof o == "undefined" || o === null || o === undefined) ? o : o[x];
+    }, obj);
+}
+
+function getAndFormatSafelyFloat(obj, key, digits=3) {
+    return key.split(".").reduce(function(o, x) {
+        return (typeof o == "undefined" || o === null || o === undefined) ? o : o[x].toFixed(digits);
     }, obj);
 }
 
@@ -159,11 +165,29 @@ class AdminDashboard extends React.Component {
                 % of article stance in which at least one disagrees:
             </InfoRow>
 
-            <InfoRow counter={getSafely(this.state.data, "fleissKParagraphs")}>
-                <a href={"https://en.wikipedia.org/wiki/Fleiss%27_kappa"} target={"_blank"} rel="noopener noreferrer">Fleiss K </a> for paragraphs emotion label:
+            <InfoRow counter={getAndFormatSafelyFloat(this.state.data, "fleissKEmotionLabelParagraphs")}>
+                <a href={"https://en.wikipedia.org/wiki/Fleiss%27_kappa"} target={"_blank"} rel="noopener noreferrer">
+                    Fleiss K </a> for paragraphs emotion label:
+            </InfoRow>
+            <InfoRow counter={getAndFormatSafelyFloat(this.state.data, "fleissKEmotionIntensityParagraphs")}>
+                <a href={"https://en.wikipedia.org/wiki/Fleiss%27_kappa"} target={"_blank"} rel="noopener noreferrer">
+                    Fleiss K </a> for paragraphs emotion intensity*:
+            </InfoRow>
+            <InfoRow counter={getAndFormatSafelyFloat(this.state.data, "fleissKEmotionLabelArticles")}>
+                <a href={"https://en.wikipedia.org/wiki/Fleiss%27_kappa"} target={"_blank"} rel="noopener noreferrer">
+                    Fleiss K </a> for articles emotion label:
+            </InfoRow>
+            <InfoRow counter={getAndFormatSafelyFloat(this.state.data, "fleissKEmotionIntensityArticles")}>
+                <a href={"https://en.wikipedia.org/wiki/Fleiss%27_kappa"} target={"_blank"} rel="noopener noreferrer">
+                    Fleiss K </a> for articles emotion intensity*:
+            </InfoRow>
+            <InfoRow counter={getAndFormatSafelyFloat(this.state.data, "fleissKStanceLabelArticles")}>
+                <a href={"https://en.wikipedia.org/wiki/Fleiss%27_kappa"} target={"_blank"} rel="noopener noreferrer">
+                    Fleiss K </a> for articles stance label:
             </InfoRow>
 
-            <Row className={"mt-1"}><Col><p>* The intensity disagreement is computed removing the entries that are tagged as
+
+            <Row className={"mt-1"}><Col><p>* The intensity agreement is computed removing the entries that are tagged as
             "sachlich"</p></Col></Row>
 
 

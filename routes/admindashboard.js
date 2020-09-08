@@ -407,51 +407,111 @@ function getInterraterStatistics() {
         });
 }
 
+function computeFleissK(fleissTable) {
+    const keys = Object.keys(fleissTable[0]);
+
+    const totalVotesAssigned = fleissTable.map(row =>
+        Object.keys(row).map(rowKey => row[rowKey]).reduce((a, b) => a + b, 0))
+        .reduce((a, b) => a + b, 0);
+    const nSubjects = fleissTable.map(row => 1).reduce((a, b) => a + b, 0);
+
+    // sum of cols
+    const Pe = keys.map(emotion => {
+        let emotionCount = 0;
+        fleissTable.forEach(row => emotionCount += row[emotion]);
+        return emotionCount / totalVotesAssigned;
+    })
+        .map(colSum => colSum * colSum)
+        .reduce((a, b) => a + b, 0);
+    //sum of rows
+    const P = fleissTable.map(row => {
+            const rowTotal = Object.keys(row).map(rowKey => row[rowKey]).reduce((a, b) => a + b, 0);
+            const squaredThenTotal = Object.keys(row).map(rowKey => row[rowKey] * row[rowKey]).reduce((a, b) => a + b, 0);
+            return (squaredThenTotal - rowTotal) / (rowTotal * (rowTotal - 1));
+        })
+            .reduce((a, b) => a + b, 0)
+        / nSubjects;
+    return (P - Pe) / (1 - Pe);
+}
+
+function getEmptyFleissEmotionLabelRow() {
+    return Object.assign({}, ...config.emotionsWithFactual.map(emotion => {return {[emotion]: 0};}));
+}
+
+function getEmptyFleissEmotionIntensityRow() {
+    return Object.assign({}, ...config.emotionIntensities.map(intensity => {return {[intensity]: 0};}));
+}
+
+function getEmptyFleissStanceLabelRow() {
+    return Object.assign({}, ...config.stanceLabels.map(stance => {return {[stance]: 0};}));
+}
+
+
 function getFleissKEmotionsParagraphs() {
     return labelledentries.find({}).exec()
         .then(entries => {
-            function getEmptyFleissRow() {
-                return Object.assign({}, ...config.emotionsWithFactual.map(emotion => {return {[emotion]: 0};}));
-            }
-
             const groupedByArticle = groupByArticle(entries);
-            const fleissTable = [];
-            let votesAssigned = 0;
-            let numberOfParagraphs = 0;
+            const fleissTableLabel = [];
+            const fleissTableIntensity = [];
 
             for (const [_, byArticle] of Object.entries(groupedByArticle)) {
-                const fleissTablePerArticle = {};
+                const fleissTablePerArticleLabel = {};
+                const fleissTablePerArticleIntensity = {};
+
                 byArticle.forEach(article => {
                     article.paragraphsEmotionLabel.forEach((label, parKey) => {
-                        if(!(fleissTablePerArticle.hasOwnProperty(parKey))) {
-                            fleissTablePerArticle[parKey] = getEmptyFleissRow();
-                            numberOfParagraphs++;
+                        if(!(fleissTablePerArticleLabel.hasOwnProperty(parKey))) {
+                            fleissTablePerArticleLabel[parKey] = getEmptyFleissEmotionLabelRow();
                         }
-                        fleissTablePerArticle[parKey][getUniqueEmotionRepresentation(label.label)]++;
-                        votesAssigned++;
+                        fleissTablePerArticleLabel[parKey][getUniqueEmotionRepresentation(label.label)]++;
+
+                        if(!(fleissTablePerArticleIntensity.hasOwnProperty(parKey))) {
+                            fleissTablePerArticleIntensity[parKey] = getEmptyFleissEmotionIntensityRow();
+                        }
+                        if(label.intensity !== -1) {
+                            fleissTablePerArticleIntensity[parKey][label.intensity]++;
+                        }
                     });
                 });
-                console.log(fleissTablePerArticle);
-                fleissTable.push(...Object.keys(fleissTablePerArticle).map(parKey => fleissTablePerArticle[parKey]));
+                fleissTableLabel.push(...Object.keys(fleissTablePerArticleLabel)
+                    .map(parKey => fleissTablePerArticleLabel[parKey]));
+                fleissTableIntensity.push(...Object.keys(fleissTablePerArticleIntensity)
+                    .map(parKey => fleissTablePerArticleIntensity[parKey]));
             }
-            console.log(fleissTable);
-            // sum of cols
-            const Pe = config.emotionsWithFactual.map(emotion => {
-                let emotionCount = 0;
-                fleissTable.forEach(row => emotionCount += row[emotion]);
-                return emotionCount / votesAssigned;
-            })
-                .map(colSum => colSum*colSum)
-                .reduce((a, b) => a + b, 0);
-            //sum of rows
-            const P = fleissTable.map(row => {
-                    const rowTotal = Object.keys(row).map(rowKey => row[rowKey]).reduce((a, b) => a + b, 0);
-                    const squaredThenTotal = Object.keys(row).map(rowKey => row[rowKey]*row[rowKey]).reduce((a, b) => a + b, 0);
-                    return (squaredThenTotal - rowTotal)/(rowTotal*(rowTotal-1));
-            })
-                .reduce((a, b) => a + b, 0)
-            / numberOfParagraphs;
-            return {fleissKParagraphs: (P - Pe) / (1 - Pe)};
+            return {fleissKEmotionLabelParagraphs: computeFleissK(fleissTableLabel),
+                fleissKEmotionIntensityParagraphs: computeFleissK(fleissTableIntensity)};
+        });
+}
+
+function getFleissKEmotionLabelArticles() {
+    return labelledentries.find({}).exec()
+        .then(entries => {
+            const groupedByArticle = groupByArticle(entries);
+            const fleissTableEmotionLabelArticles = [];
+            const fleissTableEmotionIntensityArticles = [];
+            const fleissTableStanceLabelArticles = [];
+
+
+            for (const [_, byArticle] of Object.entries(groupedByArticle)) {
+                const fleissRowEmotionLabel = getEmptyFleissEmotionLabelRow();
+                const fleissRowEmotionIntensity = getEmptyFleissEmotionIntensityRow();
+                const fleissRowStanceLabel = getEmptyFleissStanceLabelRow();
+
+                byArticle.forEach(article => {
+                    fleissRowEmotionLabel[getUniqueEmotionRepresentation(article.emotionArticleLabel.label)]++;
+                    if(article.emotionArticleLabel.intensity !== -1) {
+                        fleissRowEmotionIntensity[article.emotionArticleLabel.intensity]++;
+                    }
+                    fleissRowStanceLabel[getUniqueStanceRepresentation(article.stanceArticleQuestionLabel.label)]++;
+                });
+                fleissTableEmotionLabelArticles.push(fleissRowEmotionLabel);
+                fleissTableEmotionIntensityArticles.push(fleissRowEmotionIntensity);
+                fleissTableStanceLabelArticles.push(fleissRowStanceLabel);
+            }
+            return {fleissKEmotionLabelArticles: computeFleissK(fleissTableEmotionLabelArticles),
+                    fleissKEmotionIntensityArticles: computeFleissK(fleissTableEmotionIntensityArticles),
+                fleissKStanceLabelArticles: computeFleissK(fleissTableStanceLabelArticles)
+            };
         });
 }
 
@@ -470,6 +530,7 @@ router.route('/status').get((req, res) => {
     queryPromises.push(getChangedIdeaStatistics());
     queryPromises.push(getInterraterStatistics());
     queryPromises.push(getFleissKEmotionsParagraphs());
+    queryPromises.push(getFleissKEmotionLabelArticles());
 
 
     //check that the labellerID exists
