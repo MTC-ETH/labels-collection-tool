@@ -515,6 +515,84 @@ function getFleissKEmotionLabelArticles() {
         });
 }
 
+function computeIRA(listOfGroupedEntries) {
+    console.log(listOfGroupedEntries);
+    let totalNCouples = 0;
+    let agreeingCouples = 0;
+    listOfGroupedEntries.forEach(groupedEntries => {
+        for(let i = 0; i < groupedEntries.length - 1; ++i) {
+            for(let j = i + 1; j < groupedEntries.length; ++j) {
+                totalNCouples++;
+                if(groupedEntries[i] === groupedEntries[j]) {
+                    agreeingCouples++;
+                }
+            }
+        }
+    });
+    return agreeingCouples / totalNCouples * 100.0;
+}
+
+function getIRAs() {
+    return labelledentries.find({}).exec()
+        .then(entries => {
+            const groupedByArticle = groupByArticle(entries);
+            const dataEmotionLabelParagraphs = [];
+            const dataEmotionIntensityParagraphs = [];
+            const dataEmotionLabelArticles = [];
+            const dataEmotionIntensityArticles = [];
+            const dataStanceLabelArticles = [];
+
+
+            for (const [_, byArticle] of Object.entries(groupedByArticle)) {
+                const thisArticleEmotionLabelsParagraphs = {};
+                const thisArticleEmotionIntensitiesParagraphs = {};
+                const thisArticleEmotionLabels = [];
+                const thisArticleEmotionIntensities = [];
+                const thisArticleStanceLabels = [];
+
+                byArticle.forEach(article => {
+                    article.paragraphsEmotionLabel.forEach((label, parKey) => {
+                        if(!(thisArticleEmotionLabelsParagraphs.hasOwnProperty(parKey))) {
+                            thisArticleEmotionLabelsParagraphs[parKey] = [];
+                        }
+                        thisArticleEmotionLabelsParagraphs[parKey].push(getUniqueEmotionRepresentation(label.label));
+
+                        if(!(thisArticleEmotionIntensitiesParagraphs.hasOwnProperty(parKey))) {
+                            thisArticleEmotionIntensitiesParagraphs[parKey] = [];
+                        }
+                        if(label.intensity !== -1) {
+                            thisArticleEmotionIntensitiesParagraphs[parKey].push(label.intensity);
+                        }
+                    });
+
+                    thisArticleEmotionLabels.push(getUniqueEmotionRepresentation(article.emotionArticleLabel.label));
+                    if(article.emotionArticleLabel.intensity !== -1) {
+                        thisArticleEmotionIntensities.push(article.emotionArticleLabel.intensity);
+                    }
+                    thisArticleStanceLabels.push(getUniqueStanceRepresentation(article.stanceArticleQuestionLabel.label));
+                });
+                dataEmotionLabelParagraphs.push(...Object.keys(thisArticleEmotionLabelsParagraphs)
+                    .map(parKey => thisArticleEmotionLabelsParagraphs[parKey]));
+                dataEmotionIntensityParagraphs.push(...Object.keys(thisArticleEmotionIntensitiesParagraphs)
+                    .map(parKey => thisArticleEmotionIntensitiesParagraphs[parKey]));
+
+                dataEmotionLabelArticles.push(thisArticleEmotionLabels);
+                dataEmotionIntensityArticles.push(thisArticleEmotionIntensities);
+                dataStanceLabelArticles.push(thisArticleStanceLabels);
+            }
+            return {IRAEmotionLabelParagraphs: computeIRA(dataEmotionLabelParagraphs),
+                IRAEmotionLabelParagraphsRandom: 1 / config.emotionsWithFactual.length * 100.0,
+                IRAEmotionIntensityParagraphs: computeIRA(dataEmotionIntensityParagraphs),
+                IRAEmotionIntensityParagraphsRandom: 1 / config.emotionIntensities.length * 100.0,
+                IRAEmotionLabelArticles: computeIRA(dataEmotionLabelArticles),
+                IRAEmotionLabelArticlesRandom: 1 / config.emotionsWithFactual.length * 100.0,
+                IRAEmotionIntensityArticles: computeIRA(dataEmotionIntensityArticles),
+                IRAEmotionIntensityArticlesRandom: 1 / config.emotionIntensities.length * 100.0,
+                IRAStanceLabelArticles: computeIRA(dataStanceLabelArticles),
+                IRAStanceLabelArticlesRandom: 1 / config.stanceLabels.length * 100.0,
+            };
+        });
+}
 
 router.route('/status').get((req, res) => {
     console.log("admindashboard/status queried");
@@ -531,7 +609,7 @@ router.route('/status').get((req, res) => {
     queryPromises.push(getInterraterStatistics());
     queryPromises.push(getFleissKEmotionsParagraphs());
     queryPromises.push(getFleissKEmotionLabelArticles());
-
+    queryPromises.push(getIRAs());
 
     //check that the labellerID exists
     return Promise.all(queryPromises)

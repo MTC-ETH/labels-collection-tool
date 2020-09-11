@@ -29,6 +29,19 @@ function getAndFormatSafelyFloat(obj, key, digits=3) {
     }, obj);
 }
 
+function getAndFormatSafelyIRA(obj, key, digits=3) {
+    const perc = getSafely(obj, key);
+    const random = getSafely(obj, key + "Random");
+    let res = "";
+    if(perc !== null && perc !== undefined) {
+        res += formatPercentage(perc)
+        if(random !== null && random !== undefined) {
+            res += " (" + formatPercentage(random) + ")"
+        }
+    }
+    return res.length > 0 ? res : null;
+}
+
 class AdminDashboard extends React.Component {
 
     constructor(props, context) {
@@ -164,7 +177,7 @@ class AdminDashboard extends React.Component {
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "percAtLeastOneDisagreesStanceArticles"))}>
                 % of article stance in which at least one disagrees:
             </InfoRow>
-
+            <br/>
             <InfoRow counter={getAndFormatSafelyFloat(this.state.data, "fleissKEmotionLabelParagraphs")}>
                 <a href={"https://en.wikipedia.org/wiki/Fleiss%27_kappa"} target={"_blank"} rel="noopener noreferrer">
                     Fleiss K </a> for paragraphs emotion label:
@@ -185,7 +198,24 @@ class AdminDashboard extends React.Component {
                 <a href={"https://en.wikipedia.org/wiki/Fleiss%27_kappa"} target={"_blank"} rel="noopener noreferrer">
                     Fleiss K </a> for articles stance label:
             </InfoRow>
-
+            <br/>
+            <p>IRA (Inter Rater Agreement) is calculated as the percentage of times each pair of annotators agree; in
+            parenthesis the value if random answers were given</p>
+            <InfoRow counter={getAndFormatSafelyIRA(this.state.data, "IRAEmotionLabelParagraphs")}>
+                    IRA for paragraphs emotion label:
+            </InfoRow>
+            <InfoRow counter={getAndFormatSafelyIRA(this.state.data, "IRAEmotionIntensityParagraphs")}>
+                    IRA for paragraphs emotion intensity*:
+            </InfoRow>
+            <InfoRow counter={getAndFormatSafelyIRA(this.state.data, "IRAEmotionLabelArticles")}>
+                    IRA for articles emotion label:
+            </InfoRow>
+            <InfoRow counter={getAndFormatSafelyIRA(this.state.data, "IRAEmotionIntensityArticles")}>
+                    IRA for articles emotion intensity*:
+            </InfoRow>
+            <InfoRow counter={getAndFormatSafelyIRA(this.state.data, "IRAStanceLabelArticles")}>
+                    IRA for articles stance label:
+            </InfoRow>
 
             <Row className={"mt-1"}><Col><p>* The intensity agreement is computed removing the entries that are tagged as
             "sachlich"; this, especially for K values, can make the measure unreliable, other measures can be explored.
