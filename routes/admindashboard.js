@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const _ = require('lodash');
+const mathjs = require("mathjs");
 const config = require( "../config");
 
 const labelledentries = require(`../models/labelledentries`);
@@ -594,6 +595,34 @@ function getIRAs() {
         });
 }
 
+function getIntensitiesStats() {
+    return labelledentries.find({}).exec()
+        .then(entries => {
+            const validParagraphsIntensities = [];
+            const validArticleIntensities = [];
+            entries.forEach(entry => {
+                entry.paragraphsEmotionLabel.forEach(label => {
+                    if(label.intensity !== -1) {
+                        validParagraphsIntensities.push(label.intensity)
+                    }
+                });
+                if(entry.emotionArticleLabel.intensity !== -1) {
+                    validArticleIntensities.push(entry.emotionArticleLabel.intensity)
+                }
+            });
+
+            return {
+                paragraphsIntensityMean: mathjs.mean(validParagraphsIntensities),
+                paragraphsIntensityMedian: mathjs.median(validParagraphsIntensities),
+                paragraphsIntensityStd: mathjs.std(validParagraphsIntensities),
+                articlesIntensityMean: mathjs.mean(validArticleIntensities),
+                articlesIntensityMedian: mathjs.median(validArticleIntensities),
+                articlesIntensityStd: mathjs.std(validArticleIntensities),
+            };
+
+        });
+}
+
 router.route('/status').get((req, res) => {
     console.log("admindashboard/status queried");
     const queryPromises = [];
@@ -610,6 +639,7 @@ router.route('/status').get((req, res) => {
     queryPromises.push(getFleissKEmotionsParagraphs());
     queryPromises.push(getFleissKEmotionLabelArticles());
     queryPromises.push(getIRAs());
+    queryPromises.push(getIntensitiesStats());
 
     //check that the labellerID exists
     return Promise.all(queryPromises)

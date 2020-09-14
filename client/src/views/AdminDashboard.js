@@ -221,6 +221,20 @@ class AdminDashboard extends React.Component {
             "sachlich"; this, especially for K values, can make the measure unreliable, other measures can be explored.
             </p></Col></Row>
 
+            <h5 className={"mt-2"}>Intensities</h5>
+            <InfoRow counter={getAndFormatSafelyFloat(this.state.data, "paragraphsIntensityMean")}>
+                Mean of paragraphs emotion intensity:
+            </InfoRow>
+            <InfoRow counter={getAndFormatSafelyFloat(this.state.data, "paragraphsIntensityStd")}>
+                Std of paragraphs emotion intensity:
+            </InfoRow>
+            <InfoRow counter={getAndFormatSafelyFloat(this.state.data, "articlesIntensityMean")}>
+                Mean of articles emotion intensity:
+            </InfoRow>
+            <InfoRow counter={getAndFormatSafelyFloat(this.state.data, "articlesIntensityStd")}>
+                Std of articles emotion intensity:
+            </InfoRow>
+
 
             <Row className={"pt-2"}>
                 <Col>
