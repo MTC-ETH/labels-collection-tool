@@ -25,7 +25,13 @@ function getSafely(obj, key) {
 
 function getAndFormatSafelyFloat(obj, key, digits=3) {
     return key.split(".").reduce(function(o, x) {
-        return (typeof o == "undefined" || o === null || o === undefined) ? o : o[x].toFixed(digits);
+        if(typeof o == "undefined" || o === null || o === undefined) {
+            return o;
+        }
+        if(typeof o[x] == "undefined" || o[x] === null || o[x] === undefined) {
+            return o[x];
+        }
+        return o[x].toFixed(digits);
     }, obj);
 }
 
@@ -34,7 +40,7 @@ function getAndFormatSafelyIRA(obj, key, digits=3) {
     const random = getSafely(obj, key + "Random");
     let res = "";
     if(perc !== null && perc !== undefined) {
-        res += formatPercentage(perc)
+        res += formatPercentage(perc);
         if(random !== null && random !== undefined) {
             res += " (" + formatPercentage(random) + ")"
         }
