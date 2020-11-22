@@ -3,7 +3,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 import Article from "../components/Labelling/Article";
 import ArticleInstructions from "../components/Labelling/ArticleInstructions";
-import ArticleStanceQuestion from "../components/Labelling/ArticleStanceQuestion";
+import ArticleStanceQuestions from "../components/Labelling/ArticleStanceQuestions";
 import SubmitInstructionsAndButton from "../components/Labelling/SubmitInstructionsAndButton";
 import {Col, Container, UncontrolledAlert} from "reactstrap";
 import Row from "reactstrap/es/Row";
@@ -41,8 +41,8 @@ class Labelling extends React.Component {
             article: null,
             paragraphsEmotionLabel: {},
             paragraphsError: {},
-            stanceArticleQuestionLabel: {label: null, notSure: false},
-            stanceArticleQuestionError: false,
+            stanceArticleQuestionsLabel: {label: null, notSure: false},
+            stanceArticleQuestionsError: {},
             emotionArticleLabel: {label: null, intensity: null, notSure: false},
             emotionArticleError: false,
             serverFetchError: null,
@@ -102,12 +102,17 @@ class Labelling extends React.Component {
                     paragraphsError[par.consecutiveID] = false;
                 });
 
+                const stanceArticleQuestionsError = {};
+                article.stanceQuestions.forEach((q) => {
+                    stanceArticleQuestionsError[q.ID] = false;
+                });
+
                 return this.setState({
                     article: article,
                     paragraphsEmotionLabel: status.paragraphsEmotionLabel,
                     paragraphsError: paragraphsError,
-                    stanceArticleQuestionLabel: status.stanceArticleQuestionLabel,
-                    stanceArticleQuestionError: false,
+                    stanceArticleQuestionsLabel: status.stanceArticleQuestionsLabel,
+                    stanceArticleQuestionsError: stanceArticleQuestionsError,
                     emotionArticleLabel: status.emotionArticleLabel,
                     emotionArticleError: false
                 });
@@ -147,12 +152,18 @@ class Labelling extends React.Component {
         this.postToBackendStatus('/labelling/tag/paragraph/emotion', paragraph.consecutiveID, paragraphsEmotionLabel[paragraph.consecutiveID]);
     }
 
-    handleStanceArticle(event, fieldToUpdate, data) {
-        const stanceArticleQuestionLabel = this.state.stanceArticleQuestionLabel;
-        stanceArticleQuestionLabel[fieldToUpdate] = data;
-        stanceArticleQuestionLabel.enteredAt = Date.now();
-        this.setState({stanceArticleQuestionLabel, stanceArticleQuestionError: false});
-        this.postToBackendStatus('/labelling/tag/article/stance', null, stanceArticleQuestionLabel);
+    handleStanceArticle(event, fieldToUpdate, data, question) {
+        const stanceArticleQuestionsLabel = this.state.stanceArticleQuestionsLabel;
+        stanceArticleQuestionsLabel[question.ID][fieldToUpdate] = data;
+        stanceArticleQuestionsLabel[question.ID].enteredAt = Date.now();
+        let stanceArticleQuestionsError = {...this.state.stanceArticleQuestionsError};
+        stanceArticleQuestionsError[question.ID] = stanceArticleQuestionsError[question.ID] &&
+            (this.state.stanceArticleQuestionsLabel[question.ID] === null ||
+                this.state.stanceArticleQuestionsLabel[question.ID].label === null);
+        console.log("stanceArticleQuestionsLabel[question.ID] = " + stanceArticleQuestionsError[question.ID]);
+        console.log("this.state.stanceArticleQuestionsLabel[question.ID].label = " + this.state.stanceArticleQuestionsError[question.ID].label);
+        this.setState({stanceArticleQuestionsLabel, stanceArticleQuestionsError});
+        this.postToBackendStatus('/labelling/tag/article/stance', question.ID, stanceArticleQuestionsLabel[question.ID]);
     }
 
     handleEmotionArticle(event, fieldToUpdate, data) {
@@ -197,10 +208,15 @@ class Labelling extends React.Component {
             }
         );
 
-        let stanceArticleQuestionError = this.state.stanceArticleQuestionError;
-        if(this.state.stanceArticleQuestionLabel === null) {
-            stanceArticleQuestionError = true;
-        }
+        let stanceArticleQuestionsError = this.state.stanceArticleQuestionsError;
+        Object.entries(this.state.stanceArticleQuestionsLabel).forEach(
+            ([key, status]) => {
+                if(status === null || status.label === null) {
+                    error = true;
+                    stanceArticleQuestionsError[key] = true;
+                }
+            }
+        );
 
         let emotionArticleError = this.state.emotionArticleError;
         if(this.state.emotionArticleLabel === null ||
@@ -211,7 +227,7 @@ class Labelling extends React.Component {
         }
 
         if(error) {
-            this.setState({paragraphsError, stanceArticleQuestionError, emotionArticleError});
+            this.setState({paragraphsError, stanceArticleQuestionsError, emotionArticleError});
             alert("Please fill-in the missing entries (now in red) and try again");
             return;
         }
@@ -220,7 +236,7 @@ class Labelling extends React.Component {
             labeller: this.state.labellerID,
             article: this.state.article._id,
             paragraphsEmotionLabel: this.state.paragraphsEmotionLabel,
-            stanceArticleQuestionLabel: this.state.stanceArticleQuestionLabel,
+            stanceArticleQuestionsLabel: this.state.stanceArticleQuestionsLabel,
             emotionArticleLabel: this.state.emotionArticleLabel,
             deviceSpecs: getDeviceSpecs(),
         })
@@ -294,18 +310,17 @@ class Labelling extends React.Component {
                          instructionsTextColor={this.props.instructionsTextColor}
                 />
                 <ContainedHr/>
-                <ArticleEmotionQuestion question={this.state.article.stanceQuestion}
-                                        onClick={this.handleEmotionArticle}
+                <ArticleEmotionQuestion onClick={this.handleEmotionArticle}
                                         emotionStatus={this.state.emotionArticleLabel}
                                         error={this.state.emotionArticleError}
                                         instructionsTextColor={this.props.instructionsTextColor}
                 />
                 <ContainedHr/>
-                <ArticleStanceQuestion question={this.state.article.stanceQuestion}
-                                       onClick={this.handleStanceArticle}
-                                       stanceStatus={this.state.stanceArticleQuestionLabel}
-                                       error={this.state.stanceArticleQuestionError}
-                                       instructionsTextColor={this.props.instructionsTextColor}
+                <ArticleStanceQuestions questions={this.state.article.stanceQuestions}
+                                        onClick={this.handleStanceArticle}
+                                        stanceStatus={this.state.stanceArticleQuestionsLabel}
+                                        questionsError={this.state.stanceArticleQuestionsError}
+                                        instructionsTextColor={this.props.instructionsTextColor}
                 />
                 <ContainedHr/>
                 <SubmitInstructionsAndButton onClick={this.handleSubmit}

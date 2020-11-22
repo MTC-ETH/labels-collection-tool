@@ -11,7 +11,7 @@ mongoose.connect(uri, {useNewUrlParser:true, useCreateIndex: true, useUnifiedTop
 
 const connection = mongoose.connection;
 
-let articlesJson = require(`./json/articles_for_test_1`);
+let articlesJson = require(`./json/articles_for_test_1_full_text_more_test_stance_questions`);
 
 //insert consecutive ids for paragraphs
 articlesJson = articlesJson
@@ -20,8 +20,8 @@ articlesJson = articlesJson
             return {consecutiveID: index, text: par};
         });
 
-        if(!article.stanceQuestion) {
-            article.stanceQuestion = "Is the article in favour or against the topic it is talking about?"
+        if(!article.stanceQuestions) {
+            article.stanceQuestions = [{"ID": -1, text: "Is the article in favour or against the topic it is talking about?"}]
         }
 
         return article;

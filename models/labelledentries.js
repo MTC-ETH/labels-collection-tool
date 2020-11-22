@@ -11,8 +11,8 @@ const labelledentriesSchema = new Schema({
         articleID: String,
         paragraphsEmotionLabel: {type: Map, of: emotionTagSchema},
         paragraphsEmotionLabelHistory: {type: Map, of: {type: [emotionTagSchema], default: []}},
-        stanceArticleQuestionLabel: stanceTagSchema,
-        stanceArticleQuestionLabelHistory: {type: [stanceTagSchema], default: []},
+        stanceArticleQuestionsLabel: {type: Map, of: stanceTagSchema},
+        stanceArticleQuestionsLabelHistory: {type: Map, of: {type: [stanceTagSchema], default: []}},
         emotionArticleLabel: {type: emotionTagSchema, default: null},
         emotionArticleLabelHistory: {type: [emotionTagSchema], default: []},
         deviceSpecs: {type: {

@@ -10,8 +10,8 @@ const labellingstatusesSchema = new Schema({
     articleID: String,
         paragraphsEmotionLabel: {type: Map, of: emotionTagSchema},
         paragraphsEmotionLabelHistory: {type: Map, of: {type: [emotionTagSchema], default: []}},
-        stanceArticleQuestionLabel: stanceTagSchema,
-        stanceArticleQuestionLabelHistory: {type: [stanceTagSchema], default: []},
+        stanceArticleQuestionsLabel: {type: Map, of: stanceTagSchema},
+        stanceArticleQuestionsLabelHistory: {type: Map, of: {type: [emotionTagSchema], default: []}},
         emotionArticleLabel: {type: emotionTagSchema, default: null},
         emotionArticleLabelHistory: {type: [emotionTagSchema], default: []},
     },
@@ -51,10 +51,20 @@ function getDefaultEmptySchema(_labellerID, article) {
                 return {[par.consecutiveID]: []
                 };
             })),
-            stanceArticleQuestionLabel: {label: null,
-                notSure: false,
-                enteredAt: null},
-            stanceArticleQuestionLabelHistory: [],
+            stanceArticleQuestionsLabel: Object.assign(
+                ...article.stanceQuestions.map(question => {
+                    return {[question.ID]: {
+                            label: null,
+                            intensity: null,
+                            notSure: false,
+                            enteredAt: null
+                        }};
+                })),
+            stanceArticleQuestionsLabelHistory: Object.assign(
+                ...article.stanceQuestions.map(question => {
+                    return {[question.ID]: []
+                    };
+                })),
             emotionArticleLabel: {    label: null,
                 intensity: null,
                 notSure: false,
@@ -113,18 +123,24 @@ function updateEmotionArticleLabel(labeller, article, data) {
         });
 }
 
-function updateStanceArticleQuestionLabel(labeller, article, data) {
+function updateStanceArticleQuestionsLabel(labeller, article, elemID, data) {
     return labellingstatuses.findOne({
         'labeller': mongoose.Types.ObjectId(labeller),
         'article': mongoose.Types.ObjectId(article),
     }).exec().then(status => {
         //push current status in history
-        if (status.stanceArticleQuestionLabel.enteredAt !== null) { //if it's null means it was the first labelled entered
-            status.stanceArticleQuestionLabelHistory.push(status.stanceArticleQuestionLabel);
+        const stringID = String(elemID);
+        if (status.stanceArticleQuestionsLabel.get(stringID).enteredAt !== null) {
+            const newHistory = status.stanceArticleQuestionsLabelHistory.get(stringID);
+            newHistory.push(status.stanceArticleQuestionsLabel.get(stringID));
+            console.log(newHistory);
+            status.stanceArticleQuestionsLabelHistory.set(stringID, newHistory);
+            status.markModified('stanceArticleQuestionsLabelHistory');
         }
 
         //copy in new tag
-        status.stanceArticleQuestionLabel = data;
+        status.stanceArticleQuestionsLabel.set(stringID, data);
+        status.markModified('stanceArticleQuestionsLabel');
 
         return status.save();
     });
@@ -146,8 +162,7 @@ function updateParagraphsEmotionLabel(labeller, article, elemID, data) {
         }
 
         //copy in new tag
-        const newEntry = data;
-        status.paragraphsEmotionLabel.set(stringID, newEntry);
+        status.paragraphsEmotionLabel.set(stringID, data);
         status.markModified('paragraphsEmotionLabel');
 
         return status.save();
@@ -158,5 +173,5 @@ module.exports = labellingstatuses;
 module.exports.getDefaultEmptySchema = getDefaultEmptySchema;
 module.exports.updateLabellingStatusesDate = updateLabellingStatusesDate;
 module.exports.updateEmotionArticleLabel = updateEmotionArticleLabel;
-module.exports.updateStanceArticleQuestionLabel = updateStanceArticleQuestionLabel;
+module.exports.updateStanceArticleQuestionsLabel = updateStanceArticleQuestionsLabel;
 module.exports.updateParagraphsEmotionLabel = updateParagraphsEmotionLabel;

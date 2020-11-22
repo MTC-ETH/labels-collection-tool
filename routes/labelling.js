@@ -197,8 +197,8 @@ function updateStatus(req, res, updateFunction) {
 // POST an intermediate result of tagging a stance question on article
 router.route('/tag/article/stance').post((req, res) => {
     console.log("labelling/tag/article/stance queried");
-    return updateStatus(req, res, () => labellingstatuses.updateStanceArticleQuestionLabel(req.body.labeller,
-        req.body.article, req.body.data));
+    return updateStatus(req, res, () => labellingstatuses.updateStanceArticleQuestionsLabel(req.body.labeller,
+        req.body.article, req.body.elemID, req.body.data));
 });
 
 // POST an intermediate result of tagging emotion label article level
