@@ -36,8 +36,9 @@ function flattenLabelledEntriesToCsv() {
                        getUniqueEmotionRepresentation(label.label), label.intensity, label.notSure]));
                lines.push([entry.articleID, entry.labeller, "emotion article",
                    getUniqueEmotionRepresentation(entry.emotionArticleLabel.label), entry.emotionArticleLabel.intensity, entry.emotionArticleLabel.notSure]);
-               lines.push([entry.articleID, entry.labeller, "stance article",
-                   getUniqueStanceRepresentation(entry.stanceArticleQuestionLabel.label), "N.a.", entry.stanceArticleQuestionLabel.notSure]);
+               entry.stanceArticleQuestionsLabel.forEach((label, questionID) =>
+                   lines.push([entry.articleID, entry.labeller, "stance question " + questionID,
+                       getUniqueStanceRepresentation(label.label), "N.a.", label.notSure]));
            });
 
             function compare( a, b ) {
@@ -175,7 +176,8 @@ function getNotSureStatistics() {
             let nArticles = 0;
             let nParagraphsNotSure = 0;
             let nEmotionArticlesNotSure = 0;
-            let nStanceArticlesNotSure = 0;
+            let nStanceQuestions = 0;
+            let nStanceQuestionsNotSure = 0;
 
             entries.forEach(entry => {
                nArticles++;
@@ -193,14 +195,17 @@ function getNotSureStatistics() {
                 }
 
                 //not sure stance of article
-                if(entry.stanceArticleQuestionLabel.notSure) {
-                    nStanceArticlesNotSure++;
-                }
+                entry.stanceArticleQuestionsLabel.forEach((questTag) => {
+                    nStanceQuestions++;
+                    if(questTag.notSure) {
+                        nStanceQuestionsNotSure++;
+                    }
+                });
             });
 
             resultMap.notSureParagraphsPercentage = nParagraphsNotSure / nParagraphs * 100.0;
             resultMap.notSureEmotionArticlePercentage = nEmotionArticlesNotSure / nArticles * 100.0;
-            resultMap.notSureStanceArticlePercentage = nStanceArticlesNotSure / nArticles * 100.0;
+            resultMap.notSureStanceArticlePercentage = nStanceQuestionsNotSure / nStanceQuestions * 100.0;
 
             return resultMap;
         });
@@ -214,7 +219,8 @@ function getChangedIdeaStatistics() {
             let nArticles = 0;
             let nParagraphsChanged = 0;
             let nEmotionArticlesChanged = 0;
-            let nStanceArticlesChanged = 0;
+            let nStanceQuestions = 0;
+            let nStanceQuestionsChanged = 0;
 
             function didChangeIdea(history, final) {
                 let nClicksUsed = history.length;
@@ -253,15 +259,17 @@ function getChangedIdeaStatistics() {
                 }
 
                 //stance of article
-                if(didChangeIdea(entry.stanceArticleQuestionLabelHistory,
-                    entry.stanceArticleQuestionLabel)) {
-                    nStanceArticlesChanged++;
-                }
+                entry.stanceArticleQuestionsLabelHistory.forEach((questHistory, questKey) => {
+                    nStanceQuestions++;
+                    if(didChangeIdea(questHistory, entry.stanceArticleQuestionsLabel.get(questKey))) {
+                        nStanceQuestionsChanged++;
+                    }
+                });
             });
 
             resultMap.changedIdeaParagraphsPercentage = nParagraphsChanged / nParagraphs * 100.0;
             resultMap.changedIdeaEmotionArticlePercentage = nEmotionArticlesChanged / nArticles * 100.0;
-            resultMap.changedIdeaStanceArticlePercentage = nStanceArticlesChanged / nArticles * 100.0;
+            resultMap.changedIdeaStanceArticlePercentage = nStanceQuestionsChanged / nStanceQuestions * 100.0;
 
             return resultMap;
         });
@@ -310,6 +318,20 @@ function computeDisagreementEmotionLabel(entries) {
     return [oneDisagreesEmotionLabel, oneDisagreesEmotionIntensity];
 }
 
+function computeDisagreementStanceQuestionLabel(entries) {
+    let oneDisagreesStanceLabelArticle = false;
+    for(let i = 1; i < entries.length; i++) {
+        oneDisagreesStanceLabelArticle = oneDisagreesStanceLabelArticle ||
+            getUniqueStanceRepresentation(entries[i-1].label)
+            !== getUniqueStanceRepresentation(entries[i].label);
+        if(oneDisagreesStanceLabelArticle) {
+            break;
+        }
+    }
+
+    return oneDisagreesStanceLabelArticle;
+}
+
 function groupByArticle(entries) {
     const groupedByArticle = {};
     entries.forEach(entry => {
@@ -328,6 +350,7 @@ function getInterraterStatistics() {
             const groupedByArticle = groupByArticle(entries);
             let nUniqueArticles = 0;
             let nUniqueParagraphs = 0;
+            let nUniqueStanceQuestions = 0;
             let nAtLeastOneDisagreesEmotionLabelParagraphs = 0;
             let nAtLeastOneDisagreesIntensityParagraphs = 0;
             let nPerfectAgreementEmotionParagraphs = 0;
@@ -354,7 +377,15 @@ function getInterraterStatistics() {
                         i++;
                     });
                     emotionArticles.push(entry.emotionArticleLabel);
-                    stanceArticles.push(entry.stanceArticleQuestionLabel);
+                    i = 0;
+                    entry.stanceArticleQuestionsLabel.forEach(label => {
+                        if(stanceArticles.length <= i) {
+                            stanceArticles.push([]);
+                            nUniqueStanceQuestions++;
+                        }
+                        stanceArticles[i].push(label);
+                        i++;
+                    });
                 });
                 paragraphs.forEach(samePars => {
                     const [oneDisagreesLabel, oneDisagreesIntensity] = computeDisagreementEmotionLabel(samePars);
@@ -380,18 +411,12 @@ function getInterraterStatistics() {
                     nPerfectAgreementEmotionArticles++;
                 }
 
-                let oneDisagreesStanceLabelArticle = false;
-                for(let i = 1; i < stanceArticles.length; i++) {
-                    oneDisagreesStanceLabelArticle = oneDisagreesStanceLabelArticle ||
-                        getUniqueStanceRepresentation(stanceArticles[i-1].label)
-                        !== getUniqueStanceRepresentation(stanceArticles[i].label);
-                    if(oneDisagreesStanceLabelArticle) {
-                        break;
+                stanceArticles.forEach(sameStanceQuestions => {
+                    const oneDisagreesLabel = computeDisagreementStanceQuestionLabel(sameStanceQuestions);
+                    if(oneDisagreesLabel) {
+                        nAtLeastOneDisagreesStanceLabelArticles++;
                     }
-                }
-                if(oneDisagreesStanceLabelArticle) {
-                    nAtLeastOneDisagreesStanceLabelArticles++;
-                }
+                });
             }
 
             return {
@@ -403,12 +428,15 @@ function getInterraterStatistics() {
                 percAtLeastOneDisagreesEmotionIntensityArticles: nAtLeastOneDisagreesEmotionIntensityArticles / nUniqueArticles * 100.0,
                 percPerfectAgreementEmotionArticles: nPerfectAgreementEmotionArticles / nUniqueArticles * 100.0,
 
-                percAtLeastOneDisagreesStanceArticles: nAtLeastOneDisagreesStanceLabelArticles / nUniqueArticles * 100.0
+                percAtLeastOneDisagreesStanceArticles: nAtLeastOneDisagreesStanceLabelArticles / nUniqueStanceQuestions * 100.0
             }
         });
 }
-
+//############### from here on unchecked
 function computeFleissK(fleissTable) {
+    //remove rows in which only one labeller assigned labels:
+    fleissTable = fleissTable.filter(row => Object.keys(row).map(rowKey => row[rowKey]).reduce((a, b) => a + b, 0) > 1);
+
     const keys = Object.keys(fleissTable[0]);
 
     const totalVotesAssigned = fleissTable.map(row =>
@@ -490,29 +518,47 @@ function getFleissKEmotionLabelArticles() {
             const groupedByArticle = groupByArticle(entries);
             const fleissTableEmotionLabelArticles = [];
             const fleissTableEmotionIntensityArticles = [];
-            const fleissTableStanceLabelArticles = [];
 
 
             for (const [_, byArticle] of Object.entries(groupedByArticle)) {
                 const fleissRowEmotionLabel = getEmptyFleissEmotionLabelRow();
                 const fleissRowEmotionIntensity = getEmptyFleissEmotionIntensityRow();
-                const fleissRowStanceLabel = getEmptyFleissStanceLabelRow();
 
                 byArticle.forEach(article => {
                     fleissRowEmotionLabel[getUniqueEmotionRepresentation(article.emotionArticleLabel.label)]++;
                     if(article.emotionArticleLabel.intensity !== -1) {
                         fleissRowEmotionIntensity[article.emotionArticleLabel.intensity]++;
                     }
-                    fleissRowStanceLabel[getUniqueStanceRepresentation(article.stanceArticleQuestionLabel.label)]++;
                 });
                 fleissTableEmotionLabelArticles.push(fleissRowEmotionLabel);
                 fleissTableEmotionIntensityArticles.push(fleissRowEmotionIntensity);
-                fleissTableStanceLabelArticles.push(fleissRowStanceLabel);
             }
             return {fleissKEmotionLabelArticles: computeFleissK(fleissTableEmotionLabelArticles),
-                    fleissKEmotionIntensityArticles: computeFleissK(fleissTableEmotionIntensityArticles),
-                fleissKStanceLabelArticles: computeFleissK(fleissTableStanceLabelArticles)
-            };
+                    fleissKEmotionIntensityArticles: computeFleissK(fleissTableEmotionIntensityArticles)};
+        });
+}
+
+function getFleissKStanceQuestionsLabel() {
+    return labelledentries.find({}).exec()
+        .then(entries => {
+            const groupedByArticle = groupByArticle(entries);
+            const fleissTableLabel = [];
+
+            for (const [_, byArticle] of Object.entries(groupedByArticle)) {
+                const fleissTablePerArticleLabel = {};
+
+                byArticle.forEach(article => {
+                    article.stanceArticleQuestionsLabel.forEach((label, questionID) => {
+                        if(!(fleissTablePerArticleLabel.hasOwnProperty(questionID))) {
+                            fleissTablePerArticleLabel[questionID] = getEmptyFleissStanceLabelRow();
+                        }
+                        fleissTablePerArticleLabel[questionID][getUniqueStanceRepresentation(label.label)]++;
+                    });
+                });
+                fleissTableLabel.push(...Object.keys(fleissTablePerArticleLabel)
+                    .map(questionID => fleissTablePerArticleLabel[questionID]));
+            }
+            return {fleissKStanceQuestionsLabel: computeFleissK(fleissTableLabel)};
         });
 }
 
@@ -541,7 +587,7 @@ function getIRAs() {
             const dataEmotionIntensityParagraphs = [];
             const dataEmotionLabelArticles = [];
             const dataEmotionIntensityArticles = [];
-            const dataStanceLabelArticles = [];
+            const dataStanceQuestionsLabel = [];
 
 
             for (const [_, byArticle] of Object.entries(groupedByArticle)) {
@@ -549,7 +595,7 @@ function getIRAs() {
                 const thisArticleEmotionIntensitiesParagraphs = {};
                 const thisArticleEmotionLabels = [];
                 const thisArticleEmotionIntensities = [];
-                const thisArticleStanceLabels = [];
+                const thisArticleStanceLabels = {};
 
                 byArticle.forEach(article => {
                     article.paragraphsEmotionLabel.forEach((label, parKey) => {
@@ -570,7 +616,13 @@ function getIRAs() {
                     if(article.emotionArticleLabel.intensity !== -1) {
                         thisArticleEmotionIntensities.push(article.emotionArticleLabel.intensity);
                     }
-                    thisArticleStanceLabels.push(getUniqueStanceRepresentation(article.stanceArticleQuestionLabel.label));
+
+                    article.stanceArticleQuestionsLabel.forEach((label, questionID) => {
+                        if(!(thisArticleStanceLabels.hasOwnProperty(questionID))) {
+                            thisArticleStanceLabels[questionID] = [];
+                        }
+                        thisArticleStanceLabels[questionID].push(getUniqueStanceRepresentation(label.label));
+                    });
                 });
                 dataEmotionLabelParagraphs.push(...Object.keys(thisArticleEmotionLabelsParagraphs)
                     .map(parKey => thisArticleEmotionLabelsParagraphs[parKey]));
@@ -579,7 +631,9 @@ function getIRAs() {
 
                 dataEmotionLabelArticles.push(thisArticleEmotionLabels);
                 dataEmotionIntensityArticles.push(thisArticleEmotionIntensities);
-                dataStanceLabelArticles.push(thisArticleStanceLabels);
+
+                dataStanceQuestionsLabel.push(...Object.keys(thisArticleStanceLabels)
+                    .map(questionID => thisArticleStanceLabels[questionID]));
             }
             return {IRAEmotionLabelParagraphs: computeIRA(dataEmotionLabelParagraphs),
                 IRAEmotionLabelParagraphsRandom: 1 / config.emotionsWithFactual.length * 100.0,
@@ -589,7 +643,7 @@ function getIRAs() {
                 IRAEmotionLabelArticlesRandom: 1 / config.emotionsWithFactual.length * 100.0,
                 IRAEmotionIntensityArticles: computeIRA(dataEmotionIntensityArticles),
                 IRAEmotionIntensityArticlesRandom: 1 / config.emotionIntensities.length * 100.0,
-                IRAStanceLabelArticles: computeIRA(dataStanceLabelArticles),
+                IRAStanceLabelArticles: computeIRA(dataStanceQuestionsLabel),
                 IRAStanceLabelArticlesRandom: 1 / config.stanceLabels.length * 100.0,
             };
         });
@@ -611,6 +665,16 @@ function getIntensitiesStats() {
                 }
             });
 
+            if(validParagraphsIntensities.length === 0) {
+                return {
+                    paragraphsIntensityMean: -1,
+                    paragraphsIntensityMedian: -1,
+                    paragraphsIntensityStd: -1,
+                    articlesIntensityMean: -1,
+                    articlesIntensityMedian: -1,
+                    articlesIntensityStd: -1,
+                };
+            }
             return {
                 paragraphsIntensityMean: mathjs.mean(validParagraphsIntensities),
                 paragraphsIntensityMedian: mathjs.median(validParagraphsIntensities),
@@ -638,6 +702,7 @@ router.route('/status').get((req, res) => {
     queryPromises.push(getInterraterStatistics());
     queryPromises.push(getFleissKEmotionsParagraphs());
     queryPromises.push(getFleissKEmotionLabelArticles());
+    queryPromises.push(getFleissKStanceQuestionsLabel());
     queryPromises.push(getIRAs());
     queryPromises.push(getIntensitiesStats());
 

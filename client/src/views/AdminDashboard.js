@@ -200,7 +200,7 @@ class AdminDashboard extends React.Component {
                 <a href={"https://en.wikipedia.org/wiki/Fleiss%27_kappa"} target={"_blank"} rel="noopener noreferrer">
                     Fleiss K </a> for articles emotion intensity*:
             </InfoRow>
-            <InfoRow counter={getAndFormatSafelyFloat(this.state.data, "fleissKStanceLabelArticles")}>
+            <InfoRow counter={getAndFormatSafelyFloat(this.state.data, "fleissKStanceQuestionsLabel")}>
                 <a href={"https://en.wikipedia.org/wiki/Fleiss%27_kappa"} target={"_blank"} rel="noopener noreferrer">
                     Fleiss K </a> for articles stance label:
             </InfoRow>
