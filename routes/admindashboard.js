@@ -432,17 +432,21 @@ function getInterraterStatistics() {
             }
         });
 }
-//############### from here on unchecked
+
 function computeFleissK(fleissTable) {
     //remove rows in which only one labeller assigned labels:
     fleissTable = fleissTable.filter(row => Object.keys(row).map(rowKey => row[rowKey]).reduce((a, b) => a + b, 0) > 1);
-
+    const nSubjects = fleissTable.length;
+    if(nSubjects === 0) {
+        console.log("Only one labeller, fleiss K is set to 1");
+        return 1.0;
+    }
     const keys = Object.keys(fleissTable[0]);
 
     const totalVotesAssigned = fleissTable.map(row =>
         Object.keys(row).map(rowKey => row[rowKey]).reduce((a, b) => a + b, 0))
         .reduce((a, b) => a + b, 0);
-    const nSubjects = fleissTable.map(row => 1).reduce((a, b) => a + b, 0);
+
 
     // sum of cols
     const Pe = keys.map(emotion => {
