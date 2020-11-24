@@ -42,6 +42,7 @@ In order to add a new DNS alias, it's necessary to contact the ISG.
 
 #### Make the server a daemon
 - copy the service file in the service directories: `sudo cp labelling-tool-backend.service /lib/systemd/system/labelling-tool-backend.service`
+- make the service run at startup: `sudo systemctl enable labelling-tool-backend.service`
 - reboot or alternatively reload the service via `sudo systemctl daemon-reload labelling-tool-backend.service`
 - check that the server is running in the background by looking at the logs: `sudo journalctl -u labelling-tool-backend`
 
