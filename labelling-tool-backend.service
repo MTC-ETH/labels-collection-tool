@@ -1,0 +1,14 @@
+[Unit]
+Description=Speech Collection App
+After=network.target
+[Service]
+StandardOutput=syslog
+StandardError=syslog
+User=root
+Type=simple
+Restart=always
+RestartSec=1
+WorkingDirectory= /local/home/vzuest/speech-collection-app/
+ExecStart= /usr/bin/java -jar /local/home/vzuest/speech-collection-app/backend-1.0.0-SNAPSHOT.jar
+[Install]
+WantedBy=multi-user.target
