@@ -47,6 +47,9 @@ app.use('/personalpage/', personalpageRouter);
 backupRouter.buildMailerJob();
 
 if (process.env.NODE_ENV === 'production') {
+    const https = require("https");
+    const fs = require("fs");
+
     console.log("Running in production mode");
     //direct to local react build
     app.use(express.static(path.join(__dirname, 'client', 'build')))
@@ -54,8 +57,17 @@ if (process.env.NODE_ENV === 'production') {
     app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
     });
-}
 
-app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
-});
+    const options = {
+        key: fs.readFileSync(path.join(__dirname, 'certs', 'keystore.p12')),
+        cert: fs.readFileSync(path.join(__dirname, 'certs', 'certificate.p12'))
+    };
+
+    https.createServer(options, app).listen(port, () =>
+        console.log(`HTTPS Server is running on port: ${port}`));
+}
+else {
+    app.listen(port, () => {
+        console.log(`HTTP Server is running on port: ${port}`);
+    });
+}
