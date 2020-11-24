@@ -68,6 +68,7 @@ if (process.env.NODE_ENV === 'production') {
 
     // set up a route to redirect http to https
     app.get('*', function(req, res) {
+        console.log("redirecting to https");
         res.redirect('https://' + req.headers.host + req.url);
     });
 
