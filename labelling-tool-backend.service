@@ -8,7 +8,7 @@ User=root
 Type=simple
 Restart=always
 RestartSec=1
-WorkingDirectory= /local/home/camluca/labelling-tool
-ExecStart= node /local/home/camluca/labelling-tool/app.js
+WorkingDirectory=/local/home/camluca/labelling-tool
+ExecStart=/usr/bin/node /local/home/camluca/labelling-tool/app.js
 [Install]
 WantedBy=multi-user.target
