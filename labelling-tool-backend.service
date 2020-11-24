@@ -1,5 +1,5 @@
 [Unit]
-Description=Speech Collection App
+Description=Emotion and stance labelling tool
 After=network.target
 [Service]
 StandardOutput=syslog
@@ -8,7 +8,7 @@ User=root
 Type=simple
 Restart=always
 RestartSec=1
-WorkingDirectory= /local/home/vzuest/speech-collection-app/
-ExecStart= /usr/bin/java -jar /local/home/vzuest/speech-collection-app/backend-1.0.0-SNAPSHOT.jar
+WorkingDirectory=/local/home/camluca/labelling-tool
+ExecStart=node /local/home/camluca/labelling-tool/app.js
 [Install]
 WantedBy=multi-user.target
