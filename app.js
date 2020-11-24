@@ -74,8 +74,9 @@ if (process.env.NODE_ENV === 'production') {
         res.redirect('https://' + req.headers.host + req.url);
     });
 
+    const httpOnlyPort = process.env.HTTP_ONLY_PORT || 80;
     // have it listen on 80
-    httpOnly.listen(80);
+    httpOnly.listen(httpOnlyPort, () => console.log(`HTTP Server is running on port: ${httpOnlyPort} and only redirecting requests`));
 }
 else {
     app.listen(port, () => {
