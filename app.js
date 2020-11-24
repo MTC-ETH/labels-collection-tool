@@ -59,8 +59,8 @@ if (process.env.NODE_ENV === 'production') {
     });
 
     const options = {
-        key: fs.readFileSync(path.join(__dirname, 'certs', 'keystore.p12')),
-        cert: fs.readFileSync(path.join(__dirname, 'certs', 'certificate.p12'))
+        key: fs.readFileSync(process.env.KEY_PATH),
+        cert: fs.readFileSync(process.env.CERT_PATH)
     };
 
     https.createServer(options, app).listen(port, () =>
