@@ -27,8 +27,6 @@ articlesJson = articlesJson
         return article;
     });
 
-const labellersJson = require(`./json/labellers`);
-
 connection.once("open", () => {
     console.log("MongoDB database connection established successfully");
 
@@ -70,15 +68,20 @@ connection.once("open", () => {
                 if (collinfo) {
                     console.log("labellers already exists");
                 } else {
-                    console.log("labellers doesn't exist, creating it");
+                    console.log("labellers doesn't exist, attempting to create it");
 
-                    labellers.insertMany(labellersJson, function(err, result) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            console.log("SUCCESS, inserted " + labellersJson.length + " labellers");
-                        }
-                    });
+                    try {
+                        const labellersJson = require(`./json/labellers`);
+                        labellers.insertMany(labellersJson, function(err, result) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                console.log("SUCCESS, inserted " + labellersJson.length + " labellers");
+                            }
+                        });
+                    } catch (ex) {
+                        console.log("Cannot find file ./json/labellers.json, no labellers were added");
+                    }
                 }
             });
     }
