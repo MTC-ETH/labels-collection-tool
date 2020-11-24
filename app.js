@@ -47,8 +47,9 @@ app.use('/personalpage/', personalpageRouter);
 backupRouter.buildMailerJob();
 
 if (process.env.NODE_ENV === 'production') {
+    console.log("Running in production mode");
     //direct to local react build
-    app.use(express.static( 'client/build' ));
+    app.use(express.static(path.join(__dirname, 'client', 'build')))
 
     app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
