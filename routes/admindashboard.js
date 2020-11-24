@@ -580,6 +580,10 @@ function computeIRA(listOfGroupedEntries) {
             }
         }
     });
+    if(totalNCouples === 0) {
+        console.log("Only one labeller, setting IRA to 100.0");
+        return 100.0;
+    }
     return agreeingCouples / totalNCouples * 100.0;
 }
 

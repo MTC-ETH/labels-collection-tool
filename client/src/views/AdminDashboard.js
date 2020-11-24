@@ -126,7 +126,7 @@ class AdminDashboard extends React.Component {
                 Number of registered labellers:
             </InfoRow>
             <InfoRow counter={getSafely(this.state.data, "nTaggedArticles")}>
-                Number of labelled articles:
+                Number of labelled articles (with duplicated for interrater):
             </InfoRow>
             <InfoRow counter={getSafely(this.state.data, "nTaggedUniqueArticles")}>
                 Number of uniquely labelled articles:
