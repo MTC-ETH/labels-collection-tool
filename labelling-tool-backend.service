@@ -4,6 +4,7 @@ After=network.target
 [Service]
 StandardOutput=syslog
 StandardError=syslog
+SyslogIdentifier=labelling-tool-backend
 User=root
 Type=simple
 Restart=always
