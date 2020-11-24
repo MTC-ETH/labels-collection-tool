@@ -56,6 +56,7 @@ class AuthenticateLabeller extends React.Component {
                     }
                     this.props.history.push("/" + this.state.target + "?token=" + this.state.token);
                 } else {
+                    console.log(response);
                     alert(response.data.message);
                 }
             });
