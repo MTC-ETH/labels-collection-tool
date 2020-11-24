@@ -4,6 +4,14 @@
 # data about registered labellers
 json/labellers.json
 
+# secret for the frontend admindashboard
+/client/src/assets/json/secrets.json
+
+# certificate for the ssl
+**/certs/*
+
+# client build
+client/build/*
 
 # dependencies
 /node_modules
@@ -27,4 +35,3 @@ json/labellers.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/client/src/assets/json/secrets.json
