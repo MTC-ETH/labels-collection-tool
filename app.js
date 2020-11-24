@@ -66,14 +66,16 @@ if (process.env.NODE_ENV === 'production') {
     https.createServer(options, app).listen(port, () =>
         console.log(`HTTPS Server is running on port: ${port}`));
 
+    const httpOnly = express();
+
     // set up a route to redirect http to https
-    app.get('*', function(req, res) {
+    httpOnly.get('*', function(req, res) {
         console.log("redirecting to https");
         res.redirect('https://' + req.headers.host + req.url);
     });
 
     // have it listen on 80
-    app.listen(80);
+    httpOnly.listen(80);
 }
 else {
     app.listen(port, () => {
