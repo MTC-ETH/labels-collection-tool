@@ -134,7 +134,7 @@ router.route('/article').get((req, res) => {
         .then(queryRes => {
             //if he clicked on the link he confirmed the email
             if(queryRes !== null) {
-                return queryRes.update({confirmedEmail: true}).then(() => true);
+                return queryRes.update({used: true}).then(() => true);
             }
             return false;
         })

@@ -19,9 +19,9 @@ router.route('/info').get((req, res) => {
 
     queryPromises.push(labelledentries.countDocuments({labeller: _labellerID}).exec()
         .then(c => {return {nTaggedArticles: c, money: config.moneyPerArticle*c}}));
-
-    queryPromises.push(labellers.findOne({_id: _labellerID}).exec()
-        .then(c => {return {name: c.name, surname: c.surname}}));
+    //
+    // queryPromises.push(labellers.findOne({_id: _labellerID}).exec()
+    //     .then(c => {return {name: c.name, surname: c.surname}}));
 
     return Promise.all(queryPromises)
         .then(arrOfObjects => Object.assign({}, ...arrOfObjects)) //just flattens the objects

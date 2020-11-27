@@ -8,6 +8,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 import queryString from "query-string";
+import TokenGeneratorRow from "../components/AdminDashboard/TokenGeneratorRow";
 
 function formatPercentage(perc) {
     if(perc === null || perc === undefined || isNaN(perc)) {
@@ -262,6 +263,7 @@ class AdminDashboard extends React.Component {
                     <h3>Actions</h3>
                 </Col>
                 </Row>
+            <TokenGeneratorRow adminToken={this.state.token}/>
                 <Row>
                     <Col>
                         <p>Download:</p>

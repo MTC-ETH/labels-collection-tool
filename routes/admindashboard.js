@@ -19,6 +19,7 @@ function checkAdminToken(req, res) {
     const reqIp = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || '')
         .split(',')[0].trim().replace("::ffff:", "");
     console.log("Request ip = " + reqIp);
+    console.log(reqIp === '127.0.0.1');
     if(!(reqIp === '127.0.0.1' || isPrivateIP(reqIp))) {
         //not good to go, either not local host or not inside eth network
         res.status(400).send({error: "Please send the request using the ETHZ VPN"});
@@ -114,6 +115,20 @@ router.route('/labelledentriescsv').get((req, res) => {
             console.log(err);
             res.status(500).send(err);
         });
+});
+
+router.route('/gentoken').get((req, res) => {
+    console.log("admindashboard/gentoken queried");
+    if(!checkAdminToken(req, res)) {
+        return false;
+    }
+    const newLabeller = new labellers({
+        used: false
+    });
+
+    return newLabeller.save()
+        .then(savedObject => savedObject._id)
+        .then(idToken => res.json({token: idToken}));
 });
 
 router.route('/labellers').get((req, res) => {

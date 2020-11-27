@@ -35,8 +35,8 @@ app.use('/admindashboard/', admindashboardRouter);
 const authenticatelabellerRouter = require('./routes/authenticatelabeller');
 app.use('/authenticatelabeller/', authenticatelabellerRouter);
 
-const registerRouter = require('./routes/register');
-app.use('/register/', registerRouter);
+// const registerRouter = require('./routes/register');
+// app.use('/register/', registerRouter);
 
 const backupRouter = require('./routes/backup');
 app.use('/backup/', backupRouter);

@@ -1,5 +1,7 @@
 const router = require('express').Router();
 
+/**** Deprecated */
+
 const nodemailer = require('nodemailer');
 const labellers = require(`../models/labellers`);
 const config = require("../config");
