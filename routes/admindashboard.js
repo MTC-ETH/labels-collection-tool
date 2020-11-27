@@ -12,6 +12,7 @@ const {getAllData, millisecToString} = require("./utils");
 
 function checkAdminToken(req, res) {
     const reqIp = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || '').split(',')[0].trim();
+    console.log("Request ip = " + reqIp);
     if(!(reqIp.toString() === '127.0.0.1' || reqIp.toString().startsWith("129.132."))) {
         //not good to go, either not local host or not inside eth network
         res.status(400).send({error: "Please send the request using the ETHZ VPN"});
