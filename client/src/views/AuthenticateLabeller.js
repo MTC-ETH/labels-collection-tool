@@ -13,7 +13,6 @@ class AuthenticateLabeller extends React.Component {
 
         this.state = {
             token: null,
-            rememberMe: true,
             target: "labelling"
         };
 
@@ -22,7 +21,7 @@ class AuthenticateLabeller extends React.Component {
     }
 
     componentDidMount() {
-        const token = Cookies.get('tokenRemember');
+        const token = Cookies.get('token');
         console.log("Token in cookies: ");
         console.log(token);
         if(token) {
@@ -49,11 +48,6 @@ class AuthenticateLabeller extends React.Component {
             .then(response => {
                 if(response.data.valid) {
                     Cookies.set("token", this.state.token);
-                    if(this.state.rememberMe) {
-                        Cookies.set("tokenRemember", this.state.token);
-                    } else {
-                        Cookies.remove("tokenRemember");
-                    }
                     this.props.history.push("/" + this.state.target + "?token=" + this.state.token);
                 } else {
                     console.log(response);
@@ -81,13 +75,6 @@ class AuthenticateLabeller extends React.Component {
                                    name="tokenInput"
                                    id="tokenInput"
                                    placeholder="Personal token"/>
-                            <div className={"ml-4 mt-2"}>
-                            <Input type="checkbox"
-                                   id={"rememberMe"}
-                                   checked={this.state.rememberMe}
-                                   onChange={() => this.setState({rememberMe: !this.state.rememberMe})}/>{' '}
-                                Erinnern Sie sich beim nächsten Mal an das Token
-                            </div>
                         </FormGroup>
                         <Button onClick={this.handleSubmit} block>Anmelden</Button>
                     </Form>
