@@ -8,13 +8,18 @@ const labellers = require(`../models/labellers`);
 const articles = require(`../models/articles`);
 const {getAllData, millisecToString} = require("./utils");
 
-
+function isPrivateIP(ip) {
+    var parts = ip.split('.');
+    return parts[0] === '10' ||
+        (parts[0] === '172' && (parseInt(parts[1], 10) >= 16 && parseInt(parts[1], 10) <= 31)) ||
+        (parts[0] === '192' && parts[1] === '168');
+}
 
 function checkAdminToken(req, res) {
     const reqIp = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || '')
         .split(',')[0].trim().replace("::ffff:", "");
     console.log("Request ip = " + reqIp);
-    if(!(reqIp.toString() === '127.0.0.1' || reqIp.toString().startsWith("129.132."))) {
+    if(!(reqIp === '127.0.0.1' || isPrivateIP(reqIp))) {
         //not good to go, either not local host or not inside eth network
         res.status(400).send({error: "Please send the request using the ETHZ VPN"});
         return false;
