@@ -55,7 +55,6 @@ class EmotionCell extends React.Component {
 
 class IntensityCell extends React.Component {
     render() {
-        console.log(PlutchikSelector.intensitiesMap);
         const intensity = PlutchikSelector.intensitiesMap[this.props.intensityName];
         return <td className={"text-center align-middle"} style={{background: intensity.backgroundColor + "AA"}}>
             <Container>

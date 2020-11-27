@@ -24,9 +24,9 @@ class Instructions extends React.Component {
 
     componentDidMount() {
         const params = queryString.parse(this.props.location.search);
-        let token = params.token;
+        const token = params.token;
         const fromEmail = Boolean(params.email);
-
+        console.log("token = " + token + " fromEmail =  " + fromEmail);
         if(token && fromEmail) {
             Cookies.set('token', token);
         }
