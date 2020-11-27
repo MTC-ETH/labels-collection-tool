@@ -12,6 +12,7 @@ import StanceInstructions from "../components/Instructions/StanceInstructions";
 import ContainedHr from "../components/ContainedHr";
 import EmotionWholeArticleInstructions from "../components/Instructions/EmotionWholeArticleInstructions";
 import StanceExamples from "../components/Instructions/StanceExamples";
+import Cookies from "js-cookie";
 
 
 class Instructions extends React.Component {
@@ -23,7 +24,13 @@ class Instructions extends React.Component {
 
     componentDidMount() {
         const params = queryString.parse(this.props.location.search);
-        this.setState({token: params.token});
+        let token = params.token;
+        const fromEmail = Boolean(params.email);
+
+        if(token && fromEmail) {
+            Cookies.set('token', token);
+        }
+        this.setState({token});
     }
 
     render() {
