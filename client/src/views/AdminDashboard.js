@@ -7,7 +7,6 @@ import InfoRow from "../components/AdminDashboard/InfoRow";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-import secrets from "../assets/json/secrets"
 import queryString from "query-string";
 
 function formatPercentage(perc) {
@@ -53,6 +52,7 @@ class AdminDashboard extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
+            token: null,
             authenticated: false,
             data: null,
         }
@@ -60,42 +60,43 @@ class AdminDashboard extends React.Component {
 
     componentDidMount() {
         const params = queryString.parse(this.props.location.search);
-        this.setState({labellerID: params.token});
-        if(!params.token || params.token !== secrets.admintoken) {
-            this.setState({authenticated: false});
+        if(!params.token) {
+            this.setState({token: null});
         }
         else {
-            this.setState({authenticated: true});
+            axios.get("/admindashboard/status"+ "?token=" + params.token)
+                .then(res => {
+                    console.log(res.data);
+                    this.setState({
+                        token: params.token,
+                        data: res.data
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.setState({
+                        token: null
+                    });
+                });
         }
-
-        axios.get("/admindashboard/status")
-            .then(res => {
-                console.log(res.data);
-                this.setState({
-                    data: res.data
-            })
-            })
-            .catch(err => {
-                console.log(err);
-            });
     }
 
     handleDownload(collectionName) {
-        axios.get("/admindashboard/" + collectionName + "?token=" + secrets.admintoken)
+        axios.get("/admindashboard/" + collectionName + "?token=" + this.state.token)
             .then((response) => {
                 FileDownload(JSON.stringify(response.data, null, 4), collectionName + '.json');
             });
     }
 
     handleDownloadCsv(collectionName) {
-        axios.get("/admindashboard/" + collectionName + "?token=" + secrets.admintoken)
+        axios.get("/admindashboard/" + collectionName + "?token=" + this.state.token)
             .then((response) => {
                 FileDownload(response.data, collectionName + '.csv');
             });
     }
 
     render() {
-        if(!this.state.authenticated) {
+        if(!this.state.token) {
             return (<Container>
                 <Row>
                     <Col>
@@ -104,7 +105,8 @@ class AdminDashboard extends React.Component {
                                             <i className="ni ni-support-16" />
                                         </span>
                             <span className="alert-inner--text ml-1">
-                            <strong>Error!</strong> Please provide valid authentication token in page query
+                            <strong>Error!</strong> Please provide valid authentication token in page query and connect
+                                from ETH VPN
                                         </span>
                         </UncontrolledAlert>
                     </Col>

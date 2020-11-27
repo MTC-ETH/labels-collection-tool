@@ -11,7 +11,8 @@ const {getAllData, millisecToString} = require("./utils");
 
 
 function checkAdminToken(req, res) {
-    const reqIp = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || '').split(',')[0].trim();
+    const reqIp = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || '')
+        .split(',')[0].trim().replace("::ffff:", "");
     console.log("Request ip = " + reqIp);
     if(!(reqIp.toString() === '127.0.0.1' || reqIp.toString().startsWith("129.132."))) {
         //not good to go, either not local host or not inside eth network
@@ -704,6 +705,9 @@ function getIntensitiesStats() {
 
 router.route('/status').get((req, res) => {
     console.log("admindashboard/status queried");
+    if(!checkAdminToken(req, res)) {
+        return false;
+    }
     const queryPromises = [];
 
     queryPromises.push(labellers.countDocuments({}).exec().then(c => {return {nRegisteredLabellers: c}}));
