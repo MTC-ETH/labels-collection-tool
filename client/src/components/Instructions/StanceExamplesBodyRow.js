@@ -20,8 +20,6 @@ class ExampleTableLine extends React.Component {
 
 class StanceCell extends React.Component {
     render() {
-        console.log(StanceSelectorAbstract.optionsMap);
-        console.log(this.props.stanceName);
         const stance = StanceSelectorAbstract.optionsMap[this.props.stanceName];
         return <td className={"text-center align-middle"} style={{background: stance.color + "8A"}}>
             <Container>
