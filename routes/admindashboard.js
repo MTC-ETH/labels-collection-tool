@@ -16,6 +16,7 @@ function checkAdminToken(req, res) {
     if(!(reqIp.toString() === '127.0.0.1' || reqIp.toString().startsWith("129.132."))) {
         //not good to go, either not local host or not inside eth network
         res.status(400).send({error: "Please send the request using the ETHZ VPN"});
+        return false;
     }
     const token = _.get(req, "query.token", null);
     if(!token) {
