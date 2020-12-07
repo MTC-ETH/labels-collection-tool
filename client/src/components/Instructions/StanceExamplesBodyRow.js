@@ -4,8 +4,6 @@ import {Col, Row, Table, Container} from "reactstrap";
 import Labelling from "../../views/Labelling";
 import StanceSelectorAbstract from "../Labelling/StanceSelectorAbstract";
 
-
-
 class ExampleTableLine extends React.Component {
     render() {
         return <tr>

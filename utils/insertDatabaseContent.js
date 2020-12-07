@@ -1,17 +1,13 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
+require('dotenv').config({path: '../.env'});
 
-const config = require( "./config");
-
-// const uri = 'mongodb://localhost/labelling_tool';
-// const uri = 'mongodb://heroku_wll30t81:u7m90co6idj3qrj24mqcg2u2vi@ds153304.mlab.com:53304/heroku_wll30t81';
 const uri = process.env.MONGODB_URI;
 
 mongoose.connect(uri, {useNewUrlParser:true, useCreateIndex: true, useUnifiedTopology:true});
 
 const connection = mongoose.connection;
 
-let articlesJson = require(`./json/articles_for_test_1_full_text_more_test_stance_questions`);
+let articlesJson = require(`../json/articles_for_test_1_full_text_more_test_stance_questions`);
 
 //insert consecutive ids for paragraphs
 articlesJson = articlesJson
@@ -30,8 +26,7 @@ articlesJson = articlesJson
 connection.once("open", () => {
     console.log("MongoDB database connection established successfully");
 
-    const articles = require(`./models/articles`);
-    const labellers = require(`./models/labellers`);
+    const articles = require(`../models/articles`);
 
     console.log("Creating database");
     connection.db.listCollections({name: 'articles'})
@@ -60,8 +55,9 @@ connection.once("open", () => {
             }
         });
 
-    const addAlsoLabellers = true;
+    const addAlsoLabellers = false;
     if(addAlsoLabellers) {
+        const labellers = require(`../models/labellers`);
         connection.db.listCollections({name: 'labellers'})
             .next(function(err, collinfo) {
                 console.log("Collection articles");
@@ -71,7 +67,7 @@ connection.once("open", () => {
                     console.log("labellers doesn't exist, attempting to create it");
 
                     try {
-                        const labellersJson = require(`./json/labellers`);
+                        const labellersJson = require(`../json/labellers`);
                         labellers.insertMany(labellersJson, function(err, result) {
                             if (err) {
                                 console.log(err);

@@ -4,7 +4,7 @@ import {Col, Container, Row} from "reactstrap";
 import Paragraph from "./Paragraph";
 
 class Article extends React.Component {
-    // Set default props
+
     static defaultProps = {
         contentBackgroundColor: "#f2f0e6",
         instructionsTextColor: "#1e0ead"

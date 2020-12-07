@@ -23,11 +23,6 @@ class PlutchikSelector extends SelectorAbstract {
         this.getEmotionlessButton = this.getEmotionlessButton.bind(this);
     }
 
-    // emotions = [
-    //     [{name: "joy", color: "#FFDE7A", emoji: "😊"}, {name: "trust", color: "#ACD46A", emoji: "🤝"}, {name: "fear", color: "#2FB774", emoji: "😨"}, {name: "anticipation", color: "#FBAF64", emoji: "👀"}],
-    //     [{name: "sadness", color: "#74A9DB", emoji: "😞"}, {name: "disgust", color: "#A490C6", emoji: "🤢"}, {name: "anger", color: "#F3736D", emoji: "😡"}, {name: "surprise", color: "#2CB0D9", emoji: "😮"}],
-    // ];
-
     static emotions = [
         [{name: "Freude", color: "#FFDE7A", emoji: "😊",
             synonyms: ["Glück", "Begeisterung", "Hochgefühl", "Freude", "Vergnügen", "Lust", "Fröhlichkeit"]},
@@ -52,15 +47,7 @@ class PlutchikSelector extends SelectorAbstract {
         return {[em.name]: em}
     }));
 
-    // static emotionlessLabel = "purely factual";
-
     static emotionlessLabel = "sachlich";
-
-    // static intensities = [
-    //     {image: highVolSrc, label: "strong", value: 2, borderTop: true, backgroundColor: "#a9a9a9"},
-    //     {image: mediumVolSrc, label: "medium", value: 1, borderTop: false, backgroundColor: "#c3c3c3"},
-    //     {image: lowVolSrc, label: "weak", value: 0, borderTop: false, backgroundColor: "#e3e3e3"},
-    // ];
 
     static intensities = [
         {image: highVolSrc, label: "stark", value: 2, borderTop: true, backgroundColor: "#a9a9a9"},

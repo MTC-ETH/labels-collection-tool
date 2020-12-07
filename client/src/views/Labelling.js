@@ -15,7 +15,6 @@ import PlutchikSelector from "../components/Labelling/PlutchikSelector";
 import ContainedHr from "../components/ContainedHr";
 import Cookies from "js-cookie";
 
-// const labellerID = "5f199424dcf1cfe56a7436a7";
 function getDeviceSpecs() {
     return  {
         osName: osName,

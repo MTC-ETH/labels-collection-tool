@@ -1,5 +1,6 @@
-require('dotenv').config();
-const backup = require('./routes/backup');
+require('dotenv').config({path: '../.env'});
+const backup = require('../routes/backup');
+
 const mongoose = require('mongoose');
 const uri = process.env.MONGODB_URI;
 

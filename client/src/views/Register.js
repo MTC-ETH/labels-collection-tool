@@ -1,6 +1,5 @@
 import React from "react";
-import axios from 'axios';
-import {Button, Container, Form, FormGroup, Input, Label, UncontrolledAlert} from "reactstrap";
+import {Container} from "reactstrap";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Col from "reactstrap/es/Col";

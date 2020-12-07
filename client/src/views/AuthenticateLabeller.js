@@ -36,7 +36,6 @@ class AuthenticateLabeller extends React.Component {
 
     handleInputChange(event) {
         this.setState({
-            // success: false,
             token: event.target.value,
         });
     }

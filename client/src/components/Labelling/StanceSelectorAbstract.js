@@ -9,13 +9,6 @@ class StanceSelectorAbstract extends SelectorAbstract {
         this.getButtonObject = this.getButtonObject.bind(this);
     }
 
-    // static options = [
-    //     {name: "In favour", color: "#2FB774", emoji: "👍"},
-    //     {name: "Discussing", color: "#FBAF64", emoji: "☝️"},//👐🏽☝️👐
-    //     {name: "Against", color: "#F15A61", emoji: "👎"},
-    //     {name: "Unrelated", color: "#E7E6E6", emoji: String.fromCodePoint(0x2049)}, //⁉️️
-    // ];
-
     static options = [
         {name: "Ja, dafür", color: "#2FB774", emoji: "👍"},
         {name: "Diskutierend", color: "#FBAF64", emoji: "☝️"},//👐🏽☝️👐

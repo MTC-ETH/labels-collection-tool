@@ -47,7 +47,6 @@ class ArticleInstructions extends React.Component {
                         </Col>
                         <Col xs={12} sm={3} md={3} lg={2} xl={2}>
                             <Button
-                                // href={"/instructions?token=" + this.props.token}
                                     style={{backgroundColor: this.props.instructionsTextColor + "AF"}}
                                     onClick={this.toggleModal}
                                     block>
