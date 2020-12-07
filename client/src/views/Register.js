@@ -21,10 +21,10 @@ class AuthenticateLabeller extends React.Component {
                 <h2>Anmeldung</h2>
 
                     <p>Um sich für die Studie anzumelden, senden Sie bitte eine E-Mail an <a
-                        href={"mailto:emotionandstance.mtc@gmail.com?subject=" + AuthenticateLabeller.emailSubject +
+                        href={"mailto:mtc@ethz.ch@gmail.com?subject=" + AuthenticateLabeller.emailSubject +
                         "&body=" + AuthenticateLabeller.emailText}>
-                             emotionandstance.mtc@gmail.com
-                        </a> unter Angabe:
+                        mtc@ethz.ch
+                    </a> unter Angabe:
                         <ul>
                             <li>Ihres Vor- und Nachnamens</li>
                             <li>Ihres Geburtsdatums</li>
@@ -37,7 +37,7 @@ class AuthenticateLabeller extends React.Component {
                         Bitte beachten Sie, dass dieses Verfahren nicht autoamtisch ist und einige Tage dauern kann.
                     </p>
                         <p>Sie können <a
-                            href={"mailto:emotionandstance.mtc@gmail.com?subject=" + AuthenticateLabeller.emailSubject +
+                            href={"mailto:mtc@ethz.ch?subject=" + AuthenticateLabeller.emailSubject +
                             "&body=" + AuthenticateLabeller.emailText}>
                             diese Vorlage
                         </a> direkt verwenden.</p>

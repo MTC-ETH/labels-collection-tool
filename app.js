@@ -44,7 +44,7 @@ app.use('/backup/', backupRouter);
 const personalpageRouter = require('./routes/personalpage');
 app.use('/personalpage/', personalpageRouter);
 
-backupRouter.buildMailerJob();
+// backupRouter.buildMailerJob();
 
 if (process.env.NODE_ENV === 'production') {
     const https = require("https");
