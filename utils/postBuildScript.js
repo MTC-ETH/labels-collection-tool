@@ -1,4 +1,15 @@
-require('dotenv').config({path: '../.env'});
+const fs = require('fs');
+let path = '.env';
+
+try {
+    if (!fs.existsSync(path)) {
+        path = "../.env"
+    }
+} catch(err) {
+    console.error(err);
+}
+
+require('dotenv').config({path: path});
 const backup = require('../routes/backup');
 
 const mongoose = require('mongoose');
