@@ -1,6 +1,27 @@
-![ETHMTCHEADER](./client/src/assets/imgs/ETHMTCHeaderOriginal.png)
+![ETH MTC HEADER](./client/src/assets/imgs/ETHMTCHeaderOriginal.png)
 
-# labelling-tool
+# Labels collection tool
+This is a fullstack tool to manually pair unlabelled data with labels.
+
+This tool was created by the [ETH Media Technology Center (MTC)](https://mtc.ethz.ch/)
+in the scope of the project Emotion and Stance detection for German text.
+
+The goal of the tool is to create an easy-to-deploy platform to allow students
+or workers to label the dataset. For the aforementioned project we needed to pair each
+paragraph of a news article with an emotion and assign a stance to the whole article.
+Nonetheless, it's really easy to customize the tool to your data labelling needs,
+given the modularity of react.
+
+You can browse an example deployment of the project at [HEROKU LINK] or 
+look at the following screenshot of the emotion collection part (in German).
+![Screenshot of the emotions collection part](./client/src/assets/imgs/EmotionScreenshot.png)
+
+
+### Technologies
+The backend is built with [Node.js](https://nodejs.org/en/), 
+[mongoDB](https://www.mongodb.com/) and its node implementation 
+[mongoose](https://mongoosejs.com/).
+The front end uses [React](https://reactjs.org/) (and HTML, CSS, Javascript).
 
 
 ## Deployment on any machine
