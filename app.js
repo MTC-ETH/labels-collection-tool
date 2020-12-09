@@ -63,17 +63,19 @@ app.use('/personalpage/', personalpageRouter);
 
 // backupRouter.buildMailerJob();
 
-if (process.env.NODE_ENV === 'production') {
-    const https = require("https");
-    const fs = require("fs");
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'heroku') {
 
     console.log("Running in production mode");
     //direct to local react build
-    app.use(express.static(path.join(__dirname, 'client', 'build')))
+    app.use(express.static(path.join(__dirname, 'client', 'build')));
 
     app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
     });
+}
+if (process.env.NODE_ENV === 'production') {
+    const https = require("https");
+    const fs = require("fs");
 
     const options = {
         key: fs.readFileSync(process.env.KEY_PATH),
