@@ -18,9 +18,6 @@
 
 const config = {};
 
-//The URL of the deployment, to create correct links to sent to email etc.
-config.baseLink = "https://experiment.mtc.ethz.ch";
-
 //Map containing all the information relative to having more than one labeller label the same entity (article)
 config.interrater = {};
 

@@ -178,7 +178,7 @@ class Labelling extends React.Component {
             (this.state.stanceArticleQuestionsLabel[question.ID] === null ||
                 this.state.stanceArticleQuestionsLabel[question.ID].label === null);
         console.log("stanceArticleQuestionsLabel[question.ID] = " + stanceArticleQuestionsError[question.ID]);
-        console.log("this.state.stanceArticleQuestionsLabel[question.ID].label = " + this.state.stanceArticleQuestionsError[question.ID].label);
+        console.log("this.state.stanceArticleQuestionsLabel[question.ID].label = " + this.state.stanceArticleQuestionsLabel[question.ID].label);
         this.setState({stanceArticleQuestionsLabel, stanceArticleQuestionsError});
         this.postToBackendStatus('/labelling/tag/article/stance', question.ID, stanceArticleQuestionsLabel[question.ID]);
     }

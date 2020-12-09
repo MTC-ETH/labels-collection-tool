@@ -35,7 +35,7 @@ mongoose.connect(uri, {useNewUrlParser:true, useCreateIndex: true, useUnifiedTop
 
 const connection = mongoose.connection;
 
-let articlesJson = require(`../json/articles_for_test_1_full_text_more_test_stance_questions`);
+let articlesJson = require(`../json/articles_examples`);
 
 //insert consecutive ids for paragraphs
 articlesJson = articlesJson
