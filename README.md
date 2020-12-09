@@ -45,6 +45,16 @@ refer to the comments in the file for more information.
 All the frontend is contained in the folder `client`, please refer to the readme in that 
 folder for its explanation.
 
+## Run on localhost in dev mode
+- Install mongodb via: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/ 
+- Start mongo daemon: `sudo systemctl start mongod`
+- Install nodejs and npm, for example by following: https://nodejs.org/en/download/package-manager/
+- `npm install` to install the packages required by the backend
+- `npm start` to start the backend on port 5000
+- `cd client` to locate yourself in the client folder
+- `npm install` to install the packages required by the frontend
+- `npm start` to start the frontend on port 3000. You'll be redirected to the browser automatically.
+
 ## Deployment on Heroku
 
 

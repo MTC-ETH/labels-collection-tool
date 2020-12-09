@@ -49,6 +49,13 @@ function checkAdminToken(req, res) {
         res.status(400).send({error: "Please provide token in query"});
         return false;
     }
+    if(!process.env.ADMIN_TOKEN) {
+        console.warn("The environment variable ADMIN_TOKEN is not set. Please create a file '.env'" +
+            "in the main folder and provide `ADMIN_TOKEN=anyrandomtoken`. Without this specification the " +
+            "load of the page adminsashboard will be allowed regardless of the provided token: \n" +
+            "** currently the security of the page admindashboard is compromised, this is not suitable for production.");
+        return true;
+    }
     if(token !== process.env.ADMIN_TOKEN) {
         console.log("Token is not admin token. " + token);
         res.status(400).send({error: "Token is not admin token."});
