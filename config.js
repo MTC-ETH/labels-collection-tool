@@ -18,20 +18,28 @@
 
 const config = {};
 
+//The URL of the deployment, to create correct links to sent to email etc.
 config.baseLink = "https://experiment.mtc.ethz.ch";
 
+//Map containing all the information relative to having more than one labeller label the same entity (article)
 config.interrater = {};
 
-//number of duplicated labels per article and its respective comments
+//number of duplicated labels (or labellers) per article and its respective comments
 config.interrater.labbellersPerArticle = 5;
 
 //number of articles that will be multi-labelled depending on the labbellersPerArticle value
 //set to null in order to multilabel all the articles
 config.interrater.multiLabelledArticles = null;
 
+//How much money is each labeller paid per article
 config.moneyPerArticle = 3.00;
 
+//List of emotions
 config.emotionsWithFactual = ["Freude", "Vertrauen", "Angst", "Antizipation", "Traurigkeit", "Ekel", "Ärger", "Überraschung", "sachlich"];
+// List of emotion intensities
 config.emotionIntensities = [0,1,2];
+//list of labels for stance
 config.stanceLabels = ["Ja, dafür", "Diskutierend", "Nein, gegen", "Kein Bezug"];
+
+//--------------------------
 module.exports = config;

@@ -24,6 +24,26 @@ The backend is built with [Node.js](https://nodejs.org/en/),
 The front end uses [React](https://reactjs.org/) (and HTML, CSS, Javascript).
 
 
+## Repository structure and how to customize
+#### Backend 
+The server backend is contained in the main folder of the repository. 
+
+`app.js` conntects to the mongodb and contains the express server and exposes the REST API, by linking to the 
+routes contained in the `routes` folder, where each file corresponds to the respective 
+front-end page. For example `admindashboard.js` replies to all the queries that are responsible
+to populate the page with the same name in the frontend. <br/>
+The `models` folder contains the mongodb schema definiton and some utility functions to work on it. <br/>
+The `utils` folders contains files to insert content in the database when creating the server,
+a script needed when building in Heroku and a `.service` file useful in case of a deployment on
+a local machine. <br/>
+The `json` folder can contain information to be added to the database, for example articles.  
+
+`config.js` contains important configuration properties that apply to the backend. Please
+refer to the comments in the file for more information.
+
+## Deployment on Heroku
+
+
 ## Deployment on any machine
 This guide applies to any general deployment, also on ETH D-INFK virtual servers.
 ### General requirements
