@@ -41,6 +41,10 @@ The `json` folder can contain information to be added to the database, for examp
 `config.js` contains important configuration properties that apply to the backend. Please
 refer to the comments in the file for more information.
 
+#### Frontend
+All the frontend is contained in the folder `client`, please refer to the readme in that 
+folder for its explanation.
+
 ## Deployment on Heroku
 
 
