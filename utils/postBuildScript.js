@@ -17,6 +17,24 @@
 // along with Labels Collection Tool (LCT). If not, see <https://www.gnu.org/licenses/>.
 
 const fs = require('fs');
+
+console.log("REACT_APP_AUTOMATIC_REGISTRATION = " + process.env.REACT_APP_AUTOMATIC_REGISTRATION);
+if(process.env.REACT_APP_AUTOMATIC_REGISTRATION) {
+    fs.writeFile('./client/.env', "REACT_APP_AUTOMATIC_REGISTRATION=\"true\"\n",
+        (err) => {
+            if (err) {
+                console.log(err);
+                process.exit(1);
+            } else {
+                console.log("Successfully written");
+                process.exit();
+            }
+        }
+    );
+}
+
+
+
 let path = '.env';
 
 try {
