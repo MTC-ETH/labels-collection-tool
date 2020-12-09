@@ -85,7 +85,8 @@ connection.once("open", () => {
 
     const addAlsoLabellers = false;
     if(addAlsoLabellers) {
-        const labellers = require(`../models/labellers`);
+        const {getCorrectLabellersSchema} = require("../routes/utils");
+        const labellers = getCorrectLabellersSchema();
         connection.db.listCollections({name: 'labellers'})
             .next(function(err, collinfo) {
                 console.log("Collection articles");

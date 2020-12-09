@@ -21,7 +21,8 @@ const router = require('express').Router();
 /**** Deprecated */
 
 const nodemailer = require('nodemailer');
-const labellers = require(`../models/labellers`);
+const {getCorrectLabellersSchema} = require("./utils");
+const labellers = getCorrectLabellersSchema();
 const config = require("../config");
 
 function sendRegistrationEmailAndWriteInDB(name, surname, email, affiliation, smtpTrans, res) {

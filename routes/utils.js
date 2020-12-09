@@ -21,7 +21,7 @@ const mongoose = require('mongoose');
 
 const articles = require(`../models/articles`);
 const labelledentries = require(`../models/labelledentries`);
-const labellers = require(`../models/labellers`);
+const labellers = getCorrectLabellersSchema();
 const labellingstatuses = require(`../models/labellingstatuses`);
 
 
@@ -83,7 +83,16 @@ function getTokenFromRequest(req, res) {
     return _labellerID;
 }
 
+function getCorrectLabellersSchema() {
+    if(process.env.REACT_APP_AUTOMATIC_REGISTRATION) {
+        console.log("Using labellers with info");
+        return require('../models/labellerswithinfo.js');
+    }
+    console.log("Using labellers without info");
+    return require('../models/labellers.js');
+}
 
 module.exports.getAllData = getAllData;
 module.exports.millisecToString = millisecToString;
 module.exports.getTokenFromRequest = getTokenFromRequest;
+module.exports.getCorrectLabellersSchema = getCorrectLabellersSchema;

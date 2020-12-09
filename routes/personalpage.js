@@ -20,7 +20,6 @@ const router = require('express').Router();
 const config = require( "../config");
 
 const labelledentries = require(`../models/labelledentries`);
-const labellers = require(`../models/labellers`);
 const {getTokenFromRequest} = require("./utils");
 
 

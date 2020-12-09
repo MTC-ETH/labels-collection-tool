@@ -19,8 +19,9 @@
 const router = require('express').Router();
 const _ = require('lodash');
 const mongoose = require('mongoose');
+const {getCorrectLabellersSchema} = require("./utils");
 
-const labellers = require(`../models/labellers`);
+const labellers = getCorrectLabellersSchema();
 
 
 //get the next article to be tagged

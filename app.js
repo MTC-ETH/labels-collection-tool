@@ -21,6 +21,7 @@ const cors = require('cors');
 const path = require('path');
 
 require('dotenv').config();
+require('dotenv').config({path: "./client/.env"});
 
 const mongoose = require('mongoose');
 
@@ -49,8 +50,10 @@ app.use('/admindashboard/', admindashboardRouter);
 const authenticatelabellerRouter = require('./routes/authenticatelabeller');
 app.use('/authenticatelabeller/', authenticatelabellerRouter);
 
-// const registerRouter = require('./routes/register');
-// app.use('/register/', registerRouter);
+if(process.env.REACT_APP_AUTOMATIC_REGISTRATION) {
+    const registerRouter = require('./routes/register');
+    app.use('/register/', registerRouter);
+}
 
 const backupRouter = require('./routes/backup');
 app.use('/backup/', backupRouter);

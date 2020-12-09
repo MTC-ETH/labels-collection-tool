@@ -21,11 +21,11 @@ const mongoose = require('mongoose');
 
 const articles = require(`../models/articles`);
 const labellingstatuses = require(`../models/labellingstatuses`);
-const labellers = require(`../models/labellers`);
-const labelledentries = require(`../models/labelledentries`);
+const {getTokenFromRequest, getCorrectLabellersSchema} = require("./utils");
+const labellers = getCorrectLabellersSchema();
 
+const labelledentries = require(`../models/labelledentries`);
 const config = require('../config');
-const {getTokenFromRequest} = require("./utils");
 
 function replyWithExistingStatus(status, res) {
     console.log("Already find a status, replying with that one");

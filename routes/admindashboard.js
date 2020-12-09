@@ -22,9 +22,9 @@ const mathjs = require("mathjs");
 const config = require( "../config");
 
 const labelledentries = require(`../models/labelledentries`);
-const labellers = require(`../models/labellers`);
+const {getAllData, millisecToString, getCorrectLabellersSchema} = require("./utils");
+const labellers = getCorrectLabellersSchema();
 const articles = require(`../models/articles`);
-const {getAllData, millisecToString} = require("./utils");
 
 function isPrivateIP(ip) {
     var parts = ip.split('.');

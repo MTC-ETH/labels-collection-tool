@@ -32,6 +32,10 @@ import Instructions from "./views/Instructions";
 import TermsAndConditions from "./views/TermsAndConditions";
 import {checkMobile} from "./views/NotAvailableOnMobile";
 import PersonalPage from "./views/PersonalPage";
+import RegisterWithAutomaticEmail from "./views/RegisterWithAutomaticEmail";
+
+// const clientConfig = require( "./assets/clientConfig.js");
+
 
 ReactDOM.render(
     <>
@@ -41,7 +45,12 @@ ReactDOM.render(
                 <Route path="/labelling" exact render={props => checkMobile(<Labelling {...props}/>)} />
                 <Route path="/admindashboard" exact render={props => <AdminDashboard {...props} />} />
                 <Route path="/authenticatelabeller" exact render={props => checkMobile(<AuthenticateLabeller {...props} />)} />
-                <Route path="/register" exact render={props => <Register {...props} />} />
+                <Route path="/register" exact render={props => {
+                    if (process.env.REACT_APP_AUTOMATIC_REGISTRATION) {
+                        return <RegisterWithAutomaticEmail {...props} />;
+                    }
+                    return <Register {...props} />;
+                }} />
                 <Route path="/instructions" exact render={props => <Instructions {...props} />} />
                 <Route path="/termsandconditions" exact render={props => <TermsAndConditions {...props} />} />
                 <Route path="/personalpage" exact render={props => <PersonalPage {...props} />} />
