@@ -4,7 +4,10 @@
 This is a fullstack tool to manually pair unlabelled data with labels.
 
 This tool was created by the [ETH Media Technology Center (MTC)](https://mtc.ethz.ch/)
-in the scope of the project Emotion and Stance detection for German text.
+in the scope of the project Emotion and Stance detection for German text. Main contributors are
+[Luca Campanella](https://github.com/lucacampanella) (luca.campanella1 +at+ gmail.com), under the 
+supervision of Severin Klingler. This project is supported by Ringier, TX Group, NZZ, SRG, VSM, viscom, and the 
+ETH Zurich Foundation. 
 
 The goal of the tool is to create an easy-to-deploy platform to allow students
 or workers to label a dataset. For the aforementioned project we needed to pair each
