@@ -116,11 +116,15 @@ https://nodejs.org/en/download/package-manager/
 Clone this repository, then 
 
 #### Client:
-- Build the react client for production: `cd client && npm run build`. This
+- `cd client`
+- `npm install` to install all dependencies
+- Build the react client for production: `npm run build`. This
 will create an optimized version of the react client and will allow the 
 backend in node to serve it.
 
 #### Backend:
+- `cd ..` (main directory)
+- `npm install` to install all dependencies
 - Create in the main directory of the project a `.env` file with the right information:
 ```
 ADMIN_TOKEN="<token>"
@@ -165,4 +169,6 @@ to make it a daemon. This is done by defining one in the file `utils/labelling-t
 
 
 ### Troubleshooting
-Which service is running on which port: `sudo netstat -tulp` 
+- Which service is running on which port: `sudo netstat -tulp`
+- Look at the logs of the backend: `sudo journalctl -u labelling-tool-backend`
+(shift-G to to the end) 
