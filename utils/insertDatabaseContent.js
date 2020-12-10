@@ -29,7 +29,7 @@ try {
 require('dotenv').config({path: path});
 
 const mongoose = require('mongoose');
-const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI || "mongodb://localhost/labelling_tool";
 
 mongoose.connect(uri, {useNewUrlParser:true, useCreateIndex: true, useUnifiedTopology:true});
 

@@ -7,9 +7,9 @@ This tool was created by the [ETH Media Technology Center (MTC)](https://mtc.eth
 in the scope of the project Emotion and Stance detection for German text.
 
 The goal of the tool is to create an easy-to-deploy platform to allow students
-or workers to label the dataset. For the aforementioned project we needed to pair each
+or workers to label a dataset. For the aforementioned project we needed to pair each
 paragraph of a news article with an emotion and assign a stance to the whole article.
-Nonetheless, it's really easy to customize the tool to your data labelling needs,
+Nonetheless, it's easy to customize the tool to your data labelling needs,
 given the modularity of react.
 
 You can browse an example deployment of the project at [https://mtc-emotion-stance.herokuapp.com/](https://mtc-emotion-stance.herokuapp.com/) or 
@@ -34,7 +34,7 @@ front-end page. For example `admindashboard.js` replies to all the queries that 
 to populate the page with the same name in the frontend. <br/>
 The `models` folder contains the mongodb schema definiton and some utility functions to work on it. <br/>
 The `utils` folders contains files to insert content in the database when creating the server,
-a script needed when building in Heroku and a `.service` file useful in case of a deployment on
+a script needed when deploying in Heroku and a `.service` file useful in case of a deployment on
 a local machine. <br/>
 The `json` folder can contain information to be added to the database, for example articles.  
 
@@ -47,8 +47,9 @@ folder for its explanation.
 
 ## Run on localhost in dev mode
 - Install mongodb via: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/ 
-- Start mongo daemon: `sudo systemctl start mongod`
+- Start mongo daemon: `mongod`
 - Install nodejs and npm, for example by following: https://nodejs.org/en/download/package-manager/
+- Insert dummy database content: `node utils/insertDatabaseContent.js`
 - `npm install` to install the packages required by the backend
 - `npm start` to start the backend on port 5000
 - `cd client` to locate yourself in the client folder
@@ -56,11 +57,15 @@ folder for its explanation.
 - `npm start` to start the frontend on port 3000. You'll be redirected to the browser automatically.
 
 ## Choose user registration process
-Two registration processes are available, one not automatic and privacy preserving, a second
-automatic and less privacy oriented.
+Two registration processes are available, one privacy preserving, but not automatic and a second one,
+automatic, but less privacy oriented.
+
+In both cases the user is identified by a login token that corresponds to their mongodb ids.
+No password or email is necessary to log in, just the authentication token that they receive upon
+registration.
 
 By default the tool runs in privacy preserving mode. In this mode the registration page explains
-to the user that to register they have to send a registration request by email. The registration
+to the user that, in order to register, they have to send a request by email. The registration
 request is processed by a human that under the admindashboard page generates a new token and
 sends it back to the user. The server only retains the generated tokens and no personal info
 about the user.
@@ -88,13 +93,14 @@ To deploy:
   - `MONGODB_URI` to the URI of the just created mongodb, for example 
   `mongodb+srv://myprojectnme:mypassword@myclustername.ywdlx.azure.mongodb.net/mydbname`
   - `ADMIN_TOKEN` to a random id
-  - `NODE_ENV` to `heroku`
-  - `BASE_LINK` to the base link of your project (no slash at the end), for example
-  `https://mtc-emotion-stance.herokuapp.com` <br/><br/>
+  - `NODE_ENV` to `heroku` 
+  <br/><br/>
   Optionally, to setup the automatic email registration:
   - `REACT_APP_AUTOMATIC_REGISTRATION` to `true`
   - `EMAIL` to the sender email
   - `EMAIL_PASS` to the sender email password
+  - `BASE_LINK` to the base link of your project (no slash at the end), for example
+    `https://mtc-emotion-stance.herokuapp.com` 
 - run `git push herku master` to finalize the deployment
   
   
@@ -128,14 +134,20 @@ backend in node to serve it.
 - Create in the main directory of the project a `.env` file with the right information:
 ```
 ADMIN_TOKEN="<token>"
-EMAIL="emotionandstance.mtc@gmail.com"
-EMAIL_PASS="<email-pass>"
-EMAIL_BACKUP="luca.campanella1@gmail.com"
 MONGODB_URI="mongodb://localhost/labelling_tool"
 NODE_ENV="production"
 PORT=443
-KEY_PATH="/etc/ssl/private/voice-recordings.mtc.ethz.ch.key"
-CERT_PATH="/etc/ssl/certs/voice-recordings.mtc.ethz.ch.crt.pem"
+KEY_PATH="<path-to-tls-key>.key"
+CERT_PATH="<path-to-tls-cert>.pem"
+```
+Optionally:
+In `client/.env` insert `REACT_APP_AUTOMATIC_REGISTRATION="true"`
+and in `.env`:
+```
+EMAIL="<email>"
+EMAIL_PASS="<email-pass>"
+EMAIL_BACKUP="<email-for-backup>"
+BASE_LINK="<base-link>"
 ```
 Optionally a different port for the http redirection service can be specified by: `HTTP_ONLY_PORT=8080`
 
@@ -171,4 +183,35 @@ to make it a daemon. This is done by defining one in the file `utils/labelling-t
 ### Troubleshooting
 - Which service is running on which port: `sudo netstat -tulp`
 - Look at the logs of the backend: `sudo journalctl -u labelling-tool-backend`
-(shift-G to to the end) 
+(shift-G to to the end)
+
+## Recap of env variables 
+List of environmental variables that can be declared.
+In `.env` root file:
+- `NODE_ENV` expresses the type of deployment, can be set to `developement`, `depolyment`, `heroku`.
+Default if not preset: `developement`
+- `MONGODB_URI` to the URI of the mongodb. Default if not present: `mongodb://localhost/labelling_tool`
+- `ADMIN_TOKEN` a random id needed to access the `/admindashboard` page, using the link 
+`/admindashboard?token=<ADMIN_TOKEN>`. Default if not present: the check of the admin token is not enforced.
+- `PORT`, the port in which the backend should run. Default if not preset:
+`5000`, suggested value for deployment: `443` (https)
+- `HTTP_ONLY_PORT`, the port in which the http server that redirects to
+https is running. Default value if not specified: `80`
+- `KEY_PATH` the path to the key of the TLS certificate. (`*.key` file)
+- `CERT_PATH` the path to the certificate file of the TLS certificate. (`*.pem` file)
+- `BASE_LINK`, the base link of your project (no slash at the end), for example
+`https://mtc-emotion-stance.herokuapp.com` <br/><br/>
+
+Optionally, to setup the automatic email registration:
+- `EMAIL`, the sender email
+- `EMAIL_PASS`, the sender email password
+
+Optionally, to setup the automatic email backup at 11PM:
+- `EMAIL_BACKUP`, the email to which send the backup. `EMAIL` and `EMAIL_PASS` 
+should also be set.
+
+In `client/.env` root file:
+- `REACT_APP_AUTOMATIC_REGISTRATION`, set to true `true` if you desire to activate
+the fast registration mode, less privacy preserving. `EMAIL` and `EMAIL_PASS` 
+should also be set.
+

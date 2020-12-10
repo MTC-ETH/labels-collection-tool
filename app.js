@@ -61,7 +61,9 @@ app.use('/backup/', backupRouter);
 const personalpageRouter = require('./routes/personalpage');
 app.use('/personalpage/', personalpageRouter);
 
-// backupRouter.buildMailerJob();
+if(process.env.EMAIL_BACKUP) {
+    backupRouter.buildMailerJob();
+}
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'heroku') {
 
