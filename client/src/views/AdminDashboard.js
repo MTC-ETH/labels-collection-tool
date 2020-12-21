@@ -266,26 +266,27 @@ class AdminDashboard extends React.Component {
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "perc0StanceQuestions"))}>
                 % of stance questions marked as <b>in favour</b>:
             </InfoRow>
-            <InfoRow counter={formatPercentage(getSafely(this.state.data, "perc0FirstStanceQuestions"))}>
-                {/*The first stance questions should be the one that were more safely matched to the article*/}
-                % of first stance questions marked as <b>in favour</b>:
-            </InfoRow>
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "perc1StanceQuestions"))}>
                 % of stance questions marked as <b>discuss</b>:
+            </InfoRow>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "perc2StanceQuestions"))}>
+                % of stance questions marked as <b>against</b>:
+            </InfoRow>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "perc3StanceQuestions"))}>
+                % of stance questions marked as <b>unrelated</b>:
+            </InfoRow>
+            <Row className={"mt-2"}><Col><i>The first stance questions should be the one that were more safely matched to the article:</i></Col></Row>
+            <InfoRow counter={formatPercentage(getSafely(this.state.data, "perc0FirstStanceQuestions"))}>
+                {/**/}
+                % of first stance questions marked as <b>in favour</b>:
             </InfoRow>
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "perc1FirstStanceQuestions"))}>
                 {/*The first stance questions should be the one that were more safely matched to the article*/}
                 % of first stance questions marked as <b>discuss</b>:
             </InfoRow>
-            <InfoRow counter={formatPercentage(getSafely(this.state.data, "perc2StanceQuestions"))}>
-                % of stance questions marked as <b>against</b>:
-            </InfoRow>
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "perc2FirstStanceQuestions"))}>
                 {/*The first stance questions should be the one that were more safely matched to the article*/}
                 % of first stance questions marked as <b>against</b>:
-            </InfoRow>
-            <InfoRow counter={formatPercentage(getSafely(this.state.data, "perc3StanceQuestions"))}>
-                % of stance questions marked as <b>unrelated</b>:
             </InfoRow>
             <InfoRow counter={formatPercentage(getSafely(this.state.data, "perc3FirstStanceQuestions"))}>
                 {/*The first stance questions should be the one that were more safely matched to the article*/}
