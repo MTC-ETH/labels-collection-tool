@@ -748,6 +748,46 @@ function getIntensitiesStats() {
         });
 }
 
+function getStanceQuestionsStats() {
+    return labelledentries.find({}).exec()
+        .then(entries => {
+            let nStanceQuestions = 0;
+            let nLabelledArticles = 0;
+            let labelToCount = {};
+            let labelToIndex = {};
+            config.stanceLabels.forEach((label, index) => {
+                labelToCount[index] = 0;
+                labelToIndex[label] = index;
+            });
+            /*The first stance questions should be the one that were more safely matched to the article*/
+            let labelToCountFirstQuestion = {};
+            config.stanceLabels.forEach((_, index) => labelToCountFirstQuestion[index] = 0);
+            return Promise.all(entries.map(entry => {
+                return articles.findOne({articleID: entry.articleID}).exec().then(article => {
+                    nLabelledArticles++;
+                    entry.stanceArticleQuestionsLabel.forEach((label, questionID) => {
+                        nStanceQuestions++;
+                        labelToCount[labelToIndex[label.label]]++;
+                        if(questionID === String(article.stanceQuestions[0].ID)) {
+                            labelToCountFirstQuestion[labelToIndex[label.label]]++;
+                        }
+                    });
+                });
+            })).then(() => {
+                let resDict = {};
+                Object.keys(labelToCount).forEach((key) =>
+                    resDict["perc" + key + "StanceQuestions"] =
+                        labelToCount[key] / nStanceQuestions * 100.0
+                );
+                Object.keys(labelToCountFirstQuestion).forEach((key) =>
+                    resDict["perc" + key + "FirstStanceQuestions"] =
+                        labelToCountFirstQuestion[key] / nLabelledArticles * 100.0
+                );
+                return resDict;
+            });
+        });
+}
+
 router.route('/status').get((req, res) => {
     console.log("admindashboard/status queried");
     if(!checkAdminToken(req, res)) {
@@ -769,6 +809,7 @@ router.route('/status').get((req, res) => {
     queryPromises.push(getFleissKStanceQuestionsLabel());
     queryPromises.push(getIRAs());
     queryPromises.push(getIntensitiesStats());
+    queryPromises.push(getStanceQuestionsStats());
 
     //check that the labellerID exists
     return Promise.all(queryPromises)
